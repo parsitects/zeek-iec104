@@ -788,33 +788,6 @@ event iec104::apci(c: connection, is_orig : bool, apdu_len : count, not_i_type :
 			info$asdu = Asdu();
 		}
 
-		# print "APCI request", c$id, info$apdu_len, conv_type, i_send_seq, u_start_dt, u_stop_dt, u_test_fr, recv_seq;
-
-		# Just messing around with that for debugging, I do not think that should be here but propably in the log.
-		if (u_test_fr == 1){
-			print "TESTFR act";
-		}
-		
-		if (u_test_fr == 2){
-			print "TESTFR con";
-		}
-		
-		if (u_start_dt == 1){
-			print "STARTDT act";
-		}
-		
-		if (u_start_dt == 2){
-			print "STARTDT con";
-		}
-
-		if (u_start_dt == 4){
-			print "STOPDT act";
-		}
-		
-		if (u_start_dt == 8){
-			print "STOPDT con";
-		}
-
 		# TODO: Neews for the rest as well
 		if( |COI_temp| != 0)
 			info$asdu$end_of_initialization = COI_temp;
