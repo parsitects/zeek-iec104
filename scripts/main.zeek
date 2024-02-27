@@ -701,15 +701,6 @@ event zeek_init() &priority=5
 
 # Initialize logging state.
 hook set_session(c: connection)
-
-function emit_log(c: connection)
-	{
-	if ( ! c?$iec104 )
-		return;
-
-	Log::write(iec104::LOG, c$iec104);
-	delete c$iec104;
-	}
 {
     if ( c?$iec104 )
         return;
@@ -1627,13 +1618,3 @@ event iec104::QRP_server_evt(c: connection, qrp_server: QRP_server)
 	
 	Log::write(iec104::LOG_QRP_server, new_QRP_server);
 }
-
-
-
-
-event connection_state_remove(c: connection) &priority=-5
-	{
-	# TODO: For UDP protocols, you may want to do this after every request
-	# and/or reply.
-	#emit_log(c);
-	}
