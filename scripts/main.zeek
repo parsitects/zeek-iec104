@@ -45,7 +45,7 @@ export {
         LOG_QRP_server,
     };
 
-    type info_obj_code : enum {
+    type info_obj_code: enum {
         # Process information in monitoring direction:
         M_SP_NA_1 = 1,
         M_SP_TA_1 = 2,
@@ -130,7 +130,7 @@ export {
         F_SC_NB_1 = 127
     };
 
-    type cause_tx_code : enum {
+    type cause_tx_code: enum {
         per_cyc = 1,
         back = 2,
         spont = 3,
@@ -175,353 +175,353 @@ export {
         unknown_object_address = 47
     };
 
-    type QOI  : record {
-        Asdu_num : count &log &optional;
+    type QOI: record {
+        Asdu_num: count &log &optional;
         info_obj_addr: count &log &optional;
-        qoi : count &log &optional;
+        qoi: count &log &optional;
     };
 
-    type SCO_field : record {
-        sco_on : count &log &optional;
-        qu : count &log &optional;
-        se : count &log &optional;
+    type SCO_field: record {
+        sco_on: count &log &optional;
+        qu: count &log &optional;
+        se: count &log &optional;
     };
 
-    type SCO  : record {
-        Asdu_num : count &log;
-        info_obj_addr: count &log &optional;
-        # This is bifield in packet/spicy
-        sco : SCO_field &log &optional;
-    };
-
-    type DCO_field : record {
-        dco_on : count &log &optional;
-        qu : count &log &optional;
-        se : count &log &optional;
-    };
-
-    type DCO  : record {
-        Asdu_num : count &log;
+    type SCO: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         # This is bifield in packet/spicy
-        dco : DCO_field &log &optional;
+        sco: SCO_field &log &optional;
     };
 
-    type SIQ_field : record {
-        spi : count &log &optional;
-        bl : count &log &optional;
-        sb : count &log &optional;
-        nt : count &log &optional;
-        iv : count &log &optional;
+    type DCO_field: record {
+        dco_on: count &log &optional;
+        qu: count &log &optional;
+        se: count &log &optional;
     };
 
-    type SIQ  : record {
-        Asdu_num : count &log;
+    type DCO: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         # This is bifield in packet/spicy
-        siq : SIQ_field &log &optional;
+        dco: DCO_field &log &optional;
     };
 
-    type RCO_field : record {
-        up_down : count &log &optional;
-        qu : count &log &optional;
-        se : count &log &optional;
+    type SIQ_field: record {
+        spi: count &log &optional;
+        bl: count &log &optional;
+        sb: count &log &optional;
+        nt: count &log &optional;
+        iv: count &log &optional;
     };
 
-    type RCO  : record {
-        Asdu_num : count &log;
+    type SIQ: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         # This is bifield in packet/spicy
-        RCO : RCO_field &log &optional;
+        siq: SIQ_field &log &optional;
     };
 
-
-    type BSI_field : record {
-        value : count &log &optional;
+    type RCO_field: record {
+        up_down: count &log &optional;
+        qu: count &log &optional;
+        se: count &log &optional;
     };
 
-    type BSI  : record {
-        Asdu_num : count &log;
+    type RCO: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         # This is bifield in packet/spicy
-        # BSI : BSI_field &log &optional;
-        BSI : count &log &optional;
+        RCO: RCO_field &log &optional;
     };
 
-    type QOS_field : record {
-        ql : count &log &optional;
-        se : count &log &optional;
+
+    type BSI_field: record {
+        value: count &log &optional;
     };
 
-    type SVA_QOS  : record {
-        Asdu_num : count &log;
+    type BSI: record {
+        Asdu_num: count &log;
+        info_obj_addr: count &log &optional;
+        # This is bifield in packet/spicy
+        # BSI: BSI_field &log &optional;
+        BSI: count &log &optional;
+    };
+
+    type QOS_field: record {
+        ql: count &log &optional;
+        se: count &log &optional;
+    };
+
+    type SVA_QOS: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         SVA: count &log &optional;
-        qos : QOS_field &log &optional;
+        qos: QOS_field &log &optional;
     };
 
-    type QDS_field : record {
-        ov : count &log &optional;
-        bl : count &log &optional;
-        sb : count &log &optional;
-        nt : count &log &optional;
-        iv : count &log &optional;
+    type QDS_field: record {
+        ov: count &log &optional;
+        bl: count &log &optional;
+        sb: count &log &optional;
+        nt: count &log &optional;
+        iv: count &log &optional;
     };
 
-    type SVA_QDS  : record {
-        Asdu_num : count &log;
+    type SVA_QDS: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         SVA: count &log &optional;
-        qds : QDS_field &log &optional;
+        qds: QDS_field &log &optional;
     };
 
-    type VTI_QDS  : record {
-        Asdu_num : count &log;
+    type VTI_QDS: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
         value: string &log &optional;
-        qds : QDS_field &log &optional;
+        qds: QDS_field &log &optional;
     };
 
-    type minutes : record {
-        mins : count &log &optional;
-        iv : count &log &optional;
+    type minutes: record {
+        mins: count &log &optional;
+        iv: count &log &optional;
     };
 
-    type hours : record {
-        hours : count &log &optional;
-        su : count &log &optional;
+    type hours: record {
+        hours: count &log &optional;
+        su: count &log &optional;
     };
 
-    type day_dows : record {
-        day : count &log &optional;
-        day_of_week : count &log &optional;
+    type day_dows: record {
+        day: count &log &optional;
+        day_of_week: count &log &optional;
     };
 
-    type CP24TIME2A : record {
-        milli : count &log &optional;
-        min : minutes &log &optional;
+    type CP24TIME2A: record {
+        milli: count &log &optional;
+        min: minutes &log &optional;
     };
 
-    type CP56TIME2A : record {
-        milli : count &log &optional;
-        minute : minutes &log &optional;
-        hour : hours &log &optional;
-        day_dow : day_dows &log &optional;
-        mon : count &log &optional;
-        year : count &log &optional;
+    type CP56TIME2A: record {
+        milli: count &log &optional;
+        minute: minutes &log &optional;
+        hour: hours &log &optional;
+        day_dow: day_dows &log &optional;
+        mon: count &log &optional;
+        year: count &log &optional;
     };
 
-    type SIQ_CP56Time2a : record {
-        Asdu_num : count &log;
+    type SIQ_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        siq : SIQ_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        siq: SIQ_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type SIQ_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type SIQ_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        siq : SIQ_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        siq: SIQ_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type DIQ_field : record {
-        dpi : count &log &optional;
-        bl : count &log &optional;
-        sb : count &log &optional;
-        nt : count &log &optional;
-        iv : count &log &optional;
+    type DIQ_field: record {
+        dpi: count &log &optional;
+        bl: count &log &optional;
+        sb: count &log &optional;
+        nt: count &log &optional;
+        iv: count &log &optional;
     };
 
-    type DIQ_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type DIQ_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_type: count &log &optional;
         info_obj_addr: count &log &optional;
-        diq : DIQ_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        diq: DIQ_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type DIQ_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type DIQ_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        diq : DIQ_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        diq: DIQ_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type VTI_QDS_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type VTI_QDS_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        value : string &log &optional;
-        qds : QDS_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        value: string &log &optional;
+        qds: QDS_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
 
-    type VTI_QDS_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type VTI_QDS_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        value : string &log &optional;
-        qds : QDS_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        value: string &log &optional;
+        qds: QDS_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type BSI_QDS  : record {
-        Asdu_num : count &log;
+    type BSI_QDS: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        # bsi : BSI_field &log &optional;
-        bsi : count &log &optional;
-        qds : QDS_field &log &optional;
+        # bsi: BSI_field &log &optional;
+        bsi: count &log &optional;
+        qds: QDS_field &log &optional;
     };
 
-    type BSI_QDS_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type BSI_QDS_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        # bsi : BSI_field &log &optional;
-        bsi : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        # bsi: BSI_field &log &optional;
+        bsi: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type BSI_QDS_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type BSI_QDS_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        # bsi : BSI_field &log &optional;
-        bsi : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        # bsi: BSI_field &log &optional;
+        bsi: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type COI_field : record {
+    type COI_field: record {
         r: count &log &optional;
         i: count &log &optional;
     };
 
-    type COI  : record {
-        Asdu_num : count &log;
+    type COI: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        coi : COI_field &log &optional;
+        coi: COI_field &log &optional;
     };
 
-    type NVA_QDS_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type NVA_QDS_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        NVA : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        NVA: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type NVA_QDS_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type NVA_QDS_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        NVA : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        NVA: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type SVA_QDS_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type SVA_QDS_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        SVA : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        SVA: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type SVA_QDS_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type SVA_QDS_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        SVA : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        SVA: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type IEEE_754_QDS_CP56Time2a  : record {
-        Asdu_num : count &log;
+    type IEEE_754_QDS_CP56Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        value : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP56Time2a : CP56TIME2A &log &optional;
+        value: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type IEEE_754_QDS_CP24Time2a  : record {
-        Asdu_num : count &log;
+    type IEEE_754_QDS_CP24Time2a: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        value : count &log &optional;
-        qds : QDS_field &log &optional;
-        CP24Time2a : CP24TIME2A &log &optional;
+        value: count &log &optional;
+        qds: QDS_field &log &optional;
+        CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type Read_Command_client  : record {
-        Asdu_num : count &log;
+    type Read_Command_client: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        raw_data : string &log &optional;
+        raw_data: string &log &optional;
     };
 
-    type Read_Command_server  : record {
-        Asdu_num : count &log;
+    type Read_Command_server: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
     };
 
-    type QRP_client  : record {
-        Asdu_num : count &log;
+    type QRP_client: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
-        raw_data : string &log &optional;
+        raw_data: string &log &optional;
     };
 
-    type QRP_server  : record {
-        Asdu_num : count &log;
+    type QRP_server: record {
+        Asdu_num: count &log;
         info_obj_addr: count &log &optional;
     };
 
     type Asdu: record {
-        # info_obj_type : count &log &optional;
-        info_obj_type : info_obj_code &log &optional;
-        seq :  count &log &optional;
-        num_ix :  count &log &optional;
-        # cause_tx :  count &log &optional;
-        cause_tx :  cause_tx_code &log &optional;
-        negative :  count &log &optional;
-        test :  count &log &optional;
-        originator_address : count &log &optional;
-        common_address :  count &log &optional;
+        # info_obj_type: count &log &optional;
+        info_obj_type: info_obj_code &log &optional;
+        seq: count &log &optional;
+        num_ix: count &log &optional;
+        # cause_tx: count &log &optional;
+        cause_tx: cause_tx_code &log &optional;
+        negative: count &log &optional;
+        test: count &log &optional;
+        originator_address: count &log &optional;
+        common_address: count &log &optional;
 
-        # interrogation_command : QOI &log &optional;
-        interrogation_command : vector of count &log &optional;
+        # interrogation_command: QOI &log &optional;
+        interrogation_command: vector of count &log &optional;
 
-        # single_point_information : SIQ &log &optional;
-        single_point_information : vector of count &log &optional;
+        # single_point_information: SIQ &log &optional;
+        single_point_information: vector of count &log &optional;
 
-        single_command :  vector of count &log &optional;
+        single_command: vector of count &log &optional;
 
-        double_command : vector of count &log &optional;
+        double_command: vector of count &log &optional;
 
-        regulating_step_command : vector of count &log &optional;
-        bit_string_32_bit : vector of count &log &optional;
-        setpoint_command_scaled_value : vector of count &log &optional;
-        measured_value_scaled_value : vector of count &log &optional;
+        regulating_step_command: vector of count &log &optional;
+        bit_string_32_bit: vector of count &log &optional;
+        setpoint_command_scaled_value: vector of count &log &optional;
+        measured_value_scaled_value: vector of count &log &optional;
 
-        step_position_information : vector of count &log &optional;
+        step_position_information: vector of count &log &optional;
 
-        single_point_information_CP56Time2a : vector of count &log &optional;
-        single_point_information_CP24Time2a : vector of count &log &optional;
-        # double_point_information_CP56Time2a : DIQ_CP56Time2a &log &optional;
-        double_point_information_CP56Time2a : vector of count &log &optional;
-        double_point_information_CP24Time2a : vector of count &log &optional;
+        single_point_information_CP56Time2a: vector of count &log &optional;
+        single_point_information_CP24Time2a: vector of count &log &optional;
+        # double_point_information_CP56Time2a: DIQ_CP56Time2a &log &optional;
+        double_point_information_CP56Time2a: vector of count &log &optional;
+        double_point_information_CP24Time2a: vector of count &log &optional;
 
-        step_position_information_CP56Time2a : vector of count &log &optional;
-        step_position_information_CP24Time2a : vector of count &log &optional;
-        bit_string_32_bit_CP56Time2a : vector of count &log &optional;
-        bit_string_32_bit_CP24Time2a : vector of count &log &optional;
-        end_of_initialization : vector of count &log &optional;
-        measured_value_normalized_CP56Time2a : vector of count &log &optional;
-        measured_value_normalized_CP24Time2a : vector of count &log &optional;
-        measured_value_scaled_CP24Time2a : vector of count &log &optional;
-        measured_value_scaled_CP56Time2a : vector of count &log &optional;
-        measured_value_short_floating_point_CP56Time2a : vector of count &log &optional;
-        measured_value_short_floating_point_CP24Time2a : vector of count &log &optional;
-        read_Command_client : vector of count &log &optional;
-        read_Command_server : vector of count &log &optional;
-        qrp_client : vector of count &log &optional;
-        qrp_server : vector of count &log &optional;
+        step_position_information_CP56Time2a: vector of count &log &optional;
+        step_position_information_CP24Time2a: vector of count &log &optional;
+        bit_string_32_bit_CP56Time2a: vector of count &log &optional;
+        bit_string_32_bit_CP24Time2a: vector of count &log &optional;
+        end_of_initialization: vector of count &log &optional;
+        measured_value_normalized_CP56Time2a: vector of count &log &optional;
+        measured_value_normalized_CP24Time2a: vector of count &log &optional;
+        measured_value_scaled_CP24Time2a: vector of count &log &optional;
+        measured_value_scaled_CP56Time2a: vector of count &log &optional;
+        measured_value_short_floating_point_CP56Time2a: vector of count &log &optional;
+        measured_value_short_floating_point_CP24Time2a: vector of count &log &optional;
+        read_Command_client: vector of count &log &optional;
+        read_Command_server: vector of count &log &optional;
+        qrp_client: vector of count &log &optional;
+        qrp_server: vector of count &log &optional;
 
     };
 
@@ -574,11 +574,11 @@ export {
         [4] = "Err",
     } &default = "unknown";
 
-    type siq_CP56Time2a_w_info_obj_type : record {
-        info_obj_type_b : count &optional;
+    type siq_CP56Time2a_w_info_obj_type: record {
+        info_obj_type_b: count &optional;
         info_obj_addr: count &log;
-        siq : SIQ_field &log;
-        CP56Time2a : CP56TIME2A &log;
+        siq: SIQ_field &log;
+        CP56Time2a: CP56TIME2A &log;
     };
 
 
@@ -586,68 +586,68 @@ export {
     global log_iec104: event(rec: Info);
 }
 
-global COI_vec : vector of count;
-global COI_temp : vector of count;
+global COI_vec: vector of count;
+global COI_temp: vector of count;
 
-global QOI_vec : vector of count;
-global QOI_temp : vector of count;
+global QOI_vec: vector of count;
+global QOI_temp: vector of count;
 
-global SCO_vec : vector of count;
-global SCO_temp : vector of count;
-global DCO_vec : vector of count;
-global DCO_temp : vector of count;
+global SCO_vec: vector of count;
+global SCO_temp: vector of count;
+global DCO_vec: vector of count;
+global DCO_temp: vector of count;
 
-global SIQ_vec : vector of count;
-global SIQ_temp : vector of count;
-global RCO_vec : vector of count;
-global RCO_temp : vector of count;
-global BSI_vec : vector of count;
-global BSI_temp : vector of count;
-global SVA_QOS_vec : vector of count;
-global SVA_QOS_temp : vector of count;
-global SVA_QDS_vec : vector of count;
-global SVA_QDS_temp : vector of count;
-global VTI_QDS_vec : vector of count;
-global VTI_QDS_temp : vector of count;
+global SIQ_vec: vector of count;
+global SIQ_temp: vector of count;
+global RCO_vec: vector of count;
+global RCO_temp: vector of count;
+global BSI_vec: vector of count;
+global BSI_temp: vector of count;
+global SVA_QOS_vec: vector of count;
+global SVA_QOS_temp: vector of count;
+global SVA_QDS_vec: vector of count;
+global SVA_QDS_temp: vector of count;
+global VTI_QDS_vec: vector of count;
+global VTI_QDS_temp: vector of count;
 
-global SIQ_CP56Time2a_vec : vector of count;
-global SIQ_CP56Time2a_temp : vector of count;
-global SIQ_CP24Time2a_vec : vector of count;
-global SIQ_CP24Time2a_temp : vector of count;
-global DIQ_CP56Time2a_vec : vector of count;
-global DIQ_CP56Time2a_temp : vector of count;
-global DIQ_CP24Time2a_vec : vector of count;
-global DIQ_CP24Time2a_temp : vector of count;
-global VTI_QDS_CP56Time2a_vec : vector of count;
-global VTI_QDS_CP56Time2a_temp : vector of count;
-global VTI_QDS_CP24Time2a_vec : vector of count;
-global VTI_QDS_CP24Time2a_temp : vector of count;
-global BSI_QDS_vec : vector of count;
-global BSI_QDS_temp : vector of count;
-global BSI_QDS_CP56Time2a_vec : vector of count;
-global BSI_QDS_CP56Time2a_temp : vector of count;
-global BSI_QDS_CP24Time2a_vec : vector of count;
-global BSI_QDS_CP24Time2a_temp : vector of count;
-global NVA_QDS_CP56Time2a_vec : vector of count;
-global NVA_QDS_CP56Time2a_temp : vector of count;
-global NVA_QDS_CP24Time2a_vec : vector of count;
-global NVA_QDS_CP24Time2a_temp : vector of count;
-global SVA_QDS_CP56Time2a_vec : vector of count;
-global SVA_QDS_CP56Time2a_temp : vector of count;
-global SVA_QDS_CP24Time2a_vec : vector of count;
-global SVA_QDS_CP24Time2a_temp : vector of count;
-global IEEE_754_QDS_CP56Time2a_vec : vector of count;
-global IEEE_754_QDS_CP56Time2a_temp : vector of count;
-global IEEE_754_QDS_CP24Time2a_vec : vector of count;
-global IEEE_754_QDS_CP24Time2a_temp : vector of count;
-global Read_Command_client_vec : vector of count;
-global Read_Command_client_temp : vector of count;
-global Read_Command_server_vec : vector of count;
-global Read_Command_server_temp : vector of count;
-global QRP_client_vec : vector of count;
-global QRP_client_temp : vector of count;
-global QRP_server_vec : vector of count;
-global QRP_server_temp : vector of count;
+global SIQ_CP56Time2a_vec: vector of count;
+global SIQ_CP56Time2a_temp: vector of count;
+global SIQ_CP24Time2a_vec: vector of count;
+global SIQ_CP24Time2a_temp: vector of count;
+global DIQ_CP56Time2a_vec: vector of count;
+global DIQ_CP56Time2a_temp: vector of count;
+global DIQ_CP24Time2a_vec: vector of count;
+global DIQ_CP24Time2a_temp: vector of count;
+global VTI_QDS_CP56Time2a_vec: vector of count;
+global VTI_QDS_CP56Time2a_temp: vector of count;
+global VTI_QDS_CP24Time2a_vec: vector of count;
+global VTI_QDS_CP24Time2a_temp: vector of count;
+global BSI_QDS_vec: vector of count;
+global BSI_QDS_temp: vector of count;
+global BSI_QDS_CP56Time2a_vec: vector of count;
+global BSI_QDS_CP56Time2a_temp: vector of count;
+global BSI_QDS_CP24Time2a_vec: vector of count;
+global BSI_QDS_CP24Time2a_temp: vector of count;
+global NVA_QDS_CP56Time2a_vec: vector of count;
+global NVA_QDS_CP56Time2a_temp: vector of count;
+global NVA_QDS_CP24Time2a_vec: vector of count;
+global NVA_QDS_CP24Time2a_temp: vector of count;
+global SVA_QDS_CP56Time2a_vec: vector of count;
+global SVA_QDS_CP56Time2a_temp: vector of count;
+global SVA_QDS_CP24Time2a_vec: vector of count;
+global SVA_QDS_CP24Time2a_temp: vector of count;
+global IEEE_754_QDS_CP56Time2a_vec: vector of count;
+global IEEE_754_QDS_CP56Time2a_temp: vector of count;
+global IEEE_754_QDS_CP24Time2a_vec: vector of count;
+global IEEE_754_QDS_CP24Time2a_temp: vector of count;
+global Read_Command_client_vec: vector of count;
+global Read_Command_client_temp: vector of count;
+global Read_Command_server_vec: vector of count;
+global Read_Command_server_temp: vector of count;
+global QRP_client_vec: vector of count;
+global QRP_client_temp: vector of count;
+global QRP_server_vec: vector of count;
+global QRP_server_temp: vector of count;
 
 redef record connection += {
     iec104: Info &optional;
@@ -723,7 +723,7 @@ hook set_session(c: connection)
 #       info$reply = payload;
 #   }
 
-event iec104::apci(c: connection, is_orig : bool, apdu_len : count, not_i_type : count, apci_type : count, apci_tx : count, u_start_dt : count, u_stop_dt : count, u_test_fr : count, apci_rx : count) &priority=4
+event iec104::apci(c: connection, is_orig: bool, apdu_len: count, not_i_type: count, apci_type: count, apci_tx: count, u_start_dt: count, u_stop_dt: count, u_test_fr: count, apci_rx: count) &priority=4
 {
     hook set_session(c);
 
@@ -868,67 +868,67 @@ event iec104::apci(c: connection, is_orig : bool, apdu_len : count, not_i_type :
 
     # single_point_information_CP56Time2a_set = set();
 
-    local empty_COI_temp : vector of count;
+    local empty_COI_temp: vector of count;
     COI_temp = empty_COI_temp;
 
     local empty_QOI_temp: vector of count;
     QOI_temp = empty_QOI_temp;
 
-    local empty_SCO_temp : vector of count;
+    local empty_SCO_temp: vector of count;
     SCO_temp = empty_SCO_temp;
-    local empty_DCO_temp : vector of count;
+    local empty_DCO_temp: vector of count;
     DCO_temp = empty_DCO_temp;
 
-    local empty_SIQ_temp : vector of count;
+    local empty_SIQ_temp: vector of count;
     SIQ_temp = empty_SIQ_temp;
-    local empty_RCO_temp : vector of count;
+    local empty_RCO_temp: vector of count;
     RCO_temp = empty_RCO_temp;
-    local empty_BSI_temp : vector of count;
+    local empty_BSI_temp: vector of count;
     BSI_temp = empty_BSI_temp;
-    local empty_SVA_QOS_temp : vector of count;
+    local empty_SVA_QOS_temp: vector of count;
     SVA_QOS_temp =  empty_SVA_QOS_temp;
-    local empty_SVA_QDS_temp : vector of count;
+    local empty_SVA_QDS_temp: vector of count;
     SVA_QDS_temp = empty_SVA_QDS_temp;
-    local empty_VTI_QDS_temp : vector of count;
+    local empty_VTI_QDS_temp: vector of count;
     VTI_QDS_temp = empty_VTI_QDS_temp;
 
-    local empty_SIQ_CP56Time2a_temp : vector of count;
+    local empty_SIQ_CP56Time2a_temp: vector of count;
     SIQ_CP56Time2a_temp = empty_SIQ_CP56Time2a_temp;
-    local empty_SIQ_CP24Time2a_temp : vector of count;
+    local empty_SIQ_CP24Time2a_temp: vector of count;
     SIQ_CP24Time2a_temp = empty_SIQ_CP24Time2a_temp;
-    local empty_DIQ_CP56Time2a_temp : vector of count;
+    local empty_DIQ_CP56Time2a_temp: vector of count;
     DIQ_CP56Time2a_temp = empty_DIQ_CP56Time2a_temp;
-    local empty_DIQ_CP24Time2a_temp : vector of count;
+    local empty_DIQ_CP24Time2a_temp: vector of count;
     DIQ_CP24Time2a_temp = empty_DIQ_CP24Time2a_temp;
-    local empty_VTI_QDS_CP56Time2a_temp : vector of count;
+    local empty_VTI_QDS_CP56Time2a_temp: vector of count;
     VTI_QDS_CP56Time2a_temp = empty_VTI_QDS_CP56Time2a_temp;
-    local empty_VTI_QDS_CP24Time2a_temp : vector of count;
+    local empty_VTI_QDS_CP24Time2a_temp: vector of count;
     VTI_QDS_CP24Time2a_temp = empty_VTI_QDS_CP24Time2a_temp;
-    local empty_BSI_QDS_temp : vector of count;
+    local empty_BSI_QDS_temp: vector of count;
     BSI_QDS_temp = empty_BSI_QDS_temp;
-    local empty_BSI_QDS_CP56Time2a_temp : vector of count;
+    local empty_BSI_QDS_CP56Time2a_temp: vector of count;
     BSI_QDS_CP56Time2a_temp = empty_BSI_QDS_CP56Time2a_temp;
-    local empty_BSI_QDS_CP24Time2a_temp : vector of count;
+    local empty_BSI_QDS_CP24Time2a_temp: vector of count;
     BSI_QDS_CP24Time2a_temp = empty_BSI_QDS_CP24Time2a_temp;
-    local empty_NVA_QDS_CP56Time2a_temp : vector of count;
+    local empty_NVA_QDS_CP56Time2a_temp: vector of count;
     NVA_QDS_CP56Time2a_temp = empty_NVA_QDS_CP56Time2a_temp;
-    local empty_NVA_QDS_CP24Time2a_temp : vector of count;
+    local empty_NVA_QDS_CP24Time2a_temp: vector of count;
     NVA_QDS_CP24Time2a_temp = empty_NVA_QDS_CP24Time2a_temp;
-    local empty_SVA_QDS_CP56Time2a_temp : vector of count;
+    local empty_SVA_QDS_CP56Time2a_temp: vector of count;
     SVA_QDS_CP56Time2a_temp = empty_SVA_QDS_CP56Time2a_temp;
-    local empty_SVA_QDS_CP24Time2a_temp : vector of count;
+    local empty_SVA_QDS_CP24Time2a_temp: vector of count;
     SVA_QDS_CP24Time2a_temp = empty_SVA_QDS_CP24Time2a_temp;
-    local empty_IEEE_754_QDS_CP56Time2a_temp : vector of count;
+    local empty_IEEE_754_QDS_CP56Time2a_temp: vector of count;
     IEEE_754_QDS_CP56Time2a_temp = empty_IEEE_754_QDS_CP56Time2a_temp;
-    local empty_IEEE_754_QDS_CP24Time2a_temp : vector of count;
+    local empty_IEEE_754_QDS_CP24Time2a_temp: vector of count;
     IEEE_754_QDS_CP24Time2a_temp = empty_IEEE_754_QDS_CP24Time2a_temp;
-    local empty_Read_Command_client_temp : vector of count;
+    local empty_Read_Command_client_temp: vector of count;
     Read_Command_client_temp = empty_Read_Command_client_temp;
-    local empty_Read_Command_server_temp : vector of count;
+    local empty_Read_Command_server_temp: vector of count;
     Read_Command_server_temp = empty_Read_Command_server_temp;
-    local empty_QRP_client_temp : vector of count;
+    local empty_QRP_client_temp: vector of count;
     QRP_client_temp = empty_QRP_client_temp;
-    local empty_QRP_server_temp : vector of count;
+    local empty_QRP_server_temp: vector of count;
     QRP_server_temp = empty_QRP_server_temp;
 }
 
@@ -962,8 +962,8 @@ event iec104::u (c: connection)
     info$type_u_counter = type_u_counter;
 }
 
-event iec104::asdu(c: connection, info_obj_type : info_obj_code, seq : count, num_ix : count, cause_tx: cause_tx_code,
-                   negative : count, test : count, originator_address : count, common_address : count
+event iec104::asdu(c: connection, info_obj_type: info_obj_code, seq: count, num_ix: count, cause_tx: cause_tx_code,
+                   negative: count, test: count, originator_address: count, common_address: count
                   ) &priority=3
 {
     hook set_session(c);
