@@ -12,7 +12,8 @@ global total_time: interval;
 
 export {
     ## Log stream identifier.
-    redef enum Log::ID += { LOG,
+    redef enum Log::ID += {
+        LOG,
         LOG_COI,
         LOG_QOI,
         LOG_SCO,
@@ -551,7 +552,6 @@ export {
 
         asdu_uid: string &log &optional;
 
-
         # Counters can be for statistics but also serve good indicator for correct parsing.
         # type_i_counter: count &log;
         type_i_counter: count &optional;
@@ -651,7 +651,6 @@ global QRP_server_temp : vector of count;
 
 redef record connection += {
     iec104: Info &optional;
-    # iec104_ASDU: Asdu &optional;
 };
 
 const ports = {
@@ -662,41 +661,41 @@ const ports = {
 redef likely_server_ports += { ports };
 
 event zeek_init() &priority=5
-    {
+{
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
     # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
-        Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
-        Log::create_stream(iec104::LOG_QOI, [$columns=QOI, $path="iec104-C_IC_NA_1"]);
-        Log::create_stream(iec104::LOG_SCO, [$columns=SCO, $path="iec104-C_SC_NA_1"]);
-        Log::create_stream(iec104::LOG_DCO, [$columns=DCO, $path="iec104-C_DC_NA_1"]);
-        Log::create_stream(iec104::LOG_SIQ, [$columns=SIQ, $path="iec104-M_SP_NA_1"]);
-        Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
-        Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
-        Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
-        Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
-        Log::create_stream(iec104::LOG_VTI_QDS, [$columns=VTI_QDS, $path="iec104-M_ST_NA_1"]);
-        Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-M_SP_TB_1"]);
-        Log::create_stream(iec104::LOG_SIQ_CP24Time2a, [$columns=SIQ_CP24Time2a, $path="iec104-M_SP_TA_1"]);
-        Log::create_stream(iec104::LOG_DIQ_CP56Time2a, [$columns=DIQ_CP56Time2a, $path="iec104-M_DP_TB_1"]);
-        Log::create_stream(iec104::LOG_DIQ_CP24Time2a, [$columns=DIQ_CP24Time2a, $path="iec104-M_DP_TA_1"]);
-        Log::create_stream(iec104::LOG_VTI_QDS_CP56Time2a, [$columns=VTI_QDS_CP56Time2a, $path="iec104-M_ST_TB_1"]);
-        Log::create_stream(iec104::LOG_VTI_QDS_CP24Time2a, [$columns=VTI_QDS_CP24Time2a, $path="iec104-M_ST_TA_1"]);
-        Log::create_stream(iec104::LOG_BSI_QDS, [$columns=BSI_QDS, $path="iec104-M_BO_NA_1"]);
-        Log::create_stream(iec104::LOG_BSI_QDS_CP56Time2a, [$columns=BSI_QDS_CP56Time2a, $path="iec104-M_BO_TB_1"]);
-        Log::create_stream(iec104::LOG_BSI_QDS_CP24Time2a, [$columns=BSI_QDS_CP24Time2a, $path="iec104-M_BO_TA_1"]);
-        Log::create_stream(iec104::LOG_NVA_QDS_CP56Time2a, [$columns=NVA_QDS_CP56Time2a, $path="iec104-M_ME_TD_1"]);
-        Log::create_stream(iec104::LOG_NVA_QDS_CP24Time2a, [$columns=NVA_QDS_CP24Time2a, $path="iec104-M_ME_TA_1"]);
-        Log::create_stream(iec104::LOG_SVA_QDS_CP56Time2a, [$columns=SVA_QDS_CP56Time2a, $path="iec104-M_ME_TE_1"]);
-        Log::create_stream(iec104::LOG_SVA_QDS_CP24Time2a, [$columns=SVA_QDS_CP24Time2a, $path="iec104-M_ME_TB_1"]);
-        Log::create_stream(iec104::LOG_IEEE_754_QDS_CP56Time2a, [$columns=IEEE_754_QDS_CP56Time2a, $path="iec104-M_ME_TF_1"]);
-        Log::create_stream(iec104::LOG_IEEE_754_QDS_CP24Time2a, [$columns=IEEE_754_QDS_CP24Time2a, $path="iec104-M_ME_TC_1"]);
-        Log::create_stream(iec104::LOG_Read_Command_client, [$columns=Read_Command_client, $path="iec104-C_RD_NA_1-Read_Command_client"]);
-        Log::create_stream(iec104::LOG_Read_Command_server, [$columns=Read_Command_server, $path="iec104-_C_RD_NA_1-Read_Command_server"]);
-        Log::create_stream(iec104::LOG_QRP_client, [$columns=QRP_client, $path="iec104-C_RP_NC_1-QRP_client"]);
-        Log::create_stream(iec104::LOG_QRP_server, [$columns=QRP_server, $path="iec104-C_RP_NC_1-QRP_server"]);
-    }
+    Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
+    Log::create_stream(iec104::LOG_QOI, [$columns=QOI, $path="iec104-C_IC_NA_1"]);
+    Log::create_stream(iec104::LOG_SCO, [$columns=SCO, $path="iec104-C_SC_NA_1"]);
+    Log::create_stream(iec104::LOG_DCO, [$columns=DCO, $path="iec104-C_DC_NA_1"]);
+    Log::create_stream(iec104::LOG_SIQ, [$columns=SIQ, $path="iec104-M_SP_NA_1"]);
+    Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
+    Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
+    Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
+    Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
+    Log::create_stream(iec104::LOG_VTI_QDS, [$columns=VTI_QDS, $path="iec104-M_ST_NA_1"]);
+    Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-M_SP_TB_1"]);
+    Log::create_stream(iec104::LOG_SIQ_CP24Time2a, [$columns=SIQ_CP24Time2a, $path="iec104-M_SP_TA_1"]);
+    Log::create_stream(iec104::LOG_DIQ_CP56Time2a, [$columns=DIQ_CP56Time2a, $path="iec104-M_DP_TB_1"]);
+    Log::create_stream(iec104::LOG_DIQ_CP24Time2a, [$columns=DIQ_CP24Time2a, $path="iec104-M_DP_TA_1"]);
+    Log::create_stream(iec104::LOG_VTI_QDS_CP56Time2a, [$columns=VTI_QDS_CP56Time2a, $path="iec104-M_ST_TB_1"]);
+    Log::create_stream(iec104::LOG_VTI_QDS_CP24Time2a, [$columns=VTI_QDS_CP24Time2a, $path="iec104-M_ST_TA_1"]);
+    Log::create_stream(iec104::LOG_BSI_QDS, [$columns=BSI_QDS, $path="iec104-M_BO_NA_1"]);
+    Log::create_stream(iec104::LOG_BSI_QDS_CP56Time2a, [$columns=BSI_QDS_CP56Time2a, $path="iec104-M_BO_TB_1"]);
+    Log::create_stream(iec104::LOG_BSI_QDS_CP24Time2a, [$columns=BSI_QDS_CP24Time2a, $path="iec104-M_BO_TA_1"]);
+    Log::create_stream(iec104::LOG_NVA_QDS_CP56Time2a, [$columns=NVA_QDS_CP56Time2a, $path="iec104-M_ME_TD_1"]);
+    Log::create_stream(iec104::LOG_NVA_QDS_CP24Time2a, [$columns=NVA_QDS_CP24Time2a, $path="iec104-M_ME_TA_1"]);
+    Log::create_stream(iec104::LOG_SVA_QDS_CP56Time2a, [$columns=SVA_QDS_CP56Time2a, $path="iec104-M_ME_TE_1"]);
+    Log::create_stream(iec104::LOG_SVA_QDS_CP24Time2a, [$columns=SVA_QDS_CP24Time2a, $path="iec104-M_ME_TB_1"]);
+    Log::create_stream(iec104::LOG_IEEE_754_QDS_CP56Time2a, [$columns=IEEE_754_QDS_CP56Time2a, $path="iec104-M_ME_TF_1"]);
+    Log::create_stream(iec104::LOG_IEEE_754_QDS_CP24Time2a, [$columns=IEEE_754_QDS_CP24Time2a, $path="iec104-M_ME_TC_1"]);
+    Log::create_stream(iec104::LOG_Read_Command_client, [$columns=Read_Command_client, $path="iec104-C_RD_NA_1-Read_Command_client"]);
+    Log::create_stream(iec104::LOG_Read_Command_server, [$columns=Read_Command_server, $path="iec104-_C_RD_NA_1-Read_Command_server"]);
+    Log::create_stream(iec104::LOG_QRP_client, [$columns=QRP_client, $path="iec104-C_RP_NC_1-QRP_client"]);
+    Log::create_stream(iec104::LOG_QRP_server, [$columns=QRP_server, $path="iec104-C_RP_NC_1-QRP_server"]);
+}
 
 # Initialize logging state.
 hook set_session(c: connection)
@@ -730,211 +729,211 @@ event iec104::apci(c: connection, is_orig : bool, apdu_len : count, not_i_type :
 
     local info = c$iec104;
 
-        # if ( is_orig ) {
-        #   info$request = "ORIGINATOR";
-        #   info$reply = "";
-        # }
-        # else {
-        #   info$request = "";
-        #   info$reply = "RESPONDER";
-        # }
+    # if ( is_orig ) {
+    #   info$request = "ORIGINATOR";
+    #   info$reply = "";
+    # }
+    # else {
+    #   info$request = "";
+    #   info$reply = "RESPONDER";
+    # }
 
-        # local types = enum {
-        #   I = 0,
-        #   S = 1,
-        #   #Undefined = 2, # It is still I
-        #   U = 3
-        # };
+    # local types = enum {
+    #   I = 0,
+    #   S = 1,
+    #   #Undefined = 2, # It is still I
+    #   U = 3
+    # };
 
-        info$apdu_len = apdu_len;
-        if (not_i_type == 0) {
-            info$apci_type = apci_types[0];
-        }
-        else {
-            info$apci_type = apci_types[apci_type];
-        }
+    info$apdu_len = apdu_len;
+    if (not_i_type == 0) {
+        info$apci_type = apci_types[0];
+    }
+    else {
+        info$apci_type = apci_types[apci_type];
+    }
+
+    if (info$apci_type != "U") {
+        info$apci_tx = apci_tx;
+        info$apci_rx = apci_rx;
+    }
+    else {
+        info$apci_tx = 0;
+        info$apci_rx = 0;
+    }
+
+    if (info$apci_type == "U" || info$apci_type == "S") {
+        info$asdu = Asdu();
+    }
+
+    # TODO: Neews for the rest as well
+    if( |COI_temp| != 0)
+        info$asdu$end_of_initialization = COI_temp;
+
+    if( |QOI_temp| != 0)
+        info$asdu$interrogation_command = QOI_temp;
+
+    if( |SIQ_temp| != 0)
+        info$asdu$single_point_information = SIQ_temp;
+
+    if( |SCO_temp| != 0)
+        info$asdu$single_command = SCO_temp;
+
+    if( |DCO_temp| != 0)
+        info$asdu$double_command = DCO_temp;
+
+    if( |RCO_temp| != 0)
+        info$asdu$regulating_step_command = RCO_temp;
+
+    if( |BSI_temp| != 0)
+        info$asdu$bit_string_32_bit = BSI_temp;
+
+    if( |SVA_QOS_temp| != 0)
+        info$asdu$setpoint_command_scaled_value = SVA_QOS_temp;
+
+    if( |SVA_QDS_temp| != 0)
+        info$asdu$measured_value_scaled_value = SVA_QDS_temp;
+
+    if( |VTI_QDS_temp| != 0)
+        info$asdu$step_position_information = VTI_QDS_temp;
+
+    if( |SIQ_CP56Time2a_temp| != 0)
+        info$asdu$single_point_information_CP56Time2a = SIQ_CP56Time2a_temp;
+
+    if( |SIQ_CP24Time2a_temp| != 0)
+        info$asdu$single_point_information_CP24Time2a = SIQ_CP24Time2a_temp;
+
+    if( |DIQ_CP56Time2a_temp| != 0)
+        info$asdu$double_point_information_CP56Time2a = DIQ_CP56Time2a_temp;
+
+    if( |DIQ_CP24Time2a_temp| != 0)
+        info$asdu$double_point_information_CP24Time2a = DIQ_CP24Time2a_temp;
+
+    if( |VTI_QDS_CP56Time2a_temp| != 0)
+        info$asdu$step_position_information_CP56Time2a = VTI_QDS_CP56Time2a_temp;
+
+    if( |VTI_QDS_CP24Time2a_temp| != 0)
+        info$asdu$step_position_information_CP24Time2a = VTI_QDS_CP24Time2a_temp;
+
+    if( |BSI_QDS_temp| != 0)
+        info$asdu$bit_string_32_bit = BSI_QDS_temp;
+
+    if( |BSI_QDS_CP56Time2a_temp| != 0)
+        info$asdu$bit_string_32_bit_CP56Time2a = BSI_QDS_CP56Time2a_temp;
+
+    if( |BSI_QDS_CP24Time2a_temp| != 0)
+        info$asdu$bit_string_32_bit_CP24Time2a = BSI_QDS_CP24Time2a_temp;
+
+    if( |NVA_QDS_CP56Time2a_temp| != 0)
+        info$asdu$measured_value_normalized_CP56Time2a = NVA_QDS_CP56Time2a_temp;
+
+    if( |NVA_QDS_CP24Time2a_temp| != 0)
+        info$asdu$measured_value_normalized_CP24Time2a = NVA_QDS_CP24Time2a_temp;
+
+    if( |SVA_QDS_CP24Time2a_temp| != 0)
+        info$asdu$measured_value_scaled_CP24Time2a = SVA_QDS_CP24Time2a_temp;
+
+    if( |SVA_QDS_CP56Time2a_temp| != 0)
+        info$asdu$measured_value_scaled_CP56Time2a = SVA_QDS_CP56Time2a_temp;
+
+    if( |IEEE_754_QDS_CP56Time2a_temp| != 0)
+        info$asdu$measured_value_short_floating_point_CP56Time2a = IEEE_754_QDS_CP56Time2a_temp;
+
+    if( |IEEE_754_QDS_CP24Time2a_temp| != 0)
+        info$asdu$measured_value_short_floating_point_CP24Time2a = IEEE_754_QDS_CP24Time2a_temp;
+
+    if( |Read_Command_client_temp| != 0)
+        info$asdu$read_Command_client = Read_Command_client_temp;
+
+    if( |Read_Command_server_temp| != 0)
+        info$asdu$read_Command_server = Read_Command_server_temp;
+
+    if( |QRP_client_temp| != 0)
+        info$asdu$qrp_client = QRP_client_temp;
+
+    if( |QRP_server_temp| != 0)
+        info$asdu$qrp_server = QRP_server_temp;
 
 
-        if (info$apci_type != "U") {
-            info$apci_tx = apci_tx;
-            info$apci_rx = apci_rx;
-        }
-        else {
-            info$apci_tx = 0;
-            info$apci_rx = 0;
-        }
+    # print fmt("info$asdu$single_point_information_CP56Time2a: %s", info$asdu$single_point_information_CP56Time2a);
+    # print fmt("info$asdu$interrogation_command: %s", info$asdu$interrogation_command);
 
-        if (info$apci_type == "U" || info$apci_type == "S") {
-            info$asdu = Asdu();
-        }
+    Log::write(iec104::LOG, info);
 
-        # TODO: Neews for the rest as well
-        if( |COI_temp| != 0)
-            info$asdu$end_of_initialization = COI_temp;
+    # for ( entry in info$asdu$single_point_information_CP56Time2a)
 
-        if( |QOI_temp| != 0)
-            info$asdu$interrogation_command = QOI_temp;
+    # for ( entry in single_point_information_CP56Time2a_set)
+    #   Log::write(iec104::LOG_SIQ_CP56Time2a, entry);
+    #   print fmt("  single_point_information_CP56Time2a ENTRY: %s", entry);
 
-        if( |SIQ_temp| != 0)
-            info$asdu$single_point_information = SIQ_temp;
+    # single_point_information_CP56Time2a_set = set();
 
-        if( |SCO_temp| != 0)
-            info$asdu$single_command = SCO_temp;
+    local empty_COI_temp : vector of count;
+    COI_temp = empty_COI_temp;
 
-        if( |DCO_temp| != 0)
-            info$asdu$double_command = DCO_temp;
+    local empty_QOI_temp: vector of count;
+    QOI_temp = empty_QOI_temp;
 
-        if( |RCO_temp| != 0)
-            info$asdu$regulating_step_command = RCO_temp;
+    local empty_SCO_temp : vector of count;
+    SCO_temp = empty_SCO_temp;
+    local empty_DCO_temp : vector of count;
+    DCO_temp = empty_DCO_temp;
 
-        if( |BSI_temp| != 0)
-            info$asdu$bit_string_32_bit = BSI_temp;
+    local empty_SIQ_temp : vector of count;
+    SIQ_temp = empty_SIQ_temp;
+    local empty_RCO_temp : vector of count;
+    RCO_temp = empty_RCO_temp;
+    local empty_BSI_temp : vector of count;
+    BSI_temp = empty_BSI_temp;
+    local empty_SVA_QOS_temp : vector of count;
+    SVA_QOS_temp =  empty_SVA_QOS_temp;
+    local empty_SVA_QDS_temp : vector of count;
+    SVA_QDS_temp = empty_SVA_QDS_temp;
+    local empty_VTI_QDS_temp : vector of count;
+    VTI_QDS_temp = empty_VTI_QDS_temp;
 
-        if( |SVA_QOS_temp| != 0)
-            info$asdu$setpoint_command_scaled_value = SVA_QOS_temp;
-
-        if( |SVA_QDS_temp| != 0)
-            info$asdu$measured_value_scaled_value = SVA_QDS_temp;
-
-        if( |VTI_QDS_temp| != 0)
-            info$asdu$step_position_information = VTI_QDS_temp;
-
-        if( |SIQ_CP56Time2a_temp| != 0)
-            info$asdu$single_point_information_CP56Time2a = SIQ_CP56Time2a_temp;
-
-        if( |SIQ_CP24Time2a_temp| != 0)
-            info$asdu$single_point_information_CP24Time2a = SIQ_CP24Time2a_temp;
-
-        if( |DIQ_CP56Time2a_temp| != 0)
-            info$asdu$double_point_information_CP56Time2a = DIQ_CP56Time2a_temp;
-
-        if( |DIQ_CP24Time2a_temp| != 0)
-            info$asdu$double_point_information_CP24Time2a = DIQ_CP24Time2a_temp;
-
-        if( |VTI_QDS_CP56Time2a_temp| != 0)
-            info$asdu$step_position_information_CP56Time2a = VTI_QDS_CP56Time2a_temp;
-
-        if( |VTI_QDS_CP24Time2a_temp| != 0)
-            info$asdu$step_position_information_CP24Time2a = VTI_QDS_CP24Time2a_temp;
-
-        if( |BSI_QDS_temp| != 0)
-            info$asdu$bit_string_32_bit = BSI_QDS_temp;
-
-        if( |BSI_QDS_CP56Time2a_temp| != 0)
-            info$asdu$bit_string_32_bit_CP56Time2a = BSI_QDS_CP56Time2a_temp;
-
-        if( |BSI_QDS_CP24Time2a_temp| != 0)
-            info$asdu$bit_string_32_bit_CP24Time2a = BSI_QDS_CP24Time2a_temp;
-
-        if( |NVA_QDS_CP56Time2a_temp| != 0)
-            info$asdu$measured_value_normalized_CP56Time2a = NVA_QDS_CP56Time2a_temp;
-
-        if( |NVA_QDS_CP24Time2a_temp| != 0)
-            info$asdu$measured_value_normalized_CP24Time2a = NVA_QDS_CP24Time2a_temp;
-
-        if( |SVA_QDS_CP24Time2a_temp| != 0)
-            info$asdu$measured_value_scaled_CP24Time2a = SVA_QDS_CP24Time2a_temp;
-
-        if( |SVA_QDS_CP56Time2a_temp| != 0)
-            info$asdu$measured_value_scaled_CP56Time2a = SVA_QDS_CP56Time2a_temp;
-
-        if( |IEEE_754_QDS_CP56Time2a_temp| != 0)
-            info$asdu$measured_value_short_floating_point_CP56Time2a = IEEE_754_QDS_CP56Time2a_temp;
-
-        if( |IEEE_754_QDS_CP24Time2a_temp| != 0)
-            info$asdu$measured_value_short_floating_point_CP24Time2a = IEEE_754_QDS_CP24Time2a_temp;
-
-        if( |Read_Command_client_temp| != 0)
-            info$asdu$read_Command_client = Read_Command_client_temp;
-
-        if( |Read_Command_server_temp| != 0)
-            info$asdu$read_Command_server = Read_Command_server_temp;
-
-        if( |QRP_client_temp| != 0)
-            info$asdu$qrp_client = QRP_client_temp;
-
-        if( |QRP_server_temp| != 0)
-            info$asdu$qrp_server = QRP_server_temp;
-
-
-        # print fmt("info$asdu$single_point_information_CP56Time2a: %s", info$asdu$single_point_information_CP56Time2a);
-        # print fmt("info$asdu$interrogation_command: %s", info$asdu$interrogation_command);
-
-        Log::write(iec104::LOG, info);
-
-        # for ( entry in info$asdu$single_point_information_CP56Time2a)
-
-        # for ( entry in single_point_information_CP56Time2a_set)
-        #   Log::write(iec104::LOG_SIQ_CP56Time2a, entry);
-        #   print fmt("  single_point_information_CP56Time2a ENTRY: %s", entry);
-
-        # single_point_information_CP56Time2a_set = set();
-
-        local empty_COI_temp : vector of count;
-        COI_temp = empty_COI_temp;
-
-        local empty_QOI_temp: vector of count;
-        QOI_temp = empty_QOI_temp;
-
-        local empty_SCO_temp : vector of count;
-        SCO_temp = empty_SCO_temp;
-        local empty_DCO_temp : vector of count;
-        DCO_temp = empty_DCO_temp;
-
-        local empty_SIQ_temp : vector of count;
-        SIQ_temp = empty_SIQ_temp;
-        local empty_RCO_temp : vector of count;
-        RCO_temp = empty_RCO_temp;
-        local empty_BSI_temp : vector of count;
-        BSI_temp = empty_BSI_temp;
-        local empty_SVA_QOS_temp : vector of count;
-        SVA_QOS_temp =  empty_SVA_QOS_temp;
-        local empty_SVA_QDS_temp : vector of count;
-        SVA_QDS_temp = empty_SVA_QDS_temp;
-        local empty_VTI_QDS_temp : vector of count;
-        VTI_QDS_temp = empty_VTI_QDS_temp;
-
-        local empty_SIQ_CP56Time2a_temp : vector of count;
-        SIQ_CP56Time2a_temp = empty_SIQ_CP56Time2a_temp;
-        local empty_SIQ_CP24Time2a_temp : vector of count;
-        SIQ_CP24Time2a_temp = empty_SIQ_CP24Time2a_temp;
-        local empty_DIQ_CP56Time2a_temp : vector of count;
-        DIQ_CP56Time2a_temp = empty_DIQ_CP56Time2a_temp;
-        local empty_DIQ_CP24Time2a_temp : vector of count;
-        DIQ_CP24Time2a_temp = empty_DIQ_CP24Time2a_temp;
-        local empty_VTI_QDS_CP56Time2a_temp : vector of count;
-        VTI_QDS_CP56Time2a_temp = empty_VTI_QDS_CP56Time2a_temp;
-        local empty_VTI_QDS_CP24Time2a_temp : vector of count;
-        VTI_QDS_CP24Time2a_temp = empty_VTI_QDS_CP24Time2a_temp;
-        local empty_BSI_QDS_temp : vector of count;
-        BSI_QDS_temp = empty_BSI_QDS_temp;
-        local empty_BSI_QDS_CP56Time2a_temp : vector of count;
-        BSI_QDS_CP56Time2a_temp = empty_BSI_QDS_CP56Time2a_temp;
-        local empty_BSI_QDS_CP24Time2a_temp : vector of count;
-        BSI_QDS_CP24Time2a_temp = empty_BSI_QDS_CP24Time2a_temp;
-        local empty_NVA_QDS_CP56Time2a_temp : vector of count;
-        NVA_QDS_CP56Time2a_temp = empty_NVA_QDS_CP56Time2a_temp;
-        local empty_NVA_QDS_CP24Time2a_temp : vector of count;
-        NVA_QDS_CP24Time2a_temp = empty_NVA_QDS_CP24Time2a_temp;
-        local empty_SVA_QDS_CP56Time2a_temp : vector of count;
-        SVA_QDS_CP56Time2a_temp = empty_SVA_QDS_CP56Time2a_temp;
-        local empty_SVA_QDS_CP24Time2a_temp : vector of count;
-        SVA_QDS_CP24Time2a_temp = empty_SVA_QDS_CP24Time2a_temp;
-        local empty_IEEE_754_QDS_CP56Time2a_temp : vector of count;
-        IEEE_754_QDS_CP56Time2a_temp = empty_IEEE_754_QDS_CP56Time2a_temp;
-        local empty_IEEE_754_QDS_CP24Time2a_temp : vector of count;
-        IEEE_754_QDS_CP24Time2a_temp = empty_IEEE_754_QDS_CP24Time2a_temp;
-        local empty_Read_Command_client_temp : vector of count;
-        Read_Command_client_temp = empty_Read_Command_client_temp;
-        local empty_Read_Command_server_temp : vector of count;
-        Read_Command_server_temp = empty_Read_Command_server_temp;
-        local empty_QRP_client_temp : vector of count;
-        QRP_client_temp = empty_QRP_client_temp;
-        local empty_QRP_server_temp : vector of count;
-        QRP_server_temp = empty_QRP_server_temp;
+    local empty_SIQ_CP56Time2a_temp : vector of count;
+    SIQ_CP56Time2a_temp = empty_SIQ_CP56Time2a_temp;
+    local empty_SIQ_CP24Time2a_temp : vector of count;
+    SIQ_CP24Time2a_temp = empty_SIQ_CP24Time2a_temp;
+    local empty_DIQ_CP56Time2a_temp : vector of count;
+    DIQ_CP56Time2a_temp = empty_DIQ_CP56Time2a_temp;
+    local empty_DIQ_CP24Time2a_temp : vector of count;
+    DIQ_CP24Time2a_temp = empty_DIQ_CP24Time2a_temp;
+    local empty_VTI_QDS_CP56Time2a_temp : vector of count;
+    VTI_QDS_CP56Time2a_temp = empty_VTI_QDS_CP56Time2a_temp;
+    local empty_VTI_QDS_CP24Time2a_temp : vector of count;
+    VTI_QDS_CP24Time2a_temp = empty_VTI_QDS_CP24Time2a_temp;
+    local empty_BSI_QDS_temp : vector of count;
+    BSI_QDS_temp = empty_BSI_QDS_temp;
+    local empty_BSI_QDS_CP56Time2a_temp : vector of count;
+    BSI_QDS_CP56Time2a_temp = empty_BSI_QDS_CP56Time2a_temp;
+    local empty_BSI_QDS_CP24Time2a_temp : vector of count;
+    BSI_QDS_CP24Time2a_temp = empty_BSI_QDS_CP24Time2a_temp;
+    local empty_NVA_QDS_CP56Time2a_temp : vector of count;
+    NVA_QDS_CP56Time2a_temp = empty_NVA_QDS_CP56Time2a_temp;
+    local empty_NVA_QDS_CP24Time2a_temp : vector of count;
+    NVA_QDS_CP24Time2a_temp = empty_NVA_QDS_CP24Time2a_temp;
+    local empty_SVA_QDS_CP56Time2a_temp : vector of count;
+    SVA_QDS_CP56Time2a_temp = empty_SVA_QDS_CP56Time2a_temp;
+    local empty_SVA_QDS_CP24Time2a_temp : vector of count;
+    SVA_QDS_CP24Time2a_temp = empty_SVA_QDS_CP24Time2a_temp;
+    local empty_IEEE_754_QDS_CP56Time2a_temp : vector of count;
+    IEEE_754_QDS_CP56Time2a_temp = empty_IEEE_754_QDS_CP56Time2a_temp;
+    local empty_IEEE_754_QDS_CP24Time2a_temp : vector of count;
+    IEEE_754_QDS_CP24Time2a_temp = empty_IEEE_754_QDS_CP24Time2a_temp;
+    local empty_Read_Command_client_temp : vector of count;
+    Read_Command_client_temp = empty_Read_Command_client_temp;
+    local empty_Read_Command_server_temp : vector of count;
+    Read_Command_server_temp = empty_Read_Command_server_temp;
+    local empty_QRP_client_temp : vector of count;
+    QRP_client_temp = empty_QRP_client_temp;
+    local empty_QRP_server_temp : vector of count;
+    QRP_server_temp = empty_QRP_server_temp;
 }
 
-event iec104::i (c:connection, send_seq: count, recv_seq: count) {
+event iec104::i (c:connection, send_seq: count, recv_seq: count)
+{
     type_i_counter += 1;
 
     hook set_session(c);
@@ -943,7 +942,8 @@ event iec104::i (c:connection, send_seq: count, recv_seq: count) {
     info$type_i_counter = type_i_counter;
 }
 
-event iec104::s (c: connection, start: count, len: count, recv_seq: count) {
+event iec104::s (c: connection, start: count, len: count, recv_seq: count)
+{
     type_s_counter += 1;
 
     hook set_session(c);
@@ -952,7 +952,8 @@ event iec104::s (c: connection, start: count, len: count, recv_seq: count) {
     info$type_s_counter = type_s_counter;
 }
 
-event iec104::u (c: connection){
+event iec104::u (c: connection)
+{
     type_u_counter += 1;
 
     hook set_session(c);
@@ -961,11 +962,10 @@ event iec104::u (c: connection){
     info$type_u_counter = type_u_counter;
 }
 
-event iec104::asdu (c: connection, info_obj_type : info_obj_code, seq : count, num_ix : count, cause_tx: cause_tx_code,
-                    negative : count, test : count, originator_address : count, common_address : count) &priority=3{
-                    # , interrogation_command : vector of QOI, single_command : vector of SCO, double_command : vector of DCO) &priority=3 {
-                    # , interrogation_command : vector of QOI) &priority=3 {
-
+event iec104::asdu(c: connection, info_obj_type : info_obj_code, seq : count, num_ix : count, cause_tx: cause_tx_code,
+                   negative : count, test : count, originator_address : count, common_address : count
+                  ) &priority=3
+{
     hook set_session(c);
 
     local info = c$iec104;
@@ -987,8 +987,6 @@ event iec104::QOI_evt(c: connection, qoi: QOI)
     hook set_session(c);
 
     local info = c$iec104;
-    # print fmt("QOI");
-    # print (qoi);
 
     info$asdu = Asdu();
 
@@ -999,7 +997,6 @@ event iec104::QOI_evt(c: connection, qoi: QOI)
     QOI_vec += next_num;
 
     local new_QOI = QOI($Asdu_num=next_num);
-    # local new_QOI = QOI();
     new_QOI$info_obj_addr = qoi$info_obj_addr;
     new_QOI$qoi = qoi$qoi;
 
@@ -1009,16 +1006,6 @@ event iec104::QOI_evt(c: connection, qoi: QOI)
 event iec104::SIQ_evt(c: connection, siq: SIQ)
 {
     hook set_session(c);
-
-    # Infinity loop for testing the log ouputs
-    # local iter = 0;
-
-    # while ( iter < 5 )
-    # {
-    #   print ++iter;
-    #   if( iter == 5)
-    #       iter = 0;
-    # }
 
     local info = c$iec104;
 
@@ -1182,10 +1169,8 @@ event iec104::VTI_QDS_evt(c: connection, vti_qds: VTI_QDS)
     Log::write(iec104::LOG_VTI_QDS, new_VTI_QDS);
 }
 
-# event iec104::SIQ_CP56Time2a_evt(c: connection, asdu_b: Asdu, siq_CP56Time2a: SIQ_CP56Time2a) {
-event iec104::SIQ_CP56Time2a_evt(c: connection, siq_CP56Time2a: SIQ_CP56Time2a) {
-# event iec104::SIQ_CP56Time2a_evt(c: connection, final: siq_CP56Time2a_w_info_obj_type) &priority=2 {
-
+event iec104::SIQ_CP56Time2a_evt(c: connection, siq_CP56Time2a: SIQ_CP56Time2a)
+{
     hook set_session(c);
 
     local info = c$iec104;
@@ -1197,8 +1182,6 @@ event iec104::SIQ_CP56Time2a_evt(c: connection, siq_CP56Time2a: SIQ_CP56Time2a) 
 
     SIQ_CP56Time2a_temp += next_num;
     SIQ_CP56Time2a_vec += next_num;
-
-    # print fmt("info$asdu$single_point_information_CP56Time2a: %s", info$asdu$single_point_information_CP56Time2a);
 
     local new_SIQ_CP56Time2a = SIQ_CP56Time2a($Asdu_num=next_num);
     new_SIQ_CP56Time2a$info_obj_addr = siq_CP56Time2a$info_obj_addr;
