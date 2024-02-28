@@ -700,14 +700,16 @@ event zeek_init() &priority=5
 # Initialize logging state.
 hook set_session(c: connection)
 {
-    if ( c?$iec104 )
+    if ( c?$iec104 ) {
+        c$iec104$ts = current_event_time();
         return;
+    }
 
-    c$iec104 = Info($ts=current_event_time(),
-                    $uid=c$uid,
-                    $id=c$id,
-                    $apdu_len=apdu_len,
-                    $apci_type=apci_type);
+    c$iec104 = Info($ts = current_event_time(),
+                    $uid = c$uid,
+                    $id = c$id,
+                    $apdu_len = apdu_len,
+                    $apci_type = apci_type);
     c$iec104$asdu = Asdu();
 }
 
