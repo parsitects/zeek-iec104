@@ -764,10 +764,6 @@ event iec104::apci(c: connection, is_orig: bool, apdu_len: count, not_i_type: co
         info$apci_rx = 0;
     }
 
-    if (info$apci_type == "U" || info$apci_type == "S") {
-        info$asdu = Asdu();
-    }
-
     # TODO: Neews for the rest as well
     if( |COI_temp| != 0)
         info$asdu$end_of_initialization = COI_temp;
@@ -990,8 +986,6 @@ event iec104::QOI_evt(c: connection, qoi: QOI)
 
     local info = c$iec104;
 
-    info$asdu = Asdu();
-
     local next_num: count;
     next_num = |QOI_vec| + 1;
 
@@ -1010,8 +1004,6 @@ event iec104::SIQ_evt(c: connection, siq: SIQ)
     hook set_session(c);
 
     local info = c$iec104;
-
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SIQ_vec| + 1;
@@ -1032,8 +1024,6 @@ event iec104::SCO_evt(c: connection, sco: SCO)
 
     local info = c$iec104;
 
-    info$asdu = Asdu();
-
     local next_num: count;
     next_num = |SCO_vec| + 1;
 
@@ -1053,8 +1043,6 @@ event iec104::DCO_evt(c: connection, dco: DCO)
 
     local info = c$iec104;
 
-    info$asdu = Asdu();
-
     local next_num: count;
     next_num = |DCO_vec| + 1;
 
@@ -1073,7 +1061,6 @@ event iec104::RCO_evt(c: connection, rco: RCO)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |RCO_vec| + 1;
@@ -1093,7 +1080,6 @@ event iec104::BSI_evt(c: connection, bsi: BSI)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |BSI_vec| + 1;
@@ -1113,7 +1099,6 @@ event iec104::SVA_QOS_evt(c: connection, sva_qos: SVA_QOS)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SVA_QOS_vec| + 1;
@@ -1134,7 +1119,6 @@ event iec104::SVA_QDS_evt(c: connection, sva_qds: SVA_QDS)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SVA_QDS_vec| + 1;
@@ -1155,7 +1139,6 @@ event iec104::VTI_QDS_evt(c: connection, vti_qds: VTI_QDS)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |VTI_QDS_vec| + 1;
@@ -1176,8 +1159,6 @@ event iec104::SIQ_CP56Time2a_evt(c: connection, siq_CP56Time2a: SIQ_CP56Time2a)
     hook set_session(c);
 
     local info = c$iec104;
-
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SIQ_CP56Time2a_vec| + 1;
@@ -1200,7 +1181,6 @@ event iec104::SIQ_CP24Time2a_evt(c: connection, siq_CP24Time2a: SIQ_CP24Time2a)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SIQ_CP24Time2a_vec| + 1;
@@ -1221,7 +1201,6 @@ event iec104::DIQ_CP56Time2a_evt(c: connection, diq_CP56Time2a: DIQ_CP56Time2a)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |DIQ_CP56Time2a_vec| + 1;
@@ -1242,7 +1221,6 @@ event iec104::DIQ_CP24Time2a_evt(c: connection, diq_CP24Time2a: DIQ_CP24Time2a)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |DIQ_CP24Time2a_vec| + 1;
@@ -1263,7 +1241,6 @@ event iec104::VTI_QDS_CP56Time2a_evt(c: connection, vti_QDS_CP56Time2a: VTI_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |VTI_QDS_CP56Time2a_vec| + 1;
@@ -1285,7 +1262,6 @@ event iec104::VTI_QDS_CP24Time2a_evt(c: connection, vti_QDS_CP24Time2a: VTI_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |VTI_QDS_CP24Time2a_vec| + 1;
@@ -1307,7 +1283,6 @@ event iec104::BSI_QDS_evt(c: connection, bsi_QDS: BSI_QDS)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |BSI_QDS_vec| + 1;
@@ -1328,7 +1303,6 @@ event iec104::BSI_QDS_CP56Time2a_evt(c: connection, bsi_QDS_CP56Time2a: BSI_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |BSI_QDS_CP56Time2a_vec| + 1;
@@ -1350,7 +1324,6 @@ event iec104::BSI_QDS_CP24Time2a_evt(c: connection, bsi_QDS_CP24Time2a: BSI_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |BSI_QDS_CP24Time2a_vec| + 1;
@@ -1372,7 +1345,6 @@ event iec104::COI_evt(c: connection, coi: COI)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |COI_vec| + 1;
@@ -1392,7 +1364,6 @@ event iec104::NVA_QDS_CP56Time2a_evt(c: connection, nva_QDS_CP56Time2a: NVA_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |NVA_QDS_CP56Time2a_vec| + 1;
@@ -1414,7 +1385,6 @@ event iec104::NVA_QDS_CP24Time2a_evt(c: connection, nva_QDS_CP24Time2a: NVA_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |NVA_QDS_CP24Time2a_vec| + 1;
@@ -1436,7 +1406,6 @@ event iec104::SVA_QDS_CP24Time2a_evt(c: connection, sva_QDS_CP24Time2a: SVA_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SVA_QDS_CP24Time2a_vec| + 1;
@@ -1458,7 +1427,6 @@ event iec104::SVA_QDS_CP56Time2a_evt(c: connection, sva_QDS_CP56Time2a: SVA_QDS_
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |SVA_QDS_CP56Time2a_vec| + 1;
@@ -1480,7 +1448,6 @@ event iec104::IEEE_754_QDS_CP56Time2a_evt(c: connection, ieee_754_QDS_CP56Time2a
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |IEEE_754_QDS_CP56Time2a_vec| + 1;
@@ -1502,7 +1469,6 @@ event iec104::IEEE_754_QDS_CP24Time2a_evt(c: connection, ieee_754_QDS_CP24Time2a
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |IEEE_754_QDS_CP24Time2a_vec| + 1;
@@ -1524,7 +1490,6 @@ event iec104::Read_Command_client_evt(c: connection, read_Command_client: Read_C
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |Read_Command_client_vec| + 1;
@@ -1544,7 +1509,6 @@ event iec104::Read_Command_server_evt(c: connection, read_Command_server: Read_C
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |Read_Command_server_vec| + 1;
@@ -1563,7 +1527,6 @@ event iec104::QRP_client_evt(c: connection, qrp_client: QRP_client)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |QRP_client_vec| + 1;
@@ -1583,7 +1546,6 @@ event iec104::QRP_server_evt(c: connection, qrp_server: QRP_server)
     hook set_session(c);
 
     local info = c$iec104;
-    info$asdu = Asdu();
 
     local next_num: count;
     next_num = |QRP_server_vec| + 1;
