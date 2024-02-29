@@ -5,17 +5,11 @@ module iec104;
 import spicy;
 
 
-#public type Packet = unit {
-#    payload: bytes &eod;
-#};
-
-#const ioa_len = 3;
 type Modes = enum {
     I = 0,
     S = 1,
     U = 3
 };
-
 
 type info_obj_code = enum {
     # Process information in monitoring direction:
@@ -152,7 +146,6 @@ type cause_tx_code = enum {
 #    se : 7;
 #};
 
-
 type SIQ = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     siq : bitfield(8) {
@@ -183,7 +176,7 @@ type DIQ = unit {
 #        iv : 7;
 #};
 
-type NVA_QOS = unit{
+type NVA_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qos : bitfield(8) {
@@ -192,7 +185,7 @@ type NVA_QOS = unit{
     };
 };
 
-type NVA_QDS = unit{
+type NVA_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -204,7 +197,7 @@ type NVA_QDS = unit{
     };
 };
 
-type BSI_QDS = unit{
+type BSI_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     bsi : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -216,7 +209,7 @@ type BSI_QDS = unit{
     };
 };
 
-type SVA_QOS = unit{
+type SVA_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qos : bitfield(8) {
@@ -225,7 +218,7 @@ type SVA_QOS = unit{
     };
 };
 
-type SVA_QDS = unit{
+type SVA_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -237,7 +230,7 @@ type SVA_QDS = unit{
     };
 };
 
-type IEEE_754_QOS = unit{
+type IEEE_754_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     value : real &type=spicy::RealType::IEEE754_Single &byte-order = spicy::ByteOrder::Little;
     qos : bitfield(8) {
@@ -247,7 +240,7 @@ type IEEE_754_QOS = unit{
 };
 
 
-type IEEE_754_QDS = unit{
+type IEEE_754_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -259,7 +252,7 @@ type IEEE_754_QDS = unit{
     };
 };
 
-type VTI_QDS = unit{
+type VTI_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     value : bytes &size=1 &byte-order = spicy::ByteOrder::Little;
     qds : bitfield(8) {
@@ -271,20 +264,20 @@ type VTI_QDS = unit{
     };
 };
 
-type CP56TIME2A = unit{
+type CP56TIME2A = unit {
     milli : uint16 &byte-order = spicy::ByteOrder::Little;
     #minute : uint8;
-    minute : bitfield(8){
+    minute : bitfield(8) {
         mins : 0..6;
         iv: 7;
     };
     #hour : uint8;
-    hour : bitfield(8){
+    hour : bitfield(8) {
         hours : 0..6;
         su: 7;
     };
     #day : uint8;
-    day_dow : bitfield(8){
+    day_dow : bitfield(8) {
         day : 0..4;
         day_of_week: 5..7;
     };
@@ -292,9 +285,9 @@ type CP56TIME2A = unit{
     year : uint8;
 };
 
-type CP24TIME2A = unit{
+type CP24TIME2A = unit {
     milli : uint16 &byte-order = spicy::ByteOrder::Little;
-    minute : bitfield(8){
+    minute : bitfield(8) {
         mins : 0..6;
         iv: 7;
     };
@@ -409,7 +402,7 @@ type SCO = unit {
     };
 };
 
-type DCO = unit{
+type DCO = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     dco : bitfield(8) {
         dco_on : 0..1;
@@ -418,7 +411,7 @@ type DCO = unit{
     };
 };
 
-type RCO = unit{
+type RCO = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     rco : bitfield(8) {
         up_down : 0..1;
@@ -427,7 +420,7 @@ type RCO = unit{
     };
 };
 
-type BSI = unit{
+type BSI = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     bsi : bitfield(32) {
         value : 0..31;
@@ -473,7 +466,7 @@ type NVA_QDS_CP24Time2a = unit {
     CP24Time2a : CP24TIME2A;
 };
 
-type SVA_QDS_CP56Time2a = unit{
+type SVA_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -486,7 +479,7 @@ type SVA_QDS_CP56Time2a = unit{
     CP56Time2a : CP56TIME2A;
 };
 
-type SVA_QDS_CP24Time2a = unit{
+type SVA_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -499,7 +492,7 @@ type SVA_QDS_CP24Time2a = unit{
     CP24Time2a : CP24TIME2A;
 };
 
-type IEEE_754_QDS_CP56Time2a = unit{
+type IEEE_754_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -512,7 +505,7 @@ type IEEE_754_QDS_CP56Time2a = unit{
     CP56Time2a : CP56TIME2A;
 };
 
-type IEEE_754_QDS_CP24Time2a = unit{
+type IEEE_754_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qds : bitfield(8) {
@@ -525,23 +518,23 @@ type IEEE_754_QDS_CP24Time2a = unit{
     CP24Time2a : CP24TIME2A;
 };
 
-type Read_Command_client = unit{
+type Read_Command_client = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 
     raw_data : bytes &size=1 &convert=spicy::bytes_to_hexstring($$);
 };
 
-type Read_Command_server = unit{
+type Read_Command_server = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
-type QRP_client = unit{
+type QRP_client = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 
     raw_data : bytes &size=1 &convert=spicy::bytes_to_hexstring($$);
 };
 
-type QRP_server = unit{
+type QRP_server = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
@@ -616,8 +609,6 @@ type Apci = unit {
         print "Done with APCI here", self;
     }
 };
-
-
 
 type Asdu = unit {
 %byte-order = spicy::ByteOrder::Little;
@@ -720,8 +711,6 @@ type Asdu = unit {
 
     # TODO: We have to specify the rest here of fields based on info_obj_type
 
-
-
     on %init {
         print "Init for ASDU here";
     }
@@ -729,7 +718,6 @@ type Asdu = unit {
         #print "Done with ASDU here", self;
     }
 };
-
 
 public function QOI_ret (asdu: QOI) : tuple <uint64, uint64, uint8> {
     return (0, asdu.info_obj_addr, asdu.qoi);
@@ -808,7 +796,6 @@ public function SVA_QDS_ret (asdu: SVA_QDS) :tuple<uint64, uint64, uint64, tuple
 
     return (0, asdu.info_obj_addr, asdu.SVA, qds_tuple);
 }
-
 
 public function IEEE_754_QOS_ret (asdu: IEEE_754_QOS) : tuple<uint64, uint64, real, tuple<ql: uint8, se: uint8>> {
     local temp_ql = asdu.qos.ql;
@@ -1050,7 +1037,6 @@ public function Read_Command_server_ret (asdu: Read_Command_server) : tuple<uint
 public function QRP_client_ret (asdu: QRP_client) : tuple<uint64, uint64, string> {
     return (0, asdu.info_obj_addr, asdu.raw_data);
 }
-
 
 public function QRP_server_ret (asdu: QRP_server) : tuple<uint64, uint64> {
     return (0, asdu.info_obj_addr);
