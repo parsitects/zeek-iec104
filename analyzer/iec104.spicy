@@ -5,6 +5,8 @@ module iec104;
 import spicy;
 
 
+%byte-order = spicy::ByteOrder::Little;
+
 type Modes = enum {
     I = 0,
     S = 1,
@@ -555,9 +557,7 @@ public type Apcis = unit {
 global Apci_glob: Apci;
 Apci_glob.apduLen = 0;
 
-# We need to switch all bytes to little endian
 type Apci = unit {
-%byte-order = spicy::ByteOrder::Little;
     # The IEC-104 has the below start byte in its beginning
     start :  b"\x68" &convert=$$.to_uint(spicy::ByteOrder::Little);
     apduLen : uint8 &byte-order = spicy::ByteOrder::Little;
@@ -611,7 +611,6 @@ type Apci = unit {
 };
 
 type Asdu = unit {
-%byte-order = spicy::ByteOrder::Little;
     #info_obj_type : uint8 &byte-order = spicy::ByteOrder::Little;
     info_obj_type : uint8 &convert=info_obj_code($$);
     data_unit_identifier : bitfield (8) {
