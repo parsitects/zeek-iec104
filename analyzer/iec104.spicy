@@ -553,10 +553,6 @@ public type Apcis = unit {
     }
 };
 
-# Just for testing
-global Apci_glob: Apci;
-Apci_glob.apduLen = 0;
-
 type Apci = unit {
     # The IEC-104 has the below start byte in its beginning
     start :  b"\x68" &convert=$$.to_uint(spicy::ByteOrder::Little);
@@ -597,21 +593,12 @@ type Apci = unit {
         #print "Init for APCI here";
     }
 
-    on ctrl {
-    #on apci_type {
-        #print "after parsing type for APCI", self;
-
-        # Just for testing.
-        Apci_glob.apduLen = self.apduLen;
-    }
-
     on %done {
         print "Done with APCI here", self;
     }
 };
 
 type Asdu = unit {
-    #info_obj_type : uint8 &byte-order = spicy::ByteOrder::Little;
     info_obj_type : uint8 &convert=info_obj_code($$);
     data_unit_identifier : bitfield (8) {
         seq : 7;
@@ -627,14 +614,7 @@ type Asdu = unit {
     originator_address : uint8 &byte-order = spicy::ByteOrder::Little;
     common_address : uint16 &byte-order = spicy::ByteOrder::Little;
 
-    # The length is 3 bytes for IEC 104
-    #info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-
-    # Skipping the IOAs for now.
-    #: void &size=(Apci_glob.apduLen - 13);
-
     qoi_f : QOI()[self.data_unit_identifier.num_ix] if (self.info_obj_type == info_obj_code::C_IC_NA_1);
-    #SCO: uint8 if (self.info_obj_type == info_obj_code::C_SC_NA_1);
 
     sco_f : SCO()[self.data_unit_identifier.num_ix] if (self.info_obj_type == info_obj_code::C_SC_NA_1);
 
