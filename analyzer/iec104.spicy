@@ -180,7 +180,7 @@ type DIQ = unit {
 
 type NVA_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    NVA : uint16;
     qos : bitfield(8) {
         ql : 0..6;
         se : 7;
@@ -189,7 +189,7 @@ type NVA_QOS = unit {
 
 type NVA_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    NVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -201,7 +201,7 @@ type NVA_QDS = unit {
 
 type BSI_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    bsi : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -213,7 +213,7 @@ type BSI_QDS = unit {
 
 type SVA_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    SVA : uint16;
     qos : bitfield(8) {
         ql : 0..6;
         se : 7;
@@ -222,7 +222,7 @@ type SVA_QOS = unit {
 
 type SVA_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    SVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -234,7 +234,7 @@ type SVA_QDS = unit {
 
 type IEEE_754_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : real &type=spicy::RealType::IEEE754_Single &byte-order = spicy::ByteOrder::Little;
+    value : real &type=spicy::RealType::IEEE754_Single;
     qos : bitfield(8) {
         ql : 0..6;
         se : 7;
@@ -244,7 +244,7 @@ type IEEE_754_QOS = unit {
 
 type IEEE_754_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    value : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -256,7 +256,7 @@ type IEEE_754_QDS = unit {
 
 type VTI_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=1 &byte-order = spicy::ByteOrder::Little;
+    value : uint8;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -267,7 +267,7 @@ type VTI_QDS = unit {
 };
 
 type CP56TIME2A = unit {
-    milli : uint16 &byte-order = spicy::ByteOrder::Little;
+    milli : uint16;
     #minute : uint8;
     minute : bitfield(8) {
         mins : 0..6;
@@ -288,7 +288,7 @@ type CP56TIME2A = unit {
 };
 
 type CP24TIME2A = unit {
-    milli : uint16 &byte-order = spicy::ByteOrder::Little;
+    milli : uint16;
     minute : bitfield(8) {
         mins : 0..6;
         iv: 7;
@@ -345,7 +345,7 @@ type DIQ_CP24Time2a = unit {
 
 type VTI_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=1 &byte-order = spicy::ByteOrder::Little;
+    value : uint8;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -358,7 +358,7 @@ type VTI_QDS_CP56Time2a = unit {
 
 type VTI_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=1 &byte-order = spicy::ByteOrder::Little;
+    value : uint8;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -371,7 +371,7 @@ type VTI_QDS_CP24Time2a = unit {
 
 type BSI_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    bsi : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -384,7 +384,7 @@ type BSI_QDS_CP56Time2a = unit {
 
 type BSI_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    bsi : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -444,7 +444,7 @@ type COI = unit {
 
 type NVA_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    NVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -457,7 +457,7 @@ type NVA_QDS_CP56Time2a = unit {
 
 type NVA_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    NVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -470,7 +470,7 @@ type NVA_QDS_CP24Time2a = unit {
 
 type SVA_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    SVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -483,7 +483,7 @@ type SVA_QDS_CP56Time2a = unit {
 
 type SVA_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    SVA : bytes &size=2 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    SVA : uint16;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -496,7 +496,7 @@ type SVA_QDS_CP24Time2a = unit {
 
 type IEEE_754_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    value : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -509,7 +509,7 @@ type IEEE_754_QDS_CP56Time2a = unit {
 
 type IEEE_754_QDS_CP24Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value : bytes &size=4 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    value : uint32;
     qds : bitfield(8) {
         ov : 0;
         bl : 4;
@@ -556,7 +556,7 @@ public type Apcis = unit {
 type Apci = unit {
     # The IEC-104 has the below start byte in its beginning
     : int8(0x68);
-    apduLen : uint8 &byte-order = spicy::ByteOrder::Little;
+    apduLen : uint8;
     # There can be four 8-bit control fields
     ctrl : bitfield(32) {
         not_i_type : 0;
@@ -611,8 +611,8 @@ type Asdu = unit {
         negative : 6;
         test : 7;
     };
-    originator_address : uint8 &byte-order = spicy::ByteOrder::Little;
-    common_address : uint16 &byte-order = spicy::ByteOrder::Little;
+    originator_address : uint8;
+    common_address : uint16;
 
     qoi_f : QOI()[self.data_unit_identifier.num_ix] if (self.info_obj_type == info_obj_code::C_IC_NA_1);
 
@@ -797,7 +797,7 @@ public function IEEE_754_QDS_ret (asdu: IEEE_754_QDS) : tuple<uint64, uint64, ui
     return (0, asdu.info_obj_addr, asdu.value, qds_tuple);
 }
 
-public function VTI_QDS_ret (asdu: VTI_QDS) : tuple<uint64, uint64, bytes, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
+public function VTI_QDS_ret (asdu: VTI_QDS) : tuple<uint64, uint64, uint8, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
 
     local temp_ov = asdu.qds.ov;
     local temp_bl = asdu.qds.bl;
@@ -863,7 +863,7 @@ public function DIQ_CP24Time2a_ret (asdu: DIQ_CP24Time2a) : tuple<uint64, uint64
     return (0, asdu.info_obj_addr, diq_tuple ,asdu.CP24Time2a);
 }
 
-public function VTI_QDS_CP56Time2a_ret (asdu: VTI_QDS_CP56Time2a) : tuple<uint64, uint64, bytes, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
+public function VTI_QDS_CP56Time2a_ret (asdu: VTI_QDS_CP56Time2a) : tuple<uint64, uint64, uint8, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
     local temp_ov = asdu.qds.ov;
     local temp_bl = asdu.qds.bl;
     local temp_sb = asdu.qds.sb;
@@ -875,7 +875,7 @@ public function VTI_QDS_CP56Time2a_ret (asdu: VTI_QDS_CP56Time2a) : tuple<uint64
     return (0, asdu.info_obj_addr, asdu.value, qds_tuple, asdu.CP56Time2a);
 }
 
-public function VTI_QDS_CP24Time2a_ret (asdu: VTI_QDS_CP24Time2a) : tuple<uint64, uint64, bytes, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP24TIME2A> {
+public function VTI_QDS_CP24Time2a_ret (asdu: VTI_QDS_CP24Time2a) : tuple<uint64, uint64, uint8, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP24TIME2A> {
     local temp_ov = asdu.qds.ov;
     local temp_bl = asdu.qds.bl;
     local temp_sb = asdu.qds.sb;
