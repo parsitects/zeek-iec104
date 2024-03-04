@@ -35,7 +35,7 @@ on iec104::Apci if (!self.ctrl.not_i_type) ->
 	event iec104::i($conn, self.ctrl.apci_tx, self.ctrl.apci_rx);
 
 on iec104::Apci if (self.ctrl.apci_type == 1) -> 
-	event iec104::s($conn, self.start, self.apduLen, self.ctrl.apci_rx);
+	event iec104::s($conn, self.apduLen, self.ctrl.apci_rx);
 
 on iec104::Apci if (self.ctrl.apci_type == 3) -> 
 	event iec104::u($conn);

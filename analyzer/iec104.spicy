@@ -555,7 +555,7 @@ public type Apcis = unit {
 
 type Apci = unit {
     # The IEC-104 has the below start byte in its beginning
-    start :  b"\x68" &convert=$$.to_uint(spicy::ByteOrder::Little);
+    : int8(0x68);
     apduLen : uint8 &byte-order = spicy::ByteOrder::Little;
     # There can be four 8-bit control fields
     ctrl : bitfield(32) {
