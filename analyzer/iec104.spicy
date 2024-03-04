@@ -543,14 +543,6 @@ type QRP_server = unit {
 public type Apcis = unit {
     %port = 2404/tcp &originator;
     : Apci[];
-
-    on %init {
-    #print "Starting APCIs";
-    }
-
-    on %done {
-        #print self;
-    }
 };
 
 type Apci = unit {
@@ -588,14 +580,6 @@ type Apci = unit {
     # 4 is the minimum APDU lenght we can find.
     #dumb_2: skip &size=(apduLen - 4);
     #: void &size=(self.apduLen - 4);
-
-    on %init {
-        #print "Init for APCI here";
-    }
-
-    on %done {
-        print "Done with APCI here", self;
-    }
 };
 
 type Asdu = unit {
@@ -689,13 +673,6 @@ type Asdu = unit {
     QRP_f_server: QRP_server()[self.data_unit_identifier.num_ix] if (self.info_obj_type == info_obj_code::C_RP_NC_1 && self.cause_of_transmission.negative == 1);
 
     # TODO: We have to specify the rest here of fields based on info_obj_type
-
-    on %init {
-        print "Init for ASDU here";
-    }
-    on %done {
-        #print "Done with ASDU here", self;
-    }
 };
 
 public function QOI_ret (asdu: QOI): tuple <uint64, uint64, uint8> {
