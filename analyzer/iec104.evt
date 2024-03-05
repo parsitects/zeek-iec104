@@ -26,17 +26,16 @@ protocol analyzer spicy::iec104 over TCP:
 
 # Specify the APCI and APCI modes (U, S, I) parsing for debugging
 
-on iec104::Apci ->
-    event iec104::apci($conn, $is_orig, self.apduLen, self.apci_i, self.apci_s, self.apci_u);
-
-on iec104::Apci_i ->
-    event iec104::i($conn, self.ssn, self.rsn, self.asdu);
+# I-format APCIs have individual events for each ASDU type.
+#
+# on iec104::Apci_i ->
+#     event iec104::i($conn, self.ssn, self.rsn, self.asdu?);
 
 on iec104::Apci_s ->
     event iec104::s($conn, self.rsn);
 
 on iec104::Apci_u ->
-    event iec104::u($conn, self.start_dt, self.stop_dt, self.test_fr);
+    event iec104::u($conn, self.startdt, self.stopdt, self.testfr);
 
 # For the ASDU parsing
 
@@ -47,7 +46,6 @@ on iec104::Asdu ->
 
 on iec104::QOI ->
     event iec104::QOI_evt($conn, iec104::QOI_ret(self));
-
 
 on iec104::SIQ ->
     event iec104::SIQ_evt($conn, iec104::SIQ_ret(self));
@@ -132,14 +130,8 @@ on iec104::IEEE_754_QDS_CP56Time2a ->
 on iec104::IEEE_754_QDS_CP24Time2a ->
     event iec104::IEEE_754_QDS_CP24Time2a_evt($conn, iec104::IEEE_754_QDS_CP24Time2a_ret(self));
 
-on iec104::Read_Command_client ->
-    event iec104::Read_Command_client_evt($conn, iec104::Read_Command_client_ret(self));
+on iec104::Read_Command ->
+    event iec104::Read_Command_evt($conn, iec104::Read_Command_ret(self));
 
-on iec104::Read_Command_server ->
-    event iec104::Read_Command_server_evt($conn, iec104::Read_Command_server_ret(self));
-
-on iec104::QRP_client ->
-    event iec104::QRP_client_evt($conn, iec104::QRP_client_ret(self));
-
-on iec104::QRP_server ->
-    event iec104::QRP_server_evt($conn, iec104::QRP_server_ret(self));
+on iec104::QRP ->
+    event iec104::QRP_evt($conn, iec104::QRP_ret(self));
