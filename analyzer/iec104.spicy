@@ -540,45 +540,52 @@ type QRP_server = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
+type Apci_i = unit {
+    on %error { self.backtrack(); }
+
+    : bitfield(32) {
+      tag: 0 = 0;
+      ssn: 1..15;
+      unused: 16 = 0;
+      rsn: 17..31;
+    };
+    asdu: Asdu;
+};
+
+type Apci_s = unit {
+    on %error { self.backtrack(); }
+
+    : bitfield(32) {
+      tag: 0..1 = 1;
+      unused: 2..16 = 0;
+      rsn: 17..31;
+    };
+};
+
+type Apci_u = unit {
+    on %error { self.backtrack(); }
+
+    : bitfield(32) {
+      tag: 0..1 = 3;
+      start_dt: 2..3;
+      stop_dt: 4..5;
+      test_fr: 6..7;
+    };
+};
+
 public type Apcis = unit {
     %port = 2404/tcp &originator;
     : Apci[];
 };
 
-type Apci = unit {
+public type Apci = unit {
     # The IEC-104 has the below start byte in its beginning
     : int8(0x68);
     apduLen: uint8;
-    # There can be four 8-bit control fields
-    ctrl: bitfield(32) {
-        bit_0: 0;
-        bit_1: 1;
-        apci_type: 0..1;
-        #Only used when I mode
-        apci_tx: 1..15;
-        u_start_dt: 2..3;
-        u_stop_dt: 4..5;
-        u_test_fr: 6..7;
-        #Not used when we have U mode
-        apci_rx: 17..31;
-    };
-    # NOTE: Just testing for now until we have the ASDU completed.
-    #: void &size=(self.apduLen - 4);
-
-    # Only if there is not Type I we move on with ASDU.
-    asdu: Asdu if (self.ctrl.bit_0 == 0);
-
-    # An alternative approach might be the following
-    # but it also has some parsing issues based on the used data types
-
-    #apci_type: bytes &size=1;
-    #txid: bytes &size=1;
-    #rxid: bytes &size=1;
-
-    #dumb: bytes &until=b"\x00";
-    # 4 is the minimum APDU lenght we can find.
-    #dumb_2: skip &size=(apduLen - 4);
-    #: void &size=(self.apduLen - 4);
+    # FIXME: Check that the size of payload matches apduLen.
+    apci_i: Apci_i &try;
+    apci_s: Apci_s &try;
+    apci_u: Apci_u &try;
 };
 
 type Asdu = unit {

@@ -27,16 +27,16 @@ protocol analyzer spicy::iec104 over TCP:
 # Specify the APCI and APCI modes (U, S, I) parsing for debugging
 
 on iec104::Apci ->
-    event iec104::apci($conn, $is_orig, self.apduLen, self.ctrl.apci_type, self.ctrl.apci_tx, self.ctrl.u_start_dt, self.ctrl.u_stop_dt, self.ctrl.u_test_fr, self.ctrl.apci_rx);
+    event iec104::apci($conn, $is_orig, self.apduLen, self.apci_i, self.apci_s, self.apci_u);
 
-on iec104::Apci if (!self.ctrl.bit_0) ->
-    event iec104::i($conn, self.ctrl.apci_tx, self.ctrl.apci_rx);
+on iec104::Apci_i ->
+    event iec104::i($conn, self.ssn, self.rsn, self.asdu);
 
-on iec104::Apci if (self.ctrl.apci_type == 1) ->
-	event iec104::s($conn, self.apduLen, self.ctrl.apci_rx);
+on iec104::Apci_s ->
+    event iec104::s($conn, self.rsn);
 
-on iec104::Apci if (self.ctrl.apci_type == 3) ->
-    event iec104::u($conn);
+on iec104::Apci_u ->
+    event iec104::u($conn, self.start_dt, self.stop_dt, self.test_fr);
 
 # For the ASDU parsing
 
