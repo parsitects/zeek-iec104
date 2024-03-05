@@ -725,7 +725,7 @@ hook set_session(c: connection)
 #       info$reply = payload;
 #   }
 
-event iec104::apci(c: connection, is_orig: bool, apdu_len: count, not_i_type: count, apci_type: count, apci_tx: count, u_start_dt: count, u_stop_dt: count, u_test_fr: count, apci_rx: count) &priority=4
+event iec104::apci(c: connection, is_orig: bool, apdu_len: count, apci_type: count, apci_tx: count, u_start_dt: count, u_stop_dt: count, u_test_fr: count, apci_rx: count) &priority=4
 {
     hook set_session(c);
 
@@ -748,12 +748,7 @@ event iec104::apci(c: connection, is_orig: bool, apdu_len: count, not_i_type: co
     # };
 
     info$apdu_len = apdu_len;
-    if (not_i_type == 0) {
-        info$apci_type = apci_types[0];
-    }
-    else {
-        info$apci_type = apci_types[apci_type];
-    }
+    info$apci_type = apci_types[apci_type];
 
     if (info$apci_type != "U") {
         info$apci_tx = apci_tx;

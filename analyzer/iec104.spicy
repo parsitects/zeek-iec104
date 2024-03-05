@@ -551,9 +551,8 @@ type Apci = unit {
     apduLen: uint8;
     # There can be four 8-bit control fields
     ctrl: bitfield(32) {
-        not_i_type: 0;
-        #Only of value when not_i_type == 1
-        #mode: 0..1 if ( self.not_i_type == 1 );
+        bit_0: 0;
+        bit_1: 1;
         apci_type: 0..1;
         #Only used when I mode
         apci_tx: 1..15;
@@ -567,7 +566,7 @@ type Apci = unit {
     #: void &size=(self.apduLen - 4);
 
     # Only if there is not Type I we move on with ASDU.
-    asdu: Asdu if (self.ctrl.not_i_type == 0);
+    asdu: Asdu if (self.ctrl.bit_0 == 0);
 
     # An alternative approach might be the following
     # but it also has some parsing issues based on the used data types
