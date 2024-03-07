@@ -32,10 +32,10 @@ protocol analyzer spicy::iec104 over TCP:
 #     event iec104::i($conn, self.ssn, self.rsn, self.asdu?);
 
 on iec104::Apci_s ->
-    event iec104::s($conn, self.rsn);
+    event iec104::s($conn, $is_orig, self.rsn);
 
 on iec104::Apci_u ->
-    event iec104::u($conn, self.startdt, self.stopdt, self.testfr);
+    event iec104::u($conn, $is_orig, self.startdt, self.stopdt, self.testfr);
 
 # For the ASDU parsing
 

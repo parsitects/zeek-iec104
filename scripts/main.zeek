@@ -14,6 +14,8 @@ export {
     ## Log stream identifier.
     redef enum Log::ID += {
         LOG,
+        LOG_APCI_U,
+        LOG_APCI_S,
         LOG_COI,
         LOG_QOI,
         LOG_SCO,
@@ -510,6 +512,24 @@ export {
 
     };
 
+    type APCI_S: record {
+        ts: time &log;
+        uid: string &log;
+        id: conn_id &log;
+        is_orig: bool &log;
+        rsn: count &log;
+    };
+
+    type APCI_U: record {
+        ts: time &log;
+        uid: string &log;
+        id: conn_id &log;
+        is_orig: bool &log;
+        startdt: count &log;
+        stopdt: count &log;
+        testfr: count &log;
+    };
+
     ## Record type containing the column fields of the iec104 log.
     type Info: record {
         ## Timestamp for when the activity happened.
@@ -635,6 +655,8 @@ redef likely_server_ports += { ports };
 event zeek_init() &priority=5
 {
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
+    Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
+    Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
     # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
@@ -683,24 +705,26 @@ hook set_session(c: connection)
     c$iec104$asdu = Asdu();
 }
 
-event iec104::s (c: connection, start: count, len: count, recv_seq: count)
+event iec104::s(c: connection, is_orig: bool, rsn: count)
 {
-    type_s_counter += 1;
-
-    hook set_session(c);
-
-    local info = c$iec104;
-    info$type_s_counter = type_s_counter;
+    local rec = APCI_S($ts=current_event_time(),
+                       $uid=c$uid,
+                       $id=c$id,
+                       $is_orig=is_orig,
+                       $rsn=rsn);
+    Log::write(iec104::LOG_APCI_S, rec);
 }
 
-event iec104::u (c: connection, startdt: count, stopdt: count, testfr: count)
+event iec104::u(c: connection, is_orig: bool, startdt: count, stopdt: count, testfr: count)
 {
-    type_u_counter += 1;
-
-    hook set_session(c);
-
-    local info = c$iec104;
-    info$type_u_counter = type_u_counter;
+    local rec = APCI_U($ts=current_event_time(),
+                       $uid=c$uid,
+                       $id=c$id,
+                       $is_orig=is_orig,
+                       $startdt=startdt,
+                       $stopdt=stopdt,
+                       $testfr=testfr);
+    Log::write(iec104::LOG_APCI_U, rec);
 }
 
 event iec104::asdu(c: connection, info_obj_type: info_obj_code, seq: count, num_ix: count, cause_tx: cause_tx_code,
