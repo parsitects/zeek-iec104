@@ -176,9 +176,12 @@ export {
     };
 
     type QOI: record {
-        Asdu_num: count &log &optional;
-        info_obj_addr: count &log &optional;
-        qoi: count &log &optional;
+        ts: time &log;
+        uid: string &log;
+        id: conn_id &log;
+        is_orig: bool &log;
+        info_obj_addr: count &log;
+        qoi: count &log;
     };
 
     type SCO_field: record {
@@ -585,9 +588,6 @@ export {
 global COI_vec: vector of count;
 global COI_temp: vector of count;
 
-global QOI_vec: vector of count;
-global QOI_temp: vector of count;
-
 global SCO_vec: vector of count;
 global SCO_temp: vector of count;
 global DCO_vec: vector of count;
@@ -747,23 +747,15 @@ event iec104::asdu(c: connection, info_obj_type: info_obj_code, seq: count, num_
 }
 
 
-event iec104::QOI_evt(c: connection, qoi: QOI)
+event iec104::QOI_evt(c: connection, is_orig: bool, info_obj_addr: count, qoi: count)
 {
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |QOI_vec| + 1;
-
-    QOI_temp += next_num;
-    QOI_vec += next_num;
-
-    local new_QOI = QOI($Asdu_num=next_num);
-    new_QOI$info_obj_addr = qoi$info_obj_addr;
-    new_QOI$qoi = qoi$qoi;
-
-    Log::write(iec104::LOG_QOI, new_QOI);
+    local rec = QOI($ts=current_event_time(),
+                    $uid=c$uid,
+                    $id=c$id,
+                    $is_orig=is_orig,
+                    $info_obj_addr=info_obj_addr,
+                    $qoi=qoi);
+    Log::write(iec104::LOG_QOI, rec);
 }
 
 event iec104::SIQ_evt(c: connection, siq: SIQ)

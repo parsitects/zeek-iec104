@@ -634,10 +634,6 @@ type Asdu = unit {
     # TODO: We have to specify the rest here of fields based on info_obj_type
 };
 
-public function QOI_ret (asdu: QOI): tuple <uint64, uint64, uint8> {
-    return (0, asdu.info_obj_addr, asdu.qoi);
-}
-
 public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
     local temp_spi = asdu.siq.spi;
     local temp_bl = asdu.siq.bl;
