@@ -125,7 +125,13 @@ on iec104::SVA_QDS_CP24Time2a ->
     event iec104::SVA_QDS_CP24Time2a_evt($conn, iec104::SVA_QDS_CP24Time2a_ret(self));
 
 on iec104::IEEE_754_QDS_CP56Time2a ->
-    event iec104::IEEE_754_QDS_CP56Time2a_evt($conn, iec104::IEEE_754_QDS_CP56Time2a_ret(self));
+    event iec104::IEEE_754_QDS_CP56Time2a_evt(
+        $conn,
+        $is_orig,
+        self.info_obj_addr,
+        self.value,
+        self.qds,
+        self.btt);
 
 on iec104::IEEE_754_QDS_CP24Time2a ->
     event iec104::IEEE_754_QDS_CP24Time2a_evt($conn, iec104::IEEE_754_QDS_CP24Time2a_ret(self));

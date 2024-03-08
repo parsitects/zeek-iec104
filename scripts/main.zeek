@@ -264,11 +264,11 @@ export {
     };
 
     type QDS_field: record {
-        ov: count &log &optional;
-        bl: count &log &optional;
-        sb: count &log &optional;
-        nt: count &log &optional;
-        iv: count &log &optional;
+        ov: count &log;
+        bl: count &log;
+        sb: count &log;
+        nt: count &log;
+        iv: count &log;
     };
 
     type SVA_QDS: record {
@@ -437,12 +437,16 @@ export {
         CP24Time2a: CP24TIME2A &log &optional;
     };
 
-    type IEEE_754_QDS_CP56Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        value: count &log &optional;
-        qds: QDS_field &log &optional;
-        CP56Time2a: CP56TIME2A &log &optional;
+    type L_IEEE_754_QDS_CP56Time2a: record {
+        ts: time &log;
+        uid: string &log;
+        id: conn_id &log;
+        is_orig: bool &log;
+        info_obj_addr: count &log;
+        # FIXME: Value is actually a short float.
+        value: count &log;
+        qds: QDS_field &log;
+        btt: CP56TIME2A &log;
     };
 
     type IEEE_754_QDS_CP24Time2a: record {
@@ -683,7 +687,9 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_NVA_QDS_CP24Time2a, [$columns=NVA_QDS_CP24Time2a, $path="iec104-M_ME_TA_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS_CP56Time2a, [$columns=SVA_QDS_CP56Time2a, $path="iec104-M_ME_TE_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS_CP24Time2a, [$columns=SVA_QDS_CP24Time2a, $path="iec104-M_ME_TB_1"]);
-    Log::create_stream(iec104::LOG_IEEE_754_QDS_CP56Time2a, [$columns=IEEE_754_QDS_CP56Time2a, $path="iec104-M_ME_TF_1"]);
+    Log::create_stream(iec104::LOG_IEEE_754_QDS_CP56Time2a,
+                       [$columns=L_IEEE_754_QDS_CP56Time2a,
+                        $path="iec104-M_ME_TF_1"]);
     Log::create_stream(iec104::LOG_IEEE_754_QDS_CP24Time2a, [$columns=IEEE_754_QDS_CP24Time2a, $path="iec104-M_ME_TC_1"]);
     Log::create_stream(iec104::LOG_Read_Command, [$columns=Read_Command, $path="iec104-C_RD_NA_1"]);
     Log::create_stream(iec104::LOG_QRP, [$columns=QRP, $path="iec104-C_RP_NA_1"]);
@@ -1202,25 +1208,23 @@ event iec104::SVA_QDS_CP56Time2a_evt(c: connection, sva_QDS_CP56Time2a: SVA_QDS_
     Log::write(iec104::LOG_SVA_QDS_CP56Time2a, new_SVA_QDS_CP56Time2a);
 }
 
-event iec104::IEEE_754_QDS_CP56Time2a_evt(c: connection, ieee_754_QDS_CP56Time2a: IEEE_754_QDS_CP56Time2a)
+event iec104::IEEE_754_QDS_CP56Time2a_evt(c: connection,
+                                          is_orig: bool,
+                                          info_obj_addr: count,
+                                          value: count,
+                                          qds: QDS_field,
+                                          btt: CP56TIME2A)
 {
-    hook set_session(c);
+    local rec = L_IEEE_754_QDS_CP56Time2a($ts=current_event_time(),
+                                          $uid=c$uid,
+                                          $id=c$id,
+                                          $is_orig=is_orig,
+                                          $info_obj_addr=info_obj_addr,
+                                          $value=value,
+                                          $qds=qds,
+                                          $btt=btt);
 
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |IEEE_754_QDS_CP56Time2a_vec| + 1;
-
-    IEEE_754_QDS_CP56Time2a_temp += next_num;
-    IEEE_754_QDS_CP56Time2a_vec += next_num;
-
-    local new_IEEE_754_QDS_CP56Time2a = IEEE_754_QDS_CP56Time2a($Asdu_num=next_num);
-    new_IEEE_754_QDS_CP56Time2a$info_obj_addr = ieee_754_QDS_CP56Time2a$info_obj_addr;
-    new_IEEE_754_QDS_CP56Time2a$value = ieee_754_QDS_CP56Time2a$value;
-    new_IEEE_754_QDS_CP56Time2a$qds = ieee_754_QDS_CP56Time2a$qds;
-    new_IEEE_754_QDS_CP56Time2a$CP56Time2a = ieee_754_QDS_CP56Time2a$CP56Time2a;
-
-    Log::write(iec104::LOG_IEEE_754_QDS_CP56Time2a, new_IEEE_754_QDS_CP56Time2a);
+    Log::write(iec104::LOG_IEEE_754_QDS_CP56Time2a, rec);
 }
 
 event iec104::IEEE_754_QDS_CP24Time2a_evt(c: connection, ieee_754_QDS_CP24Time2a: IEEE_754_QDS_CP24Time2a)

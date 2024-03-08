@@ -495,17 +495,22 @@ type SVA_QDS_CP24Time2a = unit {
     CP24Time2a: CP24TIME2A;
 };
 
-type IEEE_754_QDS_CP56Time2a = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value: uint32;
-    qds: bitfield(8) {
+type T_QDS = unit {
+    : bitfield(8) {
         ov: 0;
         bl: 4;
         sb: 5;
         nt: 6;
         iv: 7;
     };
-    CP56Time2a: CP56TIME2A;
+};
+
+type IEEE_754_QDS_CP56Time2a = unit {
+    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    # FIXME: Should be short floating point.
+    value: uint32;
+    qds: T_QDS;
+    btt: CP56TIME2A;
 };
 
 type IEEE_754_QDS_CP24Time2a = unit {
@@ -911,18 +916,6 @@ public function SVA_QDS_CP24Time2a_ret (asdu: SVA_QDS_CP24Time2a): tuple<uint64,
     local qds_tuple = (temp_ov, temp_bl, temp_sb, temp_nt, temp_iv);
 
     return (0, asdu.info_obj_addr, asdu.SVA, qds_tuple, asdu.CP24Time2a);
-}
-
-public function IEEE_754_QDS_CP56Time2a_ret (asdu: IEEE_754_QDS_CP56Time2a): tuple<uint64, uint64, uint64, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
-    local temp_ov = asdu.qds.ov;
-    local temp_bl = asdu.qds.bl;
-    local temp_sb = asdu.qds.sb;
-    local temp_nt = asdu.qds.nt;
-    local temp_iv = asdu.qds.iv;
-
-    local qds_tuple = (temp_ov, temp_bl, temp_sb, temp_nt, temp_iv);
-
-    return (0, asdu.info_obj_addr, asdu.value, qds_tuple, asdu.CP56Time2a);
 }
 
 public function IEEE_754_QDS_CP24Time2a_ret (asdu: IEEE_754_QDS_CP24Time2a): tuple<uint64, uint64, uint64, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP24TIME2A> {
