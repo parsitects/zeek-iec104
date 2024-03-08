@@ -498,6 +498,8 @@ type SVA_QDS_CP24Time2a = unit {
 type T_QDS = unit {
     : bitfield(8) {
         ov: 0;
+        # TODO:
+        # : 1..3 = 0;
         bl: 4;
         sb: 5;
         nt: 6;
@@ -544,6 +546,7 @@ type Apci_i = unit {
       unused: 16 = 0;
       rsn: 17..31;
     };
+    # TODO: Theoretically this belongs in Apdu.
     asdu: Asdu;
 };
 
@@ -569,17 +572,18 @@ type Apci_u = unit {
     };
 };
 
-public type Apcis = unit {
+public type Apdus = unit {
     %port = 2404/tcp &originator;
-    : (Apci &synchronize)[];
+    : (Apdu &synchronize)[];
 };
 
-public type Apci = unit {
+public type Apdu = unit {
     : int8(0x68);
-    apduLen: uint8;
-    # FIXME: Check that the size of payload matches apduLen.
+    # FIXME: Check that the size of payload matches len.
     #
-    # TODO: apduLen must be at least 4.
+    # TODO: len must be at least 4.
+    len: uint8;
+
     apci_i: Apci_i &try;
     apci_s: Apci_s &try;
     apci_u: Apci_u &try;
