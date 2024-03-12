@@ -302,7 +302,7 @@ export {
 
     type CP24TIME2A: record {
         milli: count &log &optional;
-        min: minutes &log &optional;
+        minute: minutes &log &optional;
     };
 
     type CP56TIME2A: record {
