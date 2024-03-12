@@ -38,7 +38,7 @@ on iec104::Apdu if (self.format == iec104::Format::U)->
 # For the ASDU parsing
 
 on iec104::Asdu ->
-    event iec104::asdu($conn, self.type_id, self.data_unit_identifier.seq, self.data_unit_identifier.num_ix,
+    event iec104::asdu($conn, self.type_id, self.sq, self.obj_count,
                        self.cause_of_transmission.cause_tx, self.cause_of_transmission.negative, self.cause_of_transmission.test,
                        self.originator_address, self.common_address);
 
