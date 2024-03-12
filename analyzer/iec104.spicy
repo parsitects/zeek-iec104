@@ -14,7 +14,7 @@ public type Format = enum {
     U = 3
 };
 
-type info_obj_code = enum {
+type TypeID = enum {
     # Process information in monitoring direction:
     M_SP_NA_1 = 1,
     M_SP_TA_1 = 2,
@@ -599,7 +599,7 @@ public type Apdu = unit {
 };
 
 type Asdu = unit {
-    info_obj_type: uint8 &convert=info_obj_code($$);
+    type_id: uint8 &convert=TypeID($$);
     data_unit_identifier: bitfield (8) {
         num_ix: 0..6;
         seq: 7;
@@ -614,42 +614,42 @@ type Asdu = unit {
     originator_address: uint8;
     common_address: uint16;
 
-    switch (self.info_obj_type) {
-        info_obj_code::C_IC_NA_1 -> qoi: QOI()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_SC_NA_1 -> sco: SCO()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_DC_NA_1 -> dco: DCO()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_RC_NA_1 -> rco: RCO()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_BO_NA_1 -> bsi: BSI()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_SE_NA_1 -> nva_qos: NVA_QOS()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_SE_NB_1 -> sva_qos: SVA_QOS()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_EI_NA_1 -> coi: COI()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_SP_NA_1 -> siq: SIQ()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_DP_NA_1 -> diq: DIQ()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ST_NA_1 -> vti_qds: VTI_QDS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_BO_NA_1 -> bsi_qds: BSI_QDS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_NA_1 -> nva_qds: NVA_QDS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_NB_1 -> sva_qds: SVA_QDS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_NC_1 -> ieee_754_qds: IEEE_754_QDS()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_SP_TB_1 -> siq_CP56Time2a: SIQ_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_DP_TB_1 -> diq_CP56Time2a: DIQ_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ST_TB_1 -> vti_qds_CP56Time2a: VTI_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ST_TA_1 -> vti_qds_CP24Time2a: VTI_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_BO_TB_1 -> bsi_qds_CP56Time2a: BSI_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_BO_TA_1 -> bsi_qds_CP24Time2a: BSI_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TA_1 -> nva_qds_CP24Time2a: NVA_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_RD_NA_1 -> read_command: Read_Command()[self.data_unit_identifier.num_ix];
-        info_obj_code::C_RP_NA_1 -> qrp: QRP()[self.data_unit_identifier.num_ix];
+    switch (self.type_id) {
+        TypeID::C_IC_NA_1 -> qoi: QOI()[self.data_unit_identifier.num_ix];
+        TypeID::C_SC_NA_1 -> sco: SCO()[self.data_unit_identifier.num_ix];
+        TypeID::C_DC_NA_1 -> dco: DCO()[self.data_unit_identifier.num_ix];
+        TypeID::C_RC_NA_1 -> rco: RCO()[self.data_unit_identifier.num_ix];
+        TypeID::C_BO_NA_1 -> bsi: BSI()[self.data_unit_identifier.num_ix];
+        TypeID::C_SE_NA_1 -> nva_qos: NVA_QOS()[self.data_unit_identifier.num_ix];
+        TypeID::C_SE_NB_1 -> sva_qos: SVA_QOS()[self.data_unit_identifier.num_ix];
+        TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[self.data_unit_identifier.num_ix];
+        TypeID::M_EI_NA_1 -> coi: COI()[self.data_unit_identifier.num_ix];
+        TypeID::M_SP_NA_1 -> siq: SIQ()[self.data_unit_identifier.num_ix];
+        TypeID::M_DP_NA_1 -> diq: DIQ()[self.data_unit_identifier.num_ix];
+        TypeID::M_ST_NA_1 -> vti_qds: VTI_QDS()[self.data_unit_identifier.num_ix];
+        TypeID::M_BO_NA_1 -> bsi_qds: BSI_QDS()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_NA_1 -> nva_qds: NVA_QDS()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_NB_1 -> sva_qds: SVA_QDS()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_NC_1 -> ieee_754_qds: IEEE_754_QDS()[self.data_unit_identifier.num_ix];
+        TypeID::M_SP_TB_1 -> siq_CP56Time2a: SIQ_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_DP_TB_1 -> diq_CP56Time2a: DIQ_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ST_TB_1 -> vti_qds_CP56Time2a: VTI_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ST_TA_1 -> vti_qds_CP24Time2a: VTI_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_BO_TB_1 -> bsi_qds_CP56Time2a: BSI_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_BO_TA_1 -> bsi_qds_CP24Time2a: BSI_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TA_1 -> nva_qds_CP24Time2a: NVA_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[self.data_unit_identifier.num_ix];
+        TypeID::C_RD_NA_1 -> read_command: Read_Command()[self.data_unit_identifier.num_ix];
+        TypeID::C_RP_NA_1 -> qrp: QRP()[self.data_unit_identifier.num_ix];
     };
 
-    # TODO: We have to specify the rest here of fields based on info_obj_type
+    # TODO: We have to specify the rest here of fields based on type_id
 };
 
 public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {

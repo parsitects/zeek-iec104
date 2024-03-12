@@ -38,7 +38,7 @@ on iec104::Apdu if (self.format == iec104::Format::U)->
 # For the ASDU parsing
 
 on iec104::Asdu ->
-    event iec104::asdu($conn, self.info_obj_type, self.data_unit_identifier.seq, self.data_unit_identifier.num_ix,
+    event iec104::asdu($conn, self.type_id, self.data_unit_identifier.seq, self.data_unit_identifier.num_ix,
                        self.cause_of_transmission.cause_tx, self.cause_of_transmission.negative, self.cause_of_transmission.test,
                        self.originator_address, self.common_address);
 
@@ -75,12 +75,12 @@ on iec104::IEEE_754_QDS ->
 on iec104::VTI_QDS ->
     event iec104::VTI_QDS_evt($conn, iec104::VTI_QDS_ret(self));
 
-#on iec104::SIQ_CP56Time2a if (iec104::Asdu.info_obj_type == iec104::info_obj_code::M_SP_TB_1) ->
+#on iec104::SIQ_CP56Time2a if (iec104::Asdu.type_id == iec104::TypeID::M_SP_TB_1) ->
 on iec104::SIQ_CP56Time2a ->
     #event iec104::SIQ_CP56Time2a_evt($conn, iec104::Asdu, iec104::SIQ_CP56Time2a_ret(self));
     event iec104::SIQ_CP56Time2a_evt($conn, iec104::SIQ_CP56Time2a_ret(self));
 
-#on iec104::Asdu if (self.info_obj_type == iec104::info_obj_code::M_SP_TB_1) ->
+#on iec104::Asdu if (self.type_id == iec104::TypeID::M_SP_TB_1) ->
 #   event iec104::SIQ_CP56Time2a_evt($conn, iec104::SIQ_CP56Time2a_ret($conn, iec104::SIQ_CP56Time2a));
 
 on iec104::SIQ_CP24Time2a ->
