@@ -735,28 +735,38 @@ type QRP = unit {
     raw_data: uint8;
 };
 
-type Ctrl_i = unit {
+type Ctrl_i = unit(inout apdu: Apdu) {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
       tag: 0 = 0;
       ssn: 1..15;
-      unused: 16 = 0;
+      unused: 16; # = 0
       rsn: 17..31;
     };
+
+    on %done {
+        apdu.format = Format::I;
+        confirm;
+    }
 };
 
-type Ctrl_s = unit {
+type Ctrl_s = unit(inout apdu: Apdu) {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
       tag: 0..1 = 1;
-      unused: 2..16 = 0;
+      unused: 2..16; # = 0
       rsn: 17..31;
     };
+
+    on %done {
+        apdu.format = Format::S;
+        confirm;
+    }
 };
 
-type Ctrl_u = unit {
+type Ctrl_u = unit(inout apdu: Apdu) {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
@@ -764,8 +774,13 @@ type Ctrl_u = unit {
       startdt: 2..3;
       stopdt: 4..5;
       testfr: 6..7;
-      zeroes: 8..31 = 0;
+      zeroes: 8..31; # = 0
     };
+
+    on %done {
+        apdu.format = Format::U;
+        confirm;
+    }
 };
 
 public type Apdus = unit {
@@ -779,23 +794,30 @@ public type Apdu = unit {
         if ($$ < 4) reject;
     }
 
-    ctrl_i: Ctrl_i if (4 < self.len) {
-        self.format = Format::I;
-    }
-    ctrl_s: (Ctrl_s &try) if (4 == self.len) {
-        self.format = Format::S;
-    }
-    ctrl_u: (Ctrl_u &try) if (4 == self.len) {
-        self.format = Format::U;
-    }
+    # We cannot set self.format in unit hooks here because they are
+    # executed even in case of backtracing, so we must fall back to
+    # passing self to subunits and setting the value there.
+    ctrl_i: Ctrl_i(self) if (4 < self.len);
+    ctrl_s: Ctrl_s(self) &try if (4 == self.len);
+    ctrl_u: Ctrl_u(self) &try if (4 == self.len);
 
     # FIXME: Check that the size of information object is (len - 4).
-    asdu: Asdu if (Format::I == self.format);
+    asdu: Asdu(self) if (Format::I == self.format);
 
     var format: Format;
 };
 
-type Asdu = unit {
+type Raw = unit(tid: TypeID, nbytes: uint8) {
+    data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
+
+    on %init {
+        self.type_id = tid;
+    }
+
+    var type_id: TypeID = tid;
+};
+
+type Asdu = unit(apdu: Apdu) {
     type_id: uint8 &convert=TypeID($$);
     : bitfield (8) {
         obj_count: 0..6;
@@ -842,6 +864,7 @@ type Asdu = unit {
         TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[self.obj_count];
         TypeID::C_RD_NA_1 -> read_command: Read_Command()[self.obj_count];
         TypeID::C_RP_NA_1 -> qrp: QRP()[self.obj_count];
+        * -> raw: Raw(self.type_id, apdu.len - 40);
     };
 
     # TODO: We have to specify the rest here of fields based on type_id
