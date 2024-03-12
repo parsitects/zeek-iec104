@@ -7,7 +7,8 @@ import spicy;
 
 %byte-order = spicy::ByteOrder::Little;
 
-type Modes = enum {
+# Not used for parsing.
+public type Format = enum {
     I = 0,
     S = 1,
     U = 3
@@ -537,7 +538,7 @@ type QRP = unit {
     raw_data: uint8;
 };
 
-type Apci_i = unit {
+type Ctrl_i = unit {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
@@ -546,11 +547,9 @@ type Apci_i = unit {
       unused: 16 = 0;
       rsn: 17..31;
     };
-    # TODO: Theoretically this belongs in Apdu.
-    asdu: Asdu;
 };
 
-type Apci_s = unit {
+type Ctrl_s = unit {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
@@ -560,7 +559,7 @@ type Apci_s = unit {
     };
 };
 
-type Apci_u = unit {
+type Ctrl_u = unit {
     on %error { self.backtrack(); }
 
     : bitfield(32) {
@@ -579,14 +578,24 @@ public type Apdus = unit {
 
 public type Apdu = unit {
     : int8(0x68);
-    # FIXME: Check that the size of payload matches len.
-    #
-    # TODO: len must be at least 4.
-    len: uint8;
+    len: uint8 {
+        if ($$ < 4) reject;
+    }
 
-    apci_i: Apci_i &try;
-    apci_s: Apci_s &try;
-    apci_u: Apci_u &try;
+    ctrl_i: Ctrl_i if (4 < self.len) {
+        self.format = Format::I;
+    }
+    ctrl_s: (Ctrl_s &try) if (4 == self.len) {
+        self.format = Format::S;
+    }
+    ctrl_u: (Ctrl_u &try) if (4 == self.len) {
+        self.format = Format::U;
+    }
+
+    # FIXME: Check that the size of information object is (len - 4).
+    asdu: Asdu if (Format::I == self.format);
+
+    var format: Format;
 };
 
 type Asdu = unit {
