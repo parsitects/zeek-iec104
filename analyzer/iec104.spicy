@@ -275,7 +275,7 @@ public type TypeID = enum {
     ASDU_TYPE_255  = 255
 };
 
-type Cause = enum {
+public type Cause = enum {
     Cot_Unused  =  0, # Is not used
     Percyc      =  1, # Cyclic data
     Back        =  2, # Background scan
