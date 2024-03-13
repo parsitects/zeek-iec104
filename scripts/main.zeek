@@ -43,6 +43,7 @@ export {
         LOG_IEEE_754_QDS_CP24Time2a,
         LOG_Read_Command,
         LOG_QRP,
+        LOG_UNK,
     };
 
     type info_obj_code: enum {
@@ -537,6 +538,15 @@ export {
         testfr: count &log;
     };
 
+    type UNK: record {
+        ts: time &log;
+        uid: string &log;
+        id: conn_id &log;
+        is_orig: bool &log;
+        type_id: TypeID &log;
+        data: string &log;
+    };
+
     ## Record type containing the column fields of the iec104 log.
     type Info: record {
         ## Timestamp for when the activity happened.
@@ -693,6 +703,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_IEEE_754_QDS_CP24Time2a, [$columns=IEEE_754_QDS_CP24Time2a, $path="iec104-M_ME_TC_1"]);
     Log::create_stream(iec104::LOG_Read_Command, [$columns=Read_Command, $path="iec104-C_RD_NA_1"]);
     Log::create_stream(iec104::LOG_QRP, [$columns=QRP, $path="iec104-C_RP_NA_1"]);
+    Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
 }
 
 # Initialize logging state.
@@ -1283,4 +1294,16 @@ event iec104::QRP_evt(c: connection, qrp: QRP)
     rec$raw_data = qrp$raw_data;
 
     Log::write(iec104::LOG_QRP, rec);
+}
+
+event iec104::Unknown_ASDU(c: connection, is_orig: bool, type_id: iec104::TypeID, hex: string)
+{
+    local rec = UNK($ts=current_event_time(),
+                    $uid=c$uid,
+                    $id=c$id,
+                    $is_orig=is_orig,
+                    $type_id=type_id,
+                    $data=hex);
+    Log::write(iec104::LOG_UNK, rec);
+
 }

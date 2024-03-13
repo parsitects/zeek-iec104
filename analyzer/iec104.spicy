@@ -14,7 +14,7 @@ public type Format = enum {
     U = 3
 };
 
-type TypeID        = enum {
+public type TypeID = enum {
     ASDU_TYPEUNDEF =   0, # Not allowed
     M_SP_NA_1      =   1, # Single-point information
     M_SP_TA_1      =   2, # Single-point information with time tag

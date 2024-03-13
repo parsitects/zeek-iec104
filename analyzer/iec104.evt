@@ -24,6 +24,8 @@ protocol analyzer spicy::iec104 over TCP:
     parse with iec104::Apdus,
     port 2404/tcp;
 
+export iec104::TypeID;
+
 # I-format APCIs have individual events for each ASDU type.
 #
 # on iec104::Apci_i ->
@@ -139,3 +141,6 @@ on iec104::Read_Command ->
 
 on iec104::QRP ->
     event iec104::QRP_evt($conn, iec104::QRP_ret(self));
+
+on iec104::Raw ->
+    event iec104::Unknown_ASDU($conn, $is_orig, self.type_id, self.data);
