@@ -1,5 +1,3 @@
-# TODO: Define your analyzer here.
-
 module iec104;
 
 import spicy;
@@ -342,11 +340,6 @@ public type Cause = enum {
     Cot_63      = 63
 };
 
-#type QOS_type = bitfield(8) {
-#    ql: 0..6;
-#    se: 7;
-#};
-
 type SIQ = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     siq: bitfield(8) {
@@ -369,13 +362,6 @@ type DIQ = unit {
     };
 };
 
-#type SIQ = bitfield(8) {
-#        spi: 0;
-#        bl: 4;
-#        sb: 5;
-#        nt: 6;
-#        iv: 7;
-#};
 
 type NVA_QOS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
@@ -866,8 +852,6 @@ type Asdu = unit(apdu: Apdu) {
         TypeID::C_RP_NA_1 -> qrp: QRP()[self.obj_count];
         * -> raw: Raw(self.type_id, apdu.len - 40);
     };
-
-    # TODO: We have to specify the rest here of fields based on type_id
 };
 
 public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
@@ -977,10 +961,6 @@ public function VTI_QDS_ret (asdu: VTI_QDS): tuple<uint64, uint64, uint8, tuple<
 
     return (0, asdu.info_obj_addr, asdu.value, qds_tuple);
 }
-
-#public function SIQ_CP56Time2a_ret (asdu: SIQ_CP56Time2a): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
-#    return (0, asdu.info_obj_addr, asdu.siq ,asdu.CP56Time2a);
-#}
 
 public function SIQ_CP56Time2a_ret (asdu: SIQ_CP56Time2a): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
     local temp_spi = asdu.siq.spi;
