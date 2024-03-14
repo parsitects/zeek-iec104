@@ -733,7 +733,6 @@ type Ctrl_i = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::I;
-        confirm;
     }
 };
 
@@ -748,7 +747,6 @@ type Ctrl_s = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::S;
-        confirm;
     }
 };
 
@@ -765,7 +763,6 @@ type Ctrl_u = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::U;
-        confirm;
     }
 };
 
@@ -859,6 +856,8 @@ public type Apdu = unit {
     : Asdu(self) if (Format::I == self.format);
 
     var format: Format;
+
+    on %done { spicy::accept_input(); }
 };
 
 public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
