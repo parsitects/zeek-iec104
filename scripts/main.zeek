@@ -344,7 +344,7 @@ export {
         seq: count &log &optional;
         num_ix: count &log &optional;
         # cause_tx: count &log &optional;
-        cause: Cause &log &optional;
+        cause: COT &log &optional;
         negative: count &log &optional;
         test: count &log &optional;
         originator_address: count &log &optional;
@@ -613,7 +613,7 @@ event iec104::u(c: connection, is_orig: bool, startdt: count, stopdt: count, tes
     Log::write(iec104::LOG_APCI_U, rec);
 }
 
-event iec104::asdu(c: connection, type_id: TypeID, seq: count, num_ix: count, cause: Cause,
+event iec104::asdu(c: connection, type_id: TypeID, seq: count, num_ix: count, cause: COT,
                    negative: count, test: count, originator_address: count, common_address: count
                   ) &priority=3
 {

@@ -273,7 +273,7 @@ public type TypeID = enum {
     ASDU_TYPE_255  = 255
 };
 
-public type Cause = enum {
+public type COT = enum {
     Cot_Unused  =  0, # Is not used
     Percyc      =  1, # Cyclic data
     Back        =  2, # Background scan
@@ -786,7 +786,7 @@ type AsduIdent = unit {
         sq: 7;
     };
     : bitfield (8) {
-        cause_of_transmission: 0..5 &convert=Cause($$);
+        cause_of_transmission: 0..5 &convert=COT($$);
         negative: 6;
         test: 7;
     };

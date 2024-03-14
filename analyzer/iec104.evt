@@ -24,7 +24,7 @@ protocol analyzer spicy::iec104 over TCP:
     parse with iec104::Apdus,
     port 2404/tcp;
 
-export iec104::Cause;
+export iec104::COT;
 export iec104::TypeID;
 
 # I-format APCIs have individual events for each ASDU type.
