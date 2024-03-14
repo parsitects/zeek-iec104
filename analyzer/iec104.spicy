@@ -769,30 +769,6 @@ type Ctrl_u = unit(inout apdu: Apdu) {
     }
 };
 
-public type Apdus = unit {
-    %port = 2404/tcp &originator;
-    : (Apdu &synchronize)[];
-};
-
-public type Apdu = unit {
-    : int8(0x68);
-    len: uint8 {
-        if ($$ < 4) reject;
-    }
-
-    # We cannot set self.format in unit hooks here because they are
-    # executed even in case of backtracing, so we must fall back to
-    # passing self to subunits and setting the value there.
-    ctrl_i: Ctrl_i(self) if (4 < self.len);
-    ctrl_s: Ctrl_s(self) &try if (4 == self.len);
-    ctrl_u: Ctrl_u(self) &try if (4 == self.len);
-
-    # FIXME: Check that the size of information object is (len - 4).
-    asdu: Asdu(self) if (Format::I == self.format);
-
-    var format: Format;
-};
-
 type Raw = unit(tid: TypeID, nbytes: uint8) {
     data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
 
@@ -818,43 +794,71 @@ type AsduIdent = unit {
     common_address: uint16;
 };
 
+type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
+    switch (id.type_id) {
+        TypeID::M_SP_NA_1 -> siq: SIQ()[id.obj_count];
+        TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.obj_count];
+        TypeID::M_DP_NA_1 -> diq: DIQ()[id.obj_count];
+        TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[id.obj_count];
+        TypeID::M_ST_NA_1 -> vti_qds: VTI_QDS()[id.obj_count];
+        TypeID::M_ST_TA_1 -> vti_qds_CP24Time2a: VTI_QDS_CP24Time2a()[id.obj_count];
+        TypeID::M_BO_NA_1 -> bsi_qds: BSI_QDS()[id.obj_count];
+        TypeID::M_BO_TA_1 -> bsi_qds_CP24Time2a: BSI_QDS_CP24Time2a()[id.obj_count];
+        TypeID::M_ME_NA_1 -> nva_qds: NVA_QDS()[id.obj_count];
+        TypeID::M_ME_TA_1 -> nva_qds_CP24Time2a: NVA_QDS_CP24Time2a()[id.obj_count];
+        TypeID::M_ME_NB_1 -> sva_qds: SVA_QDS()[id.obj_count];
+        TypeID::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[id.obj_count];
+        TypeID::M_ME_NC_1 -> ieee_754_qds: IEEE_754_QDS()[id.obj_count];
+        TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[id.obj_count];
+        TypeID::M_SP_TB_1 -> siq_CP56Time2a: SIQ_CP56Time2a()[id.obj_count];
+        TypeID::M_DP_TB_1 -> diq_CP56Time2a: DIQ_CP56Time2a()[id.obj_count];
+        TypeID::M_ST_TB_1 -> vti_qds_CP56Time2a: VTI_QDS_CP56Time2a()[id.obj_count];
+        TypeID::M_BO_TB_1 -> bsi_qds_CP56Time2a: BSI_QDS_CP56Time2a()[id.obj_count];
+        TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[id.obj_count];
+        TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[id.obj_count];
+        TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[id.obj_count];
+        TypeID::C_SC_NA_1 -> sco: SCO()[id.obj_count];
+        TypeID::C_DC_NA_1 -> dco: DCO()[id.obj_count];
+        TypeID::C_RC_NA_1 -> rco: RCO()[id.obj_count];
+        TypeID::C_SE_NA_1 -> nva_qos: NVA_QOS()[id.obj_count];
+        TypeID::C_SE_NB_1 -> sva_qos: SVA_QOS()[id.obj_count];
+        TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[id.obj_count];
+        TypeID::C_BO_NA_1 -> bsi: BSI()[id.obj_count];
+        TypeID::M_EI_NA_1 -> coi: COI()[id.obj_count];
+        TypeID::C_IC_NA_1 -> qoi: QOI()[id.obj_count];
+        TypeID::C_RD_NA_1 -> read_command: Read_Command()[id.obj_count];
+        TypeID::C_RP_NA_1 -> qrp: QRP()[id.obj_count];
+        * -> raw: Raw(id.type_id, apdu.len - 40);
+    };
+};
+
 type Asdu = unit(apdu: Apdu) {
     id: AsduIdent;
-    switch (self.id.type_id) {
-        TypeID::M_SP_NA_1 -> siq: SIQ()[self.id.obj_count];
-        TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[self.id.obj_count];
-        TypeID::M_DP_NA_1 -> diq: DIQ()[self.id.obj_count];
-        TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[self.id.obj_count];
-        TypeID::M_ST_NA_1 -> vti_qds: VTI_QDS()[self.id.obj_count];
-        TypeID::M_ST_TA_1 -> vti_qds_CP24Time2a: VTI_QDS_CP24Time2a()[self.id.obj_count];
-        TypeID::M_BO_NA_1 -> bsi_qds: BSI_QDS()[self.id.obj_count];
-        TypeID::M_BO_TA_1 -> bsi_qds_CP24Time2a: BSI_QDS_CP24Time2a()[self.id.obj_count];
-        TypeID::M_ME_NA_1 -> nva_qds: NVA_QDS()[self.id.obj_count];
-        TypeID::M_ME_TA_1 -> nva_qds_CP24Time2a: NVA_QDS_CP24Time2a()[self.id.obj_count];
-        TypeID::M_ME_NB_1 -> sva_qds: SVA_QDS()[self.id.obj_count];
-        TypeID::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[self.id.obj_count];
-        TypeID::M_ME_NC_1 -> ieee_754_qds: IEEE_754_QDS()[self.id.obj_count];
-        TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[self.id.obj_count];
-        TypeID::M_SP_TB_1 -> siq_CP56Time2a: SIQ_CP56Time2a()[self.id.obj_count];
-        TypeID::M_DP_TB_1 -> diq_CP56Time2a: DIQ_CP56Time2a()[self.id.obj_count];
-        TypeID::M_ST_TB_1 -> vti_qds_CP56Time2a: VTI_QDS_CP56Time2a()[self.id.obj_count];
-        TypeID::M_BO_TB_1 -> bsi_qds_CP56Time2a: BSI_QDS_CP56Time2a()[self.id.obj_count];
-        TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[self.id.obj_count];
-        TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[self.id.obj_count];
-        TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[self.id.obj_count];
-        TypeID::C_SC_NA_1 -> sco: SCO()[self.id.obj_count];
-        TypeID::C_DC_NA_1 -> dco: DCO()[self.id.obj_count];
-        TypeID::C_RC_NA_1 -> rco: RCO()[self.id.obj_count];
-        TypeID::C_SE_NA_1 -> nva_qos: NVA_QOS()[self.id.obj_count];
-        TypeID::C_SE_NB_1 -> sva_qos: SVA_QOS()[self.id.obj_count];
-        TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[self.id.obj_count];
-        TypeID::C_BO_NA_1 -> bsi: BSI()[self.id.obj_count];
-        TypeID::M_EI_NA_1 -> coi: COI()[self.id.obj_count];
-        TypeID::C_IC_NA_1 -> qoi: QOI()[self.id.obj_count];
-        TypeID::C_RD_NA_1 -> read_command: Read_Command()[self.id.obj_count];
-        TypeID::C_RP_NA_1 -> qrp: QRP()[self.id.obj_count];
-        * -> raw: Raw(self.id.type_id, apdu.len - 40);
-    };
+    io: AsduIO(apdu, self.id);
+};
+
+public type Apdus = unit {
+    %port = 2404/tcp &originator;
+    : (Apdu &synchronize)[];
+};
+
+public type Apdu = unit {
+    : int8(0x68);
+    len: uint8 {
+        if ($$ < 4) reject;
+    }
+
+    # We cannot set self.format in unit hooks here because they are
+    # executed even in case of backtracing, so we must fall back to
+    # passing self to subunits and setting the value there.
+    ctrl_i: Ctrl_i(self) if (4 < self.len);
+    ctrl_s: Ctrl_s(self) &try if (4 == self.len);
+    ctrl_u: Ctrl_u(self) &try if (4 == self.len);
+
+    # FIXME: Check that the size of information object is (len - 4).
+    : Asdu(self) if (Format::I == self.format);
+
+    var format: Format;
 };
 
 public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {

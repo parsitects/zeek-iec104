@@ -40,10 +40,10 @@ on iec104::Apdu if (self.format == iec104::Format::U)->
 
 # For the ASDU parsing
 
-on iec104::Asdu ->
-    event iec104::asdu($conn, self.id.type_id, self.id.sq, self.id.obj_count,
-                       self.id.cause_of_transmission, self.id.negative, self.id.test,
-                       self.id.originator_address, self.id.common_address);
+on iec104::AsduIdent ->
+    event iec104::asdu($conn, self.type_id, self.sq, self.obj_count,
+                       self.cause_of_transmission, self.negative, self.test,
+                       self.originator_address, self.common_address);
 
 on iec104::QOI ->
     event iec104::QOI_evt($conn, $is_orig, self.info_obj_addr, self.qoi);
