@@ -45,11 +45,11 @@ on iec104::AsduIdent ->
                        self.cause_of_transmission, self.negative, self.test,
                        self.originator_address, self.common_address);
 
-on iec104::QOI ->
-    event iec104::QOI_evt($conn, $is_orig, self.info_obj_addr, self.qoi);
-
 on iec104::M_SP_NA_1_io ->
     event iec104::M_SP_NA_1($conn, $is_orig, iec104::M_SP_NA_1_rec(self));
+
+on iec104::C_IC_NA_1_io ->
+    event iec104::C_IC_NA_1($conn, $is_orig, iec104::C_IC_NA_1_rec(self));
 
 on iec104::SCO ->
     event iec104::SCO_evt($conn, iec104::SCO_ret(self));

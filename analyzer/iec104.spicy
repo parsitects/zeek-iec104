@@ -356,6 +356,11 @@ type M_SP_NA_1_io = unit {
     siq: SIQ;
 };
 
+type C_IC_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    qoi: uint8;
+};
+
 type DIQ = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     diq: bitfield(8) {
@@ -619,11 +624,6 @@ type BSI = unit {
     };
 };
 
-type QOI = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    qoi: uint8;
-};
-
 type COI = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     coi: bitfield(8) {
@@ -799,6 +799,7 @@ type AsduIdent = unit {
 type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
+        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.nobj];
         TypeID::M_DP_NA_1 -> diq: DIQ()[id.nobj];
         TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[id.nobj];
@@ -827,7 +828,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[id.nobj];
         TypeID::C_BO_NA_1 -> bsi: BSI()[id.nobj];
         TypeID::M_EI_NA_1 -> coi: COI()[id.nobj];
-        TypeID::C_IC_NA_1 -> qoi: QOI()[id.nobj];
         TypeID::C_RD_NA_1 -> read_command: Read_Command()[id.nobj];
         TypeID::C_RP_NA_1 -> qrp: QRP()[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 40);
@@ -878,6 +878,12 @@ public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
     tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
     return (io.obj_addr, SIQ_rec(io.siq));
+}
+
+public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
+    tuple<uint64, uint8>
+{
+    return (io.obj_addr, io.qoi);
 }
 
 public function SCO_ret (asdu: SCO) :tuple<uint64, uint64, tuple<sco_on: uint8, qu: uint8, se: uint8>> {

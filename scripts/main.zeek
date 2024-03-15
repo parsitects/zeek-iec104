@@ -15,10 +15,10 @@ export {
     redef enum Log::ID += {
         LOG,
         LOG_M_SP_NA_1,
+        LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_COI,
-        LOG_QOI,
         LOG_SCO,
         LOG_DCO,
         LOG_RCO,
@@ -66,13 +66,16 @@ export {
         io: M_SP_NA_1_io &log;
     };
 
-    type QOI: record {
+    type C_IC_NA_1_io: record {
+        obj_addr: count &log;
+        qoi: count &log;
+    };
+
+    type C_IC_NA_1_log: record {
         ts: time &log;
         uid: string &log;
-        id: conn_id &log;
         is_orig: bool &log;
-        info_obj_addr: count &log;
-        qoi: count &log;
+        io: C_IC_NA_1_io &log;
     };
 
     type SCO_field: record {
@@ -550,13 +553,13 @@ event zeek_init() &priority=5
 {
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
+    Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
     # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
     Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
-    Log::create_stream(iec104::LOG_QOI, [$columns=QOI, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_SCO, [$columns=SCO, $path="iec104-C_SC_NA_1"]);
     Log::create_stream(iec104::LOG_DCO, [$columns=DCO, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
@@ -653,15 +656,14 @@ event iec104::M_SP_NA_1(c: connection, is_orig: bool, io: M_SP_NA_1_io)
     Log::write(iec104::LOG_M_SP_NA_1, rec);
 }
 
-event iec104::QOI_evt(c: connection, is_orig: bool, info_obj_addr: count, qoi: count)
+event iec104::C_IC_NA_1(c: connection, is_orig: bool, io: C_IC_NA_1_io)
 {
-    local rec = QOI($ts=current_event_time(),
-                    $uid=c$uid,
-                    $id=c$id,
-                    $is_orig=is_orig,
-                    $info_obj_addr=info_obj_addr,
-                    $qoi=qoi);
-    Log::write(iec104::LOG_QOI, rec);
+    local rec = C_IC_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_IC_NA_1, rec);
 }
 
 event iec104::SCO_evt(c: connection, sco: SCO)
