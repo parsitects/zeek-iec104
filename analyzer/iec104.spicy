@@ -341,14 +341,19 @@ public type COT = enum {
 };
 
 type SIQ = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    siq: bitfield(8) {
+    : bitfield(8) {
         spi: 0;
+        # : 1..3 = 0;
         bl: 4;
         sb: 5;
         nt: 6;
         iv: 7;
     };
+};
+
+type M_SP_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    siq: SIQ;
 };
 
 type DIQ = unit {
@@ -793,7 +798,7 @@ type AsduIdent = unit {
 
 type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
-        TypeID::M_SP_NA_1 -> siq: SIQ()[id.nobj];
+        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.nobj];
         TypeID::M_DP_NA_1 -> diq: DIQ()[id.nobj];
         TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[id.nobj];
@@ -860,16 +865,19 @@ public type Apdu = unit {
     on %done { spicy::accept_input(); }
 };
 
-public function SIQ_ret (asdu: SIQ): tuple<uint64, uint64, tuple<spi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
-    local temp_spi = asdu.siq.spi;
-    local temp_bl = asdu.siq.bl;
-    local temp_sb = asdu.siq.sb;
-    local temp_nt = asdu.siq.nt;
-    local temp_iv = asdu.siq.iv;
+function SIQ_rec(siq: SIQ): tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>
+{
+    return (siq.spi == 1,
+            siq.bl == 1,
+            siq.sb == 1,
+            siq.nt == 1,
+            siq.iv == 1);
+}
 
-    local siq_tuple = (temp_spi, temp_bl, temp_sb, temp_nt, temp_iv);
-
-    return (0, asdu.info_obj_addr, siq_tuple);
+public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
+    tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, SIQ_rec(io.siq));
 }
 
 public function SCO_ret (asdu: SCO) :tuple<uint64, uint64, tuple<sco_on: uint8, qu: uint8, se: uint8>> {

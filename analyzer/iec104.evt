@@ -48,8 +48,8 @@ on iec104::AsduIdent ->
 on iec104::QOI ->
     event iec104::QOI_evt($conn, $is_orig, self.info_obj_addr, self.qoi);
 
-on iec104::SIQ ->
-    event iec104::SIQ_evt($conn, iec104::SIQ_ret(self));
+on iec104::M_SP_NA_1_io ->
+    event iec104::M_SP_NA_1($conn, $is_orig, iec104::M_SP_NA_1_rec(self));
 
 on iec104::SCO ->
     event iec104::SCO_evt($conn, iec104::SCO_ret(self));

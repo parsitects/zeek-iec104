@@ -14,13 +14,13 @@ export {
     ## Log stream identifier.
     redef enum Log::ID += {
         LOG,
+        LOG_M_SP_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_COI,
         LOG_QOI,
         LOG_SCO,
         LOG_DCO,
-        LOG_SIQ,
         LOG_RCO,
         LOG_BSI,
         LOG_SVA_QOS,
@@ -44,6 +44,26 @@ export {
         LOG_Read_Command,
         LOG_QRP,
         LOG_UNK,
+    };
+
+    type SIQ: record {
+        spi: bool &log;
+        bl: bool &log;
+        sb: bool &log;
+        nt: bool &log;
+        iv: bool &log;
+    };
+
+    type M_SP_NA_1_io: record {
+        obj_addr: count &log;
+        siq: SIQ &log;
+    };
+
+    type M_SP_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_SP_NA_1_io &log;
     };
 
     type QOI: record {
@@ -87,13 +107,6 @@ export {
         sb: count &log &optional;
         nt: count &log &optional;
         iv: count &log &optional;
-    };
-
-    type SIQ: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        # This is bifield in packet/spicy
-        siq: SIQ_field &log &optional;
     };
 
     type RCO_field: record {
@@ -476,8 +489,6 @@ global SCO_temp: vector of count;
 global DCO_vec: vector of count;
 global DCO_temp: vector of count;
 
-global SIQ_vec: vector of count;
-global SIQ_temp: vector of count;
 global RCO_vec: vector of count;
 global RCO_temp: vector of count;
 global BSI_vec: vector of count;
@@ -538,6 +549,7 @@ redef likely_server_ports += { ports };
 event zeek_init() &priority=5
 {
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
+    Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
     # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
@@ -547,7 +559,6 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_QOI, [$columns=QOI, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_SCO, [$columns=SCO, $path="iec104-C_SC_NA_1"]);
     Log::create_stream(iec104::LOG_DCO, [$columns=DCO, $path="iec104-C_DC_NA_1"]);
-    Log::create_stream(iec104::LOG_SIQ, [$columns=SIQ, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
     Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
     Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
@@ -632,6 +643,15 @@ event iec104::asdu(c: connection, type_id: TypeID, seq: count, num_ix: count, ca
     info$asdu$common_address = common_address;
 }
 
+event iec104::M_SP_NA_1(c: connection, is_orig: bool, io: M_SP_NA_1_io)
+{
+    local rec = M_SP_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_SP_NA_1, rec);
+}
 
 event iec104::QOI_evt(c: connection, is_orig: bool, info_obj_addr: count, qoi: count)
 {
@@ -642,25 +662,6 @@ event iec104::QOI_evt(c: connection, is_orig: bool, info_obj_addr: count, qoi: c
                     $info_obj_addr=info_obj_addr,
                     $qoi=qoi);
     Log::write(iec104::LOG_QOI, rec);
-}
-
-event iec104::SIQ_evt(c: connection, siq: SIQ)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |SIQ_vec| + 1;
-
-    SIQ_temp += next_num;
-    SIQ_vec += next_num;
-
-    local new_SIQ = SIQ($Asdu_num=next_num);
-    new_SIQ$info_obj_addr = siq$info_obj_addr;
-    new_SIQ$siq = siq$siq;
-
-    Log::write(iec104::LOG_SIQ, new_SIQ);
 }
 
 event iec104::SCO_evt(c: connection, sco: SCO)
