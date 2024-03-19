@@ -51,8 +51,8 @@ on iec104::M_SP_NA_1_io ->
 on iec104::C_IC_NA_1_io ->
     event iec104::C_IC_NA_1($conn, $is_orig, iec104::C_IC_NA_1_rec(self));
 
-on iec104::SCO ->
-    event iec104::SCO_evt($conn, iec104::SCO_ret(self));
+on iec104::C_SC_NA_1_io ->
+    event iec104::C_SC_NA_1($conn, $is_orig, iec104::C_SC_NA_1_rec(self));
 
 on iec104::DCO ->
     event iec104::DCO_evt($conn, iec104::DCO_ret(self));
