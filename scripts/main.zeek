@@ -16,6 +16,7 @@ export {
         LOG,
         LOG_M_SP_NA_1,
         LOG_C_SC_NA_1,
+        LOG_C_SC_TA_1,
         LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
@@ -94,6 +95,31 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: C_SC_NA_1_io &log;
+    };
+
+    type CP56Time2a: record {
+        ms: count &log;
+        minute: count &log;
+        iv: bool &log;
+        hour: count &log;
+        su: bool &log;
+        day: count &log;
+        dow: count &log;
+        month: count &log;
+        year: count &log;
+    };
+
+    type C_SC_TA_1_io: record {
+        obj_addr: count &log;
+        sco: SCO &log;
+        tt: CP56Time2a &log;
+    };
+
+    type C_SC_TA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_SC_TA_1_io &log;
     };
 
     type DCO_field: record {
@@ -557,6 +583,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
+    Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
@@ -677,7 +704,16 @@ event iec104::C_SC_NA_1(c: connection, is_orig: bool, io: C_SC_NA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_C_SC_NA_1, rec);
+}
 
+event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
+{
+    local rec = C_SC_TA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_SC_TA_1, rec);
 }
 
 event iec104::DCO_evt(c: connection, dco: DCO)
