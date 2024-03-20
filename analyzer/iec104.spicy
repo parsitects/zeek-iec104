@@ -455,6 +455,16 @@ type C_RC_TA_1_io = unit {
     tt: CP56Time2a;
 };
 
+type C_SE_TA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    nva: uint16;
+    qos: bitfield(8) {
+        ql: 0..6;
+        se: 7;
+    };
+    tt: CP56Time2a;
+};
+
 type DIQ = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     diq: bitfield(8) {
@@ -863,6 +873,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
         TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
         TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io()[id.nobj];
+        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.nobj];
         TypeID::M_DP_NA_1 -> diq: DIQ()[id.nobj];
@@ -999,6 +1010,16 @@ public function C_RC_TA_1_rec(io: C_RC_TA_1_io):
 {
     return (io.obj_addr,
             (io.rco.rcs, io.rco.qu, io.rco.se == 1),
+            CP56Time2a_rec(io.tt));
+}
+
+public function C_SE_TA_1_rec(io: C_SE_TA_1_io):
+    tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr,
+            io.nva,
+            (io.qos.ql, io.qos.se == 1),
             CP56Time2a_rec(io.tt));
 }
 
