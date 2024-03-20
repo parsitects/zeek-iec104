@@ -19,6 +19,7 @@ export {
         LOG_C_DC_NA_1,
         LOG_C_RC_NA_1,
         LOG_C_SE_NA_1,
+        LOG_C_SE_NB_1,
         LOG_C_SC_TA_1,
         LOG_C_DC_TA_1,
         LOG_C_RC_TA_1,
@@ -153,6 +154,19 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: C_SE_NA_1_io &log;
+    };
+
+    type C_SE_NB_1_io: record {
+        obj_addr: count &log;
+        sva: count &log;
+        qos: QOS &log;
+    };
+
+    type C_SE_NB_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_SE_NB_1_io &log;
     };
 
     type CP56Time2a: record {
@@ -652,6 +666,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"]);
     Log::create_stream(iec104::LOG_C_SE_NA_1, [$columns=C_SE_NA_1_log, $path="iec104-C_SE_NA_1"]);
+    Log::create_stream(iec104::LOG_C_SE_NB_1, [$columns=C_SE_NB_1_log, $path="iec104-C_SE_NB_1"]);
     Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
     Log::create_stream(iec104::LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"]);
     Log::create_stream(iec104::LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"]);
@@ -664,7 +679,6 @@ event zeek_init() &priority=5
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
     Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
     Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
-    Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
     Log::create_stream(iec104::LOG_VTI_QDS, [$columns=VTI_QDS, $path="iec104-M_ST_NA_1"]);
     Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-M_SP_TB_1"]);
@@ -806,6 +820,16 @@ event iec104::C_SE_NA_1(c: connection, is_orig: bool, io: C_SE_NA_1_io)
     Log::write(iec104::LOG_C_SE_NA_1, rec);
 }
 
+event iec104::C_SE_NB_1(c: connection, is_orig: bool, io: C_SE_NB_1_io)
+{
+    local rec = C_SE_NB_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_SE_NB_1, rec);
+}
+
 event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
 {
     local rec = C_SC_TA_1_log(
@@ -863,26 +887,6 @@ event iec104::BSI_evt(c: connection, bsi: BSI)
     new_BSI$BSI = bsi$BSI;
 
     Log::write(iec104::LOG_BSI, new_BSI);
-}
-
-event iec104::SVA_QOS_evt(c: connection, sva_qos: SVA_QOS)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |SVA_QOS_vec| + 1;
-
-    SVA_QOS_temp += next_num;
-    SVA_QOS_vec += next_num;
-
-    local new_SVA_QOS = SVA_QOS($Asdu_num=next_num);
-    new_SVA_QOS$info_obj_addr = sva_qos$info_obj_addr;
-    new_SVA_QOS$SVA = sva_qos$SVA;
-    new_SVA_QOS$qos = sva_qos$qos;
-
-    Log::write(iec104::LOG_SVA_QOS, new_SVA_QOS);
 }
 
 event iec104::SVA_QDS_evt(c: connection, sva_qds: SVA_QDS)
