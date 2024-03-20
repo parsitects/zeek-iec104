@@ -417,6 +417,16 @@ type C_SC_TA_1_io = unit {
     tt: CP56Time2a;
 };
 
+type C_DC_TA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    dco: bitfield(8) {
+        dcs: 0..1;
+        qu: 2..6;
+        se: 7;
+    };
+    tt: CP56Time2a;
+};
+
 type DIQ = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     diq: bitfield(8) {
@@ -840,6 +850,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
+        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.nobj];
         TypeID::M_DP_NA_1 -> diq: DIQ()[id.nobj];
@@ -951,6 +962,14 @@ public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
             CP56Time2a_rec(io.tt));
 }
 
+public function C_DC_TA_1_rec(io: C_DC_TA_1_io):
+    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr,
+            (io.dco.dcs, io.dco.qu, io.dco.se == 1),
+            CP56Time2a_rec(io.tt));
+}
 
 public function RCO_ret (asdu: RCO) :tuple<uint64, uint64, tuple<up_down: uint8, qu: uint8, se: uint8>> {
 

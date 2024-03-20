@@ -18,6 +18,7 @@ export {
         LOG_C_SC_NA_1,
         LOG_C_DC_NA_1,
         LOG_C_SC_TA_1,
+        LOG_C_DC_TA_1,
         LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
@@ -138,6 +139,19 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: C_SC_TA_1_io &log;
+    };
+
+    type C_DC_TA_1_io: record {
+        obj_addr: count &log;
+        sco: DCO &log;
+        tt: CP56Time2a &log;
+    };
+
+    type C_DC_TA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_DC_TA_1_io &log;
     };
 
     type SIQ_field: record {
@@ -587,6 +601,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
     Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
+    Log::create_stream(iec104::LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
@@ -726,6 +741,16 @@ event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_C_SC_TA_1, rec);
+}
+
+event iec104::C_DC_TA_1(c: connection, is_orig: bool, io: C_DC_TA_1_io)
+{
+    local rec = C_DC_TA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_DC_TA_1, rec);
 }
 
 event iec104::RCO_evt(c: connection, rco: RCO)
