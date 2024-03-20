@@ -17,13 +17,13 @@ export {
         LOG_M_SP_NA_1,
         LOG_C_SC_NA_1,
         LOG_C_DC_NA_1,
+        LOG_C_RC_NA_1,
         LOG_C_SC_TA_1,
         LOG_C_DC_TA_1,
         LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_COI,
-        LOG_RCO,
         LOG_BSI,
         LOG_SVA_QOS,
         LOG_SVA_QDS,
@@ -116,6 +116,24 @@ export {
         io: C_DC_NA_1_io &log;
     };
 
+    type RCO: record {
+        rcs: count &log;
+        qu: count &log;
+        se: bool &log;
+    };
+
+    type C_RC_NA_1_io: record {
+        obj_addr: count &log;
+        sco: RCO &log;
+    };
+
+    type C_RC_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_RC_NA_1_io &log;
+    };
+
     type CP56Time2a: record {
         ms: count &log;
         minute: count &log;
@@ -161,20 +179,6 @@ export {
         nt: count &log &optional;
         iv: count &log &optional;
     };
-
-    type RCO_field: record {
-        up_down: count &log &optional;
-        qu: count &log &optional;
-        se: count &log &optional;
-    };
-
-    type RCO: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        # This is bifield in packet/spicy
-        RCO: RCO_field &log &optional;
-    };
-
 
     type BSI_field: record {
         value: count &log &optional;
@@ -537,8 +541,6 @@ export {
 global COI_vec: vector of count;
 global COI_temp: vector of count;
 
-global RCO_vec: vector of count;
-global RCO_temp: vector of count;
 global BSI_vec: vector of count;
 global BSI_temp: vector of count;
 global SVA_QOS_vec: vector of count;
@@ -600,6 +602,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
     Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
+    Log::create_stream(iec104::LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
     Log::create_stream(iec104::LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
@@ -609,7 +612,6 @@ event zeek_init() &priority=5
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
     Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
-    Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
     Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
     Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
@@ -733,6 +735,16 @@ event iec104::C_DC_NA_1(c: connection, is_orig: bool, io: C_DC_NA_1_io)
     Log::write(iec104::LOG_C_DC_NA_1, rec);
 }
 
+event iec104::C_RC_NA_1(c: connection, is_orig: bool, io: C_RC_NA_1_io)
+{
+    local rec = C_DC_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_RC_NA_1, rec);
+}
+
 event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
 {
     local rec = C_SC_TA_1_log(
@@ -751,25 +763,6 @@ event iec104::C_DC_TA_1(c: connection, is_orig: bool, io: C_DC_TA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_C_DC_TA_1, rec);
-}
-
-event iec104::RCO_evt(c: connection, rco: RCO)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |RCO_vec| + 1;
-
-    RCO_temp += next_num;
-    RCO_vec += next_num;
-
-    local new_RCO = RCO($Asdu_num=next_num);
-    new_RCO$info_obj_addr = rco$info_obj_addr;
-    new_RCO$RCO = rco$RCO;
-
-    Log::write(iec104::LOG_RCO, new_RCO);
 }
 
 event iec104::BSI_evt(c: connection, bsi: BSI)
