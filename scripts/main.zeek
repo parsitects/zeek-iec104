@@ -16,12 +16,12 @@ export {
         LOG,
         LOG_M_SP_NA_1,
         LOG_C_SC_NA_1,
+        LOG_C_DC_NA_1,
         LOG_C_SC_TA_1,
         LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_COI,
-        LOG_DCO,
         LOG_RCO,
         LOG_BSI,
         LOG_SVA_QOS,
@@ -97,6 +97,24 @@ export {
         io: C_SC_NA_1_io &log;
     };
 
+    type DCO: record {
+        dcs: count &log;
+        qu: count &log;
+        se: bool &log;
+    };
+
+    type C_DC_NA_1_io: record {
+        obj_addr: count &log;
+        sco: DCO &log;
+    };
+
+    type C_DC_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_DC_NA_1_io &log;
+    };
+
     type CP56Time2a: record {
         ms: count &log;
         minute: count &log;
@@ -120,19 +138,6 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: C_SC_TA_1_io &log;
-    };
-
-    type DCO_field: record {
-        dco_on: count &log &optional;
-        qu: count &log &optional;
-        se: count &log &optional;
-    };
-
-    type DCO: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        # This is bifield in packet/spicy
-        dco: DCO_field &log &optional;
     };
 
     type SIQ_field: record {
@@ -518,9 +523,6 @@ export {
 global COI_vec: vector of count;
 global COI_temp: vector of count;
 
-global DCO_vec: vector of count;
-global DCO_temp: vector of count;
-
 global RCO_vec: vector of count;
 global RCO_temp: vector of count;
 global BSI_vec: vector of count;
@@ -583,6 +585,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
+    Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
@@ -591,7 +594,6 @@ event zeek_init() &priority=5
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
     Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
-    Log::create_stream(iec104::LOG_DCO, [$columns=DCO, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_RCO, [$columns=RCO, $path="iec104-C_RC_NA"]);
     Log::create_stream(iec104::LOG_BSI, [$columns=BSI, $path="iec104-C_BO_NA_1"]);
     Log::create_stream(iec104::LOG_SVA_QOS, [$columns=SVA_QOS, $path="iec104-C_SE_NB_1"]);
@@ -706,6 +708,16 @@ event iec104::C_SC_NA_1(c: connection, is_orig: bool, io: C_SC_NA_1_io)
     Log::write(iec104::LOG_C_SC_NA_1, rec);
 }
 
+event iec104::C_DC_NA_1(c: connection, is_orig: bool, io: C_DC_NA_1_io)
+{
+    local rec = C_DC_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_DC_NA_1, rec);
+}
+
 event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
 {
     local rec = C_SC_TA_1_log(
@@ -714,25 +726,6 @@ event iec104::C_SC_TA_1(c: connection, is_orig: bool, io: C_SC_TA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_C_SC_TA_1, rec);
-}
-
-event iec104::DCO_evt(c: connection, dco: DCO)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |DCO_vec| + 1;
-
-    DCO_temp += next_num;
-    DCO_vec += next_num;
-
-    local new_DCO = DCO($Asdu_num=next_num);
-    new_DCO$info_obj_addr = dco$info_obj_addr;
-    new_DCO$dco = dco$dco;
-
-    Log::write(iec104::LOG_DCO, new_DCO);
 }
 
 event iec104::RCO_evt(c: connection, rco: RCO)

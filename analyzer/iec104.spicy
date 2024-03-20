@@ -397,6 +397,15 @@ type C_SC_NA_1_io = unit {
     };
 };
 
+type C_DC_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    dco: bitfield(8) {
+        dcs: 0..1;
+        qu: 2..6;
+        se: 7;
+    };
+};
+
 type C_SC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     sco: bitfield(8) {
@@ -637,15 +646,6 @@ type BSI_QDS_CP24Time2a = unit {
     CP24Time2a: CP24TIME2A;
 };
 
-type DCO = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    dco: bitfield(8) {
-        dco_on: 0..1;
-        qu: 2..6;
-        se: 7;
-    };
-};
-
 type RCO = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     rco: bitfield(8) {
@@ -838,6 +838,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
+        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> siq_CP24Time2a: SIQ_CP24Time2a()[id.nobj];
@@ -860,7 +861,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[id.nobj];
-        TypeID::C_DC_NA_1 -> dco: DCO()[id.nobj];
         TypeID::C_RC_NA_1 -> rco: RCO()[id.nobj];
         TypeID::C_SE_NA_1 -> nva_qos: NVA_QOS()[id.nobj];
         TypeID::C_SE_NB_1 -> sva_qos: SVA_QOS()[id.nobj];
@@ -937,6 +937,12 @@ public function C_SC_NA_1_rec(io: C_SC_NA_1_io):
     return (io.obj_addr, (io.sco.scs == 1, io.sco.qu, io.sco.se == 1));
 }
 
+public function C_DC_NA_1_rec(io: C_DC_NA_1_io):
+    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
+{
+    return (io.obj_addr, (io.dco.dcs, io.dco.qu, io.dco.se == 1));
+}
+
 public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
     tuple<uint64, scs: bool, qu: uint8, se: bool,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
@@ -945,15 +951,6 @@ public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
             CP56Time2a_rec(io.tt));
 }
 
-public function DCO_ret (asdu: DCO) :tuple<uint64, uint64, tuple<dco_on: uint8, qu: uint8, se: uint8>> {
-    local temp_dco_on = asdu.dco.dco_on;
-    local temp_qu = asdu.dco.qu;
-    local temp_se = asdu.dco.se;
-
-    local dco_tuple = (temp_dco_on, temp_qu, temp_se);
-
-    return (0, asdu.info_obj_addr, dco_tuple);
-}
 
 public function RCO_ret (asdu: RCO) :tuple<uint64, uint64, tuple<up_down: uint8, qu: uint8, se: uint8>> {
 
