@@ -415,6 +415,15 @@ type C_RC_NA_1_io = unit {
     };
 };
 
+type C_SE_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    nva: uint16;
+    qos: bitfield(8) {
+        ql: 0..6;
+        se: 7;
+    };
+};
+
 type C_SC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     sco: bitfield(8) {
@@ -454,16 +463,6 @@ type DIQ = unit {
         sb: 5;
         nt: 6;
         iv: 7;
-    };
-};
-
-
-type NVA_QOS = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA: uint16;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
     };
 };
 
@@ -860,6 +859,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io()[id.nobj];
+        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io()[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
         TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
         TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io()[id.nobj];
@@ -884,7 +884,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[id.nobj];
-        TypeID::C_SE_NA_1 -> nva_qos: NVA_QOS()[id.nobj];
         TypeID::C_SE_NB_1 -> sva_qos: SVA_QOS()[id.nobj];
         TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[id.nobj];
         TypeID::C_BO_NA_1 -> bsi: BSI()[id.nobj];
@@ -969,6 +968,12 @@ public function C_RC_NA_1_rec(io: C_RC_NA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
 {
     return (io.obj_addr, (io.rco.rcs, io.rco.qu, io.rco.se == 1));
+}
+
+public function C_SE_NA_1_rec(io: C_SE_NA_1_io):
+    tuple<uint64, nva: uint16, tuple<ql: uint8, se: bool>>
+{
+    return (io.obj_addr, io.nva, (io.qos.ql, io.qos.se == 1));
 }
 
 public function C_SC_TA_1_rec(io: C_SC_TA_1_io):

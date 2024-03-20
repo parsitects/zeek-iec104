@@ -60,6 +60,9 @@ on iec104::C_DC_NA_1_io ->
 on iec104::C_RC_NA_1_io ->
     event iec104::C_RC_NA_1($conn, $is_orig, iec104::C_RC_NA_1_rec(self));
 
+on iec104::C_SE_NA_1_io ->
+    event iec104::C_SE_NA_1($conn, $is_orig, iec104::C_SE_NA_1_rec(self));
+
 on iec104::C_SC_TA_1_io ->
     event iec104::C_SC_TA_1($conn, $is_orig, iec104::C_SC_TA_1_rec(self));
 
