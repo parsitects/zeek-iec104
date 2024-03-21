@@ -22,6 +22,7 @@ export {
         LOG_M_ST_TA_1,
         LOG_M_BO_NA_1,
         LOG_M_BO_TA_1,
+        LOG_M_ME_NA_1,
         LOG_M_ME_NC_1,
         LOG_M_SP_TB_1,
         LOG_M_DP_TB_1,
@@ -190,6 +191,19 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: M_BO_TA_1_io &log;
+    };
+
+    type M_ME_NA_1_io: record {
+        obj_addr: count &log;
+        nva: count &log;
+        qds: QDS &log;
+    };
+
+    type M_ME_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_ME_NA_1_io &log;
     };
 
     type M_ME_NC_1_io: record {
@@ -798,6 +812,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"]);
     Log::create_stream(iec104::LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"]);
     Log::create_stream(iec104::LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"]);
+    Log::create_stream(iec104::LOG_M_ME_NA_1, [$columns=M_ME_NA_1_log, $path="iec104-M_ME_NA_1"]);
     Log::create_stream(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"]);
     Log::create_stream(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"]);
     Log::create_stream(iec104::LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"]);
@@ -969,6 +984,16 @@ event iec104::M_BO_TA_1(c: connection, is_orig: bool, io: M_BO_TA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_M_BO_TA_1, rec);
+}
+
+event iec104::M_ME_NA_1(c: connection, is_orig: bool, io: M_ME_NA_1_io)
+{
+    local rec = M_ME_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_ME_NA_1, rec);
 }
 
 event iec104::M_ME_NC_1(c: connection, is_orig: bool, io: M_ME_NC_1_io)
