@@ -48,6 +48,9 @@ on iec104::AsduIdent ->
 on iec104::M_SP_NA_1_io ->
     event iec104::M_SP_NA_1($conn, $is_orig, iec104::M_SP_NA_1_rec(self));
 
+on iec104::M_ME_NC_1_io ->
+    event iec104::M_ME_NC_1($conn, $is_orig, iec104::M_ME_NC_1_rec(self));
+
 on iec104::C_IC_NA_1_io ->
     event iec104::C_IC_NA_1($conn, $is_orig, iec104::C_IC_NA_1_rec(self));
 
@@ -89,9 +92,6 @@ on iec104::BSI ->
 
 on iec104::SVA_QDS ->
     event iec104::SVA_QDS_evt($conn, iec104::SVA_QDS_ret(self));
-
-on iec104::IEEE_754_QDS ->
-    event iec104::IEEE_754_QDS_evt($conn, iec104::IEEE_754_QDS_ret(self));
 
 on iec104::VTI_QDS ->
     event iec104::VTI_QDS_evt($conn, iec104::VTI_QDS_ret(self));
