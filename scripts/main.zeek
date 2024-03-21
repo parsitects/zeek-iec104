@@ -21,6 +21,7 @@ export {
         LOG_M_ST_NA_1,
         LOG_M_ST_TA_1,
         LOG_M_BO_NA_1,
+        LOG_M_BO_TA_1,
         LOG_M_ME_NC_1,
         LOG_M_SP_TB_1,
         LOG_M_DP_TB_1,
@@ -47,7 +48,6 @@ export {
         LOG_DIQ_CP56Time2a,
         LOG_DIQ_CP24Time2a,
         LOG_BSI_QDS_CP56Time2a,
-        LOG_BSI_QDS_CP24Time2a,
         LOG_NVA_QDS_CP56Time2a,
         LOG_NVA_QDS_CP24Time2a,
         LOG_SVA_QDS_CP56Time2a,
@@ -176,6 +176,20 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: M_BO_NA_1_io &log;
+    };
+
+    type M_BO_TA_1_io: record {
+        obj_addr: count &log;
+        bsi: count &log;
+        qds: QDS &log;
+        tt: CP24Time2a;
+    };
+
+    type M_BO_TA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_BO_TA_1_io &log;
     };
 
     type M_ME_NC_1_io: record {
@@ -545,15 +559,6 @@ export {
         CP56Time2a: CP56TIME2A &log &optional;
     };
 
-    type BSI_QDS_CP24Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        # bsi: BSI_field &log &optional;
-        bsi: count &log &optional;
-        qds: QDS_field &log &optional;
-        CP24Time2a: CP24TIME2A &log &optional;
-    };
-
     type NVA_QDS_CP56Time2a: record {
         Asdu_num: count &log;
         info_obj_addr: count &log &optional;
@@ -750,8 +755,6 @@ global DIQ_CP24Time2a_vec: vector of count;
 global DIQ_CP24Time2a_temp: vector of count;
 global BSI_QDS_CP56Time2a_vec: vector of count;
 global BSI_QDS_CP56Time2a_temp: vector of count;
-global BSI_QDS_CP24Time2a_vec: vector of count;
-global BSI_QDS_CP24Time2a_temp: vector of count;
 global NVA_QDS_CP56Time2a_vec: vector of count;
 global NVA_QDS_CP56Time2a_temp: vector of count;
 global NVA_QDS_CP24Time2a_vec: vector of count;
@@ -790,6 +793,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_M_ST_NA_1, [$columns=M_ST_NA_1_log, $path="iec104-M_ST_NA_1"]);
     Log::create_stream(iec104::LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"]);
     Log::create_stream(iec104::LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"]);
+    Log::create_stream(iec104::LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"]);
     Log::create_stream(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"]);
     Log::create_stream(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"]);
     Log::create_stream(iec104::LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"]);
@@ -813,7 +817,6 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
     Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
     Log::create_stream(iec104::LOG_BSI_QDS_CP56Time2a, [$columns=BSI_QDS_CP56Time2a, $path="iec104-M_BO_TB_1"]);
-    Log::create_stream(iec104::LOG_BSI_QDS_CP24Time2a, [$columns=BSI_QDS_CP24Time2a, $path="iec104-M_BO_TA_1"]);
     Log::create_stream(iec104::LOG_NVA_QDS_CP56Time2a, [$columns=NVA_QDS_CP56Time2a, $path="iec104-M_ME_TD_1"]);
     Log::create_stream(iec104::LOG_NVA_QDS_CP24Time2a, [$columns=NVA_QDS_CP24Time2a, $path="iec104-M_ME_TA_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS_CP56Time2a, [$columns=SVA_QDS_CP56Time2a, $path="iec104-M_ME_TE_1"]);
@@ -952,6 +955,16 @@ event iec104::M_BO_NA_1(c: connection, is_orig: bool, io: M_BO_NA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_M_BO_NA_1, rec);
+}
+
+event iec104::M_BO_TA_1(c: connection, is_orig: bool, io: M_BO_TA_1_io)
+{
+    local rec = M_BO_TA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_BO_TA_1, rec);
 }
 
 event iec104::M_ME_NC_1(c: connection, is_orig: bool, io: M_ME_NC_1_io)
@@ -1182,27 +1195,6 @@ event iec104::BSI_QDS_CP56Time2a_evt(c: connection, bsi_QDS_CP56Time2a: BSI_QDS_
     new_BSI_QDS_CP56Time2a$CP56Time2a = bsi_QDS_CP56Time2a$CP56Time2a;
 
     Log::write(iec104::LOG_BSI_QDS_CP56Time2a, new_BSI_QDS_CP56Time2a);
-}
-
-event iec104::BSI_QDS_CP24Time2a_evt(c: connection, bsi_QDS_CP24Time2a: BSI_QDS_CP24Time2a)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |BSI_QDS_CP24Time2a_vec| + 1;
-
-    BSI_QDS_CP24Time2a_temp += next_num;
-    BSI_QDS_CP24Time2a_vec += next_num;
-
-    local new_BSI_QDS_CP24Time2a = BSI_QDS_CP24Time2a($Asdu_num=next_num);
-    new_BSI_QDS_CP24Time2a$info_obj_addr = bsi_QDS_CP24Time2a$info_obj_addr;
-    new_BSI_QDS_CP24Time2a$bsi = bsi_QDS_CP24Time2a$bsi;
-    new_BSI_QDS_CP24Time2a$qds = bsi_QDS_CP24Time2a$qds;
-    new_BSI_QDS_CP24Time2a$CP24Time2a = bsi_QDS_CP24Time2a$CP24Time2a;
-
-    Log::write(iec104::LOG_BSI_QDS_CP24Time2a, new_BSI_QDS_CP24Time2a);
 }
 
 event iec104::NVA_QDS_CP56Time2a_evt(c: connection, nva_QDS_CP56Time2a: NVA_QDS_CP56Time2a)
