@@ -29,10 +29,10 @@ export {
         LOG_C_SE_TA_1,
         LOG_C_SE_TC_1,
         LOG_C_BO_TA_1,
+        LOG_M_EI_NA_1,
         LOG_C_IC_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
-        LOG_COI,
         LOG_SVA_QOS,
         LOG_SVA_QDS,
         LOG_VTI_QDS,
@@ -311,6 +311,19 @@ export {
         io: C_BO_TA_1_io &log;
     };
 
+    type M_EI_NA_1_io: record {
+        obj_addr: count &log;
+        coi: count &log;
+        lpc: bool &log;
+    };
+
+    type M_EI_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_EI_NA_1_io &log;
+    };
+
     type SIQ_field: record {
         spi: count &log &optional;
         bl: count &log &optional;
@@ -472,17 +485,6 @@ export {
         bsi: count &log &optional;
         qds: QDS_field &log &optional;
         CP24Time2a: CP24TIME2A &log &optional;
-    };
-
-    type COI_field: record {
-        r: count &log &optional;
-        i: count &log &optional;
-    };
-
-    type COI: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        coi: COI_field &log &optional;
     };
 
     type NVA_QDS_CP56Time2a: record {
@@ -677,9 +679,6 @@ export {
     global log_iec104: event(rec: Info);
 }
 
-global COI_vec: vector of count;
-global COI_temp: vector of count;
-
 global SVA_QOS_vec: vector of count;
 global SVA_QOS_temp: vector of count;
 global SVA_QDS_vec: vector of count;
@@ -751,13 +750,13 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"]);
     Log::create_stream(iec104::LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"]);
     Log::create_stream(iec104::LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"]);
+    Log::create_stream(iec104::LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
     # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
     # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
     # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
-    Log::create_stream(iec104::LOG_COI, [$columns=COI, $path="iec104-M_EI_NA_1"]);
     Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
     Log::create_stream(iec104::LOG_VTI_QDS, [$columns=VTI_QDS, $path="iec104-M_ST_NA_1"]);
     Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-M_SP_TB_1"]);
@@ -999,6 +998,16 @@ event iec104::C_BO_TA_1(c: connection, is_orig: bool, io: C_BO_TA_1_io)
     Log::write(iec104::LOG_C_BO_TA_1, rec);
 }
 
+event iec104::M_EI_NA_1(c: connection, is_orig: bool, io: M_EI_NA_1_io)
+{
+    local rec = M_EI_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_EI_NA_1, rec);
+}
+
 event iec104::SVA_QDS_evt(c: connection, sva_qds: SVA_QDS)
 {
     hook set_session(c);
@@ -1223,25 +1232,6 @@ event iec104::BSI_QDS_CP24Time2a_evt(c: connection, bsi_QDS_CP24Time2a: BSI_QDS_
     new_BSI_QDS_CP24Time2a$CP24Time2a = bsi_QDS_CP24Time2a$CP24Time2a;
 
     Log::write(iec104::LOG_BSI_QDS_CP24Time2a, new_BSI_QDS_CP24Time2a);
-}
-
-event iec104::COI_evt(c: connection, coi: COI)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |COI_vec| + 1;
-
-    COI_temp += next_num;
-    COI_vec += next_num;
-
-    local new_coi = COI($Asdu_num=next_num);
-    new_coi$info_obj_addr = coi$info_obj_addr;
-    new_coi$coi = coi$coi;
-
-    Log::write(iec104::LOG_COI, new_coi);
 }
 
 event iec104::NVA_QDS_CP56Time2a_evt(c: connection, nva_QDS_CP56Time2a: NVA_QDS_CP56Time2a)
