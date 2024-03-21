@@ -430,6 +430,12 @@ type M_DP_TA_1_io = unit {
     tt: CP24Time2a;
 };
 
+type M_DP_TB_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    diq: DIQ;
+    tt: CP56Time2a;
+};
+
 type M_ME_NC_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     r32: real &type=spicy::RealType::IEEE754_Single;
@@ -647,18 +653,6 @@ type CP24TIME2A = unit {
         mins: 0..6;
         iv: 7;
     };
-};
-
-type DIQ_CP56Time2a = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    diq: bitfield(8) {
-        dpi: 0..1;
-        bl: 4;
-        sb: 5;
-        nt: 6;
-        iv: 7;
-    };
-    CP56Time2a: CP56TIME2A;
 };
 
 type VTI_QDS_CP56Time2a = unit {
@@ -883,6 +877,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
         TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io()[id.nobj];
         TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io()[id.nobj];
+        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io()[id.nobj];
         TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io()[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
@@ -909,7 +904,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_NB_1 -> sva_qds: SVA_QDS()[id.nobj];
         TypeID::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[id.nobj];
         TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[id.nobj];
-        TypeID::M_DP_TB_1 -> diq_CP56Time2a: DIQ_CP56Time2a()[id.nobj];
         TypeID::M_ST_TB_1 -> vti_qds_CP56Time2a: VTI_QDS_CP56Time2a()[id.nobj];
         TypeID::M_BO_TB_1 -> bsi_qds_CP56Time2a: BSI_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[id.nobj];
@@ -1031,6 +1025,14 @@ public function M_SP_TB_1_rec(io: M_SP_TB_1_io):
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
     return (io.obj_addr, SIQ_rec(io.siq), CP56Time2a_rec(io.tt));
+}
+
+public function M_DP_TB_1_rec(io: M_DP_TB_1_io):
+    tuple<uint64,
+          tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, DIQ_rec(io.diq), CP56Time2a_rec(io.tt));
 }
 
 public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
@@ -1163,19 +1165,6 @@ public function VTI_QDS_ret (asdu: VTI_QDS): tuple<uint64, uint64, uint8, tuple<
     local qds_tuple = (temp_ov, temp_bl, temp_sb, temp_nt, temp_iv);
 
     return (0, asdu.info_obj_addr, asdu.value, qds_tuple);
-}
-
-public function DIQ_CP56Time2a_ret (asdu: DIQ_CP56Time2a): tuple<uint64, uint64, uint64, tuple<dpi: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
-
-    local temp_dpi = asdu.diq.dpi;
-    local temp_bl = asdu.diq.bl;
-    local temp_sb = asdu.diq.sb;
-    local temp_nt = asdu.diq.nt;
-    local temp_iv = asdu.diq.iv;
-
-    local diq_tuple = (temp_dpi, temp_bl, temp_sb, temp_nt, temp_iv);
-    return (0, 31 ,asdu.info_obj_addr, diq_tuple ,asdu.CP56Time2a);
-
 }
 
 public function VTI_QDS_CP56Time2a_ret (asdu: VTI_QDS_CP56Time2a): tuple<uint64, uint64, uint8, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
