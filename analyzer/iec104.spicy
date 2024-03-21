@@ -351,6 +351,17 @@ type SIQ = unit {
     };
 };
 
+type DIQ = unit {
+    : bitfield(8) {
+        dpi: 0..1;
+        # : 2..3 = 0;
+        bl: 4;
+        sb: 5;
+        nt: 6;
+        iv: 7;
+    };
+};
+
 type QDS = unit {
     : bitfield(8) {
         ov: 0;
@@ -406,6 +417,11 @@ type M_SP_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     siq: SIQ;
     tt: CP24Time2a;
+};
+
+type M_DP_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    diq: DIQ;
 };
 
 type M_ME_NC_1_io = unit {
@@ -547,17 +563,6 @@ type M_EI_NA_1_io = unit {
     : bitfield(8) {
         coi: 0..6;
         lpc: 7;
-    };
-};
-
-type DIQ = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    diq: bitfield(8) {
-        dpi: 0..1;
-        bl: 4;
-        sb: 5;
-        nt: 6;
-        iv: 7;
     };
 };
 
@@ -882,6 +887,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
+        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io()[id.nobj];
         TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io()[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
@@ -899,7 +905,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::M_DP_NA_1 -> diq: DIQ()[id.nobj];
         TypeID::M_DP_TA_1 -> diq_CP24Time2a: DIQ_CP24Time2a()[id.nobj];
         TypeID::M_ST_NA_1 -> vti_qds: VTI_QDS()[id.nobj];
         TypeID::M_ST_TA_1 -> vti_qds_CP24Time2a: VTI_QDS_CP24Time2a()[id.nobj];
@@ -962,6 +967,15 @@ function SIQ_rec(siq: SIQ): tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: b
             siq.iv == 1);
 }
 
+function DIQ_rec(diq: DIQ): tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>
+{
+    return (diq.dpi,
+            diq.bl == 1,
+            diq.sb == 1,
+            diq.nt == 1,
+            diq.iv == 1);
+}
+
 function QDS_rec(qds: QDS): tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>
 {
     return (qds.ov == 1,
@@ -995,6 +1009,12 @@ public function M_SP_TA_1_rec(io: M_SP_TA_1_io):
           tuple<ms: uint16, minute: uint8>>
 {
     return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
+}
+
+public function M_DP_NA_1_rec(io: M_DP_NA_1_io):
+    tuple<uint64, tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, DIQ_rec(io.diq));
 }
 
 public function M_ME_NC_1_rec(io: M_ME_NC_1_io):
