@@ -27,6 +27,7 @@ export {
         LOG_M_ME_NB_1,
         LOG_M_ME_TB_1,
         LOG_M_ME_NC_1,
+        LOG_M_ME_TC_1,
         LOG_M_SP_TB_1,
         LOG_M_DP_TB_1,
         LOG_M_ST_TB_1,
@@ -54,7 +55,6 @@ export {
         LOG_DIQ_CP24Time2a,
         LOG_SVA_QDS_CP56Time2a,
         LOG_IEEE_754_QDS_CP56Time2a,
-        LOG_IEEE_754_QDS_CP24Time2a,
         LOG_Read_Command,
         LOG_QRP,
         LOG_UNK,
@@ -258,6 +258,20 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: M_ME_NC_1_io &log;
+    };
+
+    type M_ME_TC_1_io: record {
+        obj_addr: count &log;
+        r32: double &log;
+        qds: QDS &log;
+        tt: CP24Time2a;
+    };
+
+    type M_ME_TC_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_ME_TC_1_io &log;
     };
 
     type CP56Time2a: record {
@@ -833,6 +847,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_M_ME_NB_1, [$columns=M_ME_NB_1_log, $path="iec104-M_ME_NB_1"]);
     Log::create_stream(iec104::LOG_M_ME_TB_1, [$columns=M_ME_TB_1_log, $path="iec104-M_ME_TB_1"]);
     Log::create_stream(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"]);
+    Log::create_stream(iec104::LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"]);
     Log::create_stream(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"]);
     Log::create_stream(iec104::LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"]);
     Log::create_stream(iec104::LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"]);
@@ -859,7 +874,6 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_IEEE_754_QDS_CP56Time2a,
                        [$columns=L_IEEE_754_QDS_CP56Time2a,
                         $path="iec104-M_ME_TF_1"]);
-    Log::create_stream(iec104::LOG_IEEE_754_QDS_CP24Time2a, [$columns=IEEE_754_QDS_CP24Time2a, $path="iec104-M_ME_TC_1"]);
     Log::create_stream(iec104::LOG_Read_Command, [$columns=Read_Command, $path="iec104-C_RD_NA_1"]);
     Log::create_stream(iec104::LOG_QRP, [$columns=QRP, $path="iec104-C_RP_NA_1"]);
     Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
@@ -1050,6 +1064,16 @@ event iec104::M_ME_NC_1(c: connection, is_orig: bool, io: M_ME_NC_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_M_ME_NC_1, rec);
+}
+
+event iec104::M_ME_TC_1(c: connection, is_orig: bool, io: M_ME_TC_1_io)
+{
+    local rec = M_ME_TC_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_ME_TC_1, rec);
 }
 
 event iec104::M_SP_TB_1(c: connection, is_orig: bool, io: M_SP_TB_1_io)
@@ -1290,27 +1314,6 @@ event iec104::IEEE_754_QDS_CP56Time2a_evt(c: connection,
                                           $btt=btt);
 
     Log::write(iec104::LOG_IEEE_754_QDS_CP56Time2a, rec);
-}
-
-event iec104::IEEE_754_QDS_CP24Time2a_evt(c: connection, ieee_754_QDS_CP24Time2a: IEEE_754_QDS_CP24Time2a)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |IEEE_754_QDS_CP24Time2a_vec| + 1;
-
-    IEEE_754_QDS_CP24Time2a_temp += next_num;
-    IEEE_754_QDS_CP24Time2a_vec += next_num;
-
-    local new_IEEE_754_QDS_CP24Time2a = IEEE_754_QDS_CP24Time2a($Asdu_num=next_num);
-    new_IEEE_754_QDS_CP24Time2a$info_obj_addr = ieee_754_QDS_CP24Time2a$info_obj_addr;
-    new_IEEE_754_QDS_CP24Time2a$value = ieee_754_QDS_CP24Time2a$value;
-    new_IEEE_754_QDS_CP24Time2a$qds = ieee_754_QDS_CP24Time2a$qds;
-    new_IEEE_754_QDS_CP24Time2a$CP24Time2a = ieee_754_QDS_CP24Time2a$CP24Time2a;
-
-    Log::write(iec104::LOG_IEEE_754_QDS_CP24Time2a, new_IEEE_754_QDS_CP24Time2a);
 }
 
 event iec104::Read_Command_evt(c: connection, read_Command: Read_Command)
