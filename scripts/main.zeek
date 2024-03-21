@@ -16,6 +16,7 @@ export {
         LOG,
         LOG_M_SP_NA_1,
         LOG_M_ME_NC_1,
+        LOG_M_SP_TB_1,
         LOG_C_SC_NA_1,
         LOG_C_DC_NA_1,
         LOG_C_RC_NA_1,
@@ -36,7 +37,6 @@ export {
         LOG_SVA_QOS,
         LOG_SVA_QDS,
         LOG_VTI_QDS,
-        LOG_SIQ_CP56Time2a,
         LOG_SIQ_CP24Time2a,
         LOG_DIQ_CP56Time2a,
         LOG_DIQ_CP24Time2a,
@@ -95,6 +95,31 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: M_ME_NC_1_io &log;
+    };
+
+    type CP56Time2a: record {
+        ms: count &log;
+        minute: count &log;
+        iv: bool &log;
+        hour: count &log;
+        su: bool &log;
+        day: count &log;
+        dow: count &log;
+        month: count &log;
+        year: count &log;
+    };
+
+    type M_SP_TB_1_io: record {
+        obj_addr: count &log;
+        siq: SIQ &log;
+        tt: CP56Time2a &log;
+    };
+
+    type M_SP_TB_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: M_SP_TB_1_io &log;
     };
 
     type C_IC_NA_1_io: record {
@@ -217,18 +242,6 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: C_BO_NA_1_io &log;
-    };
-
-    type CP56Time2a: record {
-        ms: count &log;
-        minute: count &log;
-        iv: bool &log;
-        hour: count &log;
-        su: bool &log;
-        day: count &log;
-        dow: count &log;
-        month: count &log;
-        year: count &log;
     };
 
     type C_SC_TA_1_io: record {
@@ -405,13 +418,6 @@ export {
         day_dow: day_dows &log &optional;
         mon: count &log &optional;
         year: count &log &optional;
-    };
-
-    type SIQ_CP56Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        siq: SIQ_field &log &optional;
-        CP56Time2a: CP56TIME2A &log &optional;
     };
 
     type SIQ_CP24Time2a: record {
@@ -668,13 +674,6 @@ export {
         reply: string &optional &log;
     };
 
-    type siq_CP56Time2a_w_info_obj_type: record {
-        info_obj_type_b: count &optional;
-        info_obj_addr: count &log;
-        siq: SIQ_field &log;
-        CP56Time2a: CP56TIME2A &log;
-    };
-
     ## Default hook into iec104 logging.
     global log_iec104: event(rec: Info);
 }
@@ -686,8 +685,6 @@ global SVA_QDS_temp: vector of count;
 global VTI_QDS_vec: vector of count;
 global VTI_QDS_temp: vector of count;
 
-global SIQ_CP56Time2a_vec: vector of count;
-global SIQ_CP56Time2a_temp: vector of count;
 global SIQ_CP24Time2a_vec: vector of count;
 global SIQ_CP24Time2a_temp: vector of count;
 global DIQ_CP56Time2a_vec: vector of count;
@@ -737,6 +734,7 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"]);
+    Log::create_stream(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"]);
     Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
     Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
     Log::create_stream(iec104::LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"]);
@@ -754,12 +752,8 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
-    # TODO: Shall we create another log stream here that we correlate it to have multiple records for the
-    # num_ix ASDUs that we might have? Correllated with an ASDU_UUID?
-    # Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-SIQ"]);
     Log::create_stream(iec104::LOG_SVA_QDS, [$columns=SVA_QDS, $path="iec104-M_ME_NB_1"]);
     Log::create_stream(iec104::LOG_VTI_QDS, [$columns=VTI_QDS, $path="iec104-M_ST_NA_1"]);
-    Log::create_stream(iec104::LOG_SIQ_CP56Time2a, [$columns=SIQ_CP56Time2a, $path="iec104-M_SP_TB_1"]);
     Log::create_stream(iec104::LOG_SIQ_CP24Time2a, [$columns=SIQ_CP24Time2a, $path="iec104-M_SP_TA_1"]);
     Log::create_stream(iec104::LOG_DIQ_CP56Time2a, [$columns=DIQ_CP56Time2a, $path="iec104-M_DP_TB_1"]);
     Log::create_stream(iec104::LOG_DIQ_CP24Time2a, [$columns=DIQ_CP24Time2a, $path="iec104-M_DP_TA_1"]);
@@ -856,6 +850,16 @@ event iec104::M_ME_NC_1(c: connection, is_orig: bool, io: M_ME_NC_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_M_ME_NC_1, rec);
+}
+
+event iec104::M_SP_TB_1(c: connection, is_orig: bool, io: M_SP_TB_1_io)
+{
+    local rec = M_SP_TB_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_M_SP_TB_1, rec);
 }
 
 event iec104::C_IC_NA_1(c: connection, is_orig: bool, io: C_IC_NA_1_io)
@@ -1046,28 +1050,6 @@ event iec104::VTI_QDS_evt(c: connection, vti_qds: VTI_QDS)
     new_VTI_QDS$qds = vti_qds$qds;
 
     Log::write(iec104::LOG_VTI_QDS, new_VTI_QDS);
-}
-
-event iec104::SIQ_CP56Time2a_evt(c: connection, siq_CP56Time2a: SIQ_CP56Time2a)
-{
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |SIQ_CP56Time2a_vec| + 1;
-
-    SIQ_CP56Time2a_temp += next_num;
-    SIQ_CP56Time2a_vec += next_num;
-
-    local new_SIQ_CP56Time2a = SIQ_CP56Time2a($Asdu_num=next_num);
-    new_SIQ_CP56Time2a$info_obj_addr = siq_CP56Time2a$info_obj_addr;
-    new_SIQ_CP56Time2a$siq = siq_CP56Time2a$siq;
-    new_SIQ_CP56Time2a$CP56Time2a = siq_CP56Time2a$CP56Time2a;
-
-    Log::write(iec104::LOG_SIQ_CP56Time2a, new_SIQ_CP56Time2a);
-
-
 }
 
 event iec104::SIQ_CP24Time2a_evt(c: connection, siq_CP24Time2a: SIQ_CP24Time2a)
