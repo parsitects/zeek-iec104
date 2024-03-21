@@ -66,6 +66,9 @@ on iec104::C_SE_NA_1_io ->
 on iec104::C_SE_NB_1_io ->
     event iec104::C_SE_NB_1($conn, $is_orig, iec104::C_SE_NB_1_rec(self));
 
+on iec104::C_SE_NC_1_io ->
+    event iec104::C_SE_NC_1($conn, $is_orig, iec104::C_SE_NC_1_rec(self));
+
 on iec104::C_SC_TA_1_io ->
     event iec104::C_SC_TA_1($conn, $is_orig, iec104::C_SC_TA_1_rec(self));
 
@@ -83,9 +86,6 @@ on iec104::BSI ->
 
 on iec104::SVA_QDS ->
     event iec104::SVA_QDS_evt($conn, iec104::SVA_QDS_ret(self));
-
-on iec104::IEEE_754_QOS ->
-    event iec104::IEEE_754_QOS_evt($conn, iec104::IEEE_754_QOS_ret(self));
 
 on iec104::IEEE_754_QDS ->
     event iec104::IEEE_754_QDS_evt($conn, iec104::IEEE_754_QDS_ret(self));

@@ -433,6 +433,15 @@ type C_SE_NB_1_io = unit {
     };
 };
 
+type C_SE_NC_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qos: bitfield(8) {
+        ql: 0..6;
+        se: 7;
+    };
+};
+
 type C_SC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     sco: bitfield(8) {
@@ -520,16 +529,6 @@ type SVA_QDS = unit {
         iv: 7;
     };
 };
-
-type IEEE_754_QOS = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    value: real &type=spicy::RealType::IEEE754_Single;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
-};
-
 
 type IEEE_754_QDS = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
@@ -871,6 +870,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io()[id.nobj];
         TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io()[id.nobj];
         TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io()[id.nobj];
+        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io()[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
         TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
         TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io()[id.nobj];
@@ -896,7 +896,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TD_1 -> nva_qds_CP56Time2a: NVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TE_1 -> sva_qds_CP56Time2a: SVA_QDS_CP56Time2a()[id.nobj];
         TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[id.nobj];
-        TypeID::C_SE_NC_1 -> ieee_754_qos: IEEE_754_QOS()[id.nobj];
         TypeID::C_BO_NA_1 -> bsi: BSI()[id.nobj];
         TypeID::M_EI_NA_1 -> coi: COI()[id.nobj];
         TypeID::C_RD_NA_1 -> read_command: Read_Command()[id.nobj];
@@ -993,6 +992,12 @@ public function C_SE_NB_1_rec(io: C_SE_NB_1_io):
     return (io.obj_addr, io.sva, (io.qos.ql, io.qos.se == 1));
 }
 
+public function C_SE_NC_1_rec(io: C_SE_NC_1_io):
+    tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
+{
+    return (io.obj_addr, io.r32, (io.qos.ql, io.qos.se == 1));
+}
+
 public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
     tuple<uint64, scs: bool, qu: uint8, se: bool,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
@@ -1048,15 +1053,6 @@ public function SVA_QDS_ret (asdu: SVA_QDS) :tuple<uint64, uint64, uint64, tuple
     local qds_tuple = (temp_ov, temp_bl, temp_sb, temp_nt, temp_iv);
 
     return (0, asdu.info_obj_addr, asdu.SVA, qds_tuple);
-}
-
-public function IEEE_754_QOS_ret (asdu: IEEE_754_QOS): tuple<uint64, uint64, real, tuple<ql: uint8, se: uint8>> {
-    local temp_ql = asdu.qos.ql;
-    local temp_se = asdu.qos.se;
-
-    local qos_tuple = (temp_ql, temp_se);
-
-    return (0, asdu.info_obj_addr, asdu.value, qos_tuple);
 }
 
 public function IEEE_754_QDS_ret (asdu: IEEE_754_QDS): tuple<uint64, uint64, uint64, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>> {
