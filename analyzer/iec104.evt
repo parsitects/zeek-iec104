@@ -54,6 +54,9 @@ on iec104::M_SP_TA_1_io ->
 on iec104::M_DP_NA_1_io ->
     event iec104::M_DP_NA_1($conn, $is_orig, iec104::M_DP_NA_1_rec(self));
 
+on iec104::M_DP_TA_1_io ->
+    event iec104::M_DP_TA_1($conn, $is_orig, iec104::M_DP_TA_1_rec(self));
+
 on iec104::M_ME_NC_1_io ->
     event iec104::M_ME_NC_1($conn, $is_orig, iec104::M_ME_NC_1_rec(self));
 
@@ -113,9 +116,6 @@ on iec104::VTI_QDS ->
 
 on iec104::DIQ_CP56Time2a ->
     event iec104::DIQ_CP56Time2a_evt($conn, iec104::DIQ_CP56Time2a_ret(self));
-
-on iec104::DIQ_CP24Time2a ->
-    event iec104::DIQ_CP24Time2a_evt($conn, iec104::DIQ_CP24Time2a_ret(self));
 
 on iec104::VTI_QDS_CP56Time2a ->
     event iec104::VTI_QDS_CP56Time2a_evt($conn, iec104::VTI_QDS_CP56Time2a_ret(self));
