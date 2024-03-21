@@ -535,6 +535,13 @@ type M_ME_TE_1_io = unit {
     tt: CP56Time2a;
 };
 
+type M_ME_TF_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qds: QDS;
+    tt: CP56Time2a;
+};
+
 type C_IC_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qoi: uint8;
@@ -686,34 +693,6 @@ type CP56TIME2A = unit {
     year: uint8;
 };
 
-type CP24TIME2A = unit {
-    milli: uint16;
-    minute: bitfield(8) {
-        mins: 0..6;
-        iv: 7;
-    };
-};
-
-type T_QDS = unit {
-    : bitfield(8) {
-        ov: 0;
-        # TODO:
-        # : 1..3 = 0;
-        bl: 4;
-        sb: 5;
-        nt: 6;
-        iv: 7;
-    };
-};
-
-type IEEE_754_QDS_CP56Time2a = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    # FIXME: Should be short floating point.
-    value: uint32;
-    qds: T_QDS;
-    btt: CP56TIME2A;
-};
-
 type Read_Command = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
@@ -815,6 +794,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io()[id.nobj];
         TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io()[id.nobj];
         TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_io()[id.nobj];
+        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io()[id.nobj];
@@ -830,7 +810,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::M_ME_TF_1 -> ieee_754_qds_CP56Time2a: IEEE_754_QDS_CP56Time2a()[id.nobj];
         TypeID::C_RD_NA_1 -> read_command: Read_Command()[id.nobj];
         TypeID::C_RP_NA_1 -> qrp: QRP()[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 40);
@@ -1051,6 +1030,14 @@ public function M_ME_TE_1_rec(io: M_ME_TE_1_io):
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
     return (io.obj_addr, io.sva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function M_ME_TF_1_rec(io: M_ME_TF_1_io):
+    tuple<uint64, r32: real,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function C_IC_NA_1_rec(io: C_IC_NA_1_io):

@@ -105,6 +105,9 @@ on iec104::M_ME_TD_1_io ->
 on iec104::M_ME_TE_1_io ->
     event iec104::M_ME_TE_1($conn, $is_orig, iec104::M_ME_TE_1_rec(self));
 
+on iec104::M_ME_TF_1_io ->
+    event iec104::M_ME_TF_1($conn, $is_orig, iec104::M_ME_TF_1_rec(self));
+
 on iec104::C_IC_NA_1_io ->
     event iec104::C_IC_NA_1($conn, $is_orig, iec104::C_IC_NA_1_rec(self));
 
@@ -149,15 +152,6 @@ on iec104::C_BO_TA_1_io ->
 
 on iec104::M_EI_NA_1_io ->
     event iec104::M_EI_NA_1($conn, $is_orig, iec104::M_EI_NA_1_rec(self));
-
-on iec104::IEEE_754_QDS_CP56Time2a ->
-    event iec104::IEEE_754_QDS_CP56Time2a_evt(
-        $conn,
-        $is_orig,
-        self.info_obj_addr,
-        self.value,
-        self.qds,
-        self.btt);
 
 on iec104::Read_Command ->
     event iec104::Read_Command_evt($conn, iec104::Read_Command_ret(self));
