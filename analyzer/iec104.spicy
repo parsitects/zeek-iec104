@@ -462,6 +462,13 @@ type M_ME_NA_1_io = unit {
     qds: QDS;
 };
 
+type M_ME_TA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    nva: uint16;
+    qds: QDS;
+    tt: CP24Time2a;
+};
+
 type M_ME_NC_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     r32: real &type=spicy::RealType::IEEE754_Single;
@@ -678,19 +685,6 @@ type NVA_QDS_CP56Time2a = unit {
     CP56Time2a: CP56TIME2A;
 };
 
-type NVA_QDS_CP24Time2a = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    NVA: uint16;
-    qds: bitfield(8) {
-        ov: 0;
-        bl: 4;
-        sb: 5;
-        nt: 6;
-        iv: 7;
-    };
-    CP24Time2a: CP24TIME2A;
-};
-
 type SVA_QDS_CP56Time2a = unit {
     info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     SVA: uint16;
@@ -840,6 +834,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_io()[id.nobj];
         TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_io()[id.nobj];
         TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_io()[id.nobj];
+        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_io()[id.nobj];
         TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io()[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io()[id.nobj];
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io()[id.nobj];
@@ -860,7 +855,6 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::M_ME_TA_1 -> nva_qds_CP24Time2a: NVA_QDS_CP24Time2a()[id.nobj];
         TypeID::M_ME_NB_1 -> sva_qds: SVA_QDS()[id.nobj];
         TypeID::M_ME_TB_1 -> sva_qds_CP24Time2a: SVA_QDS_CP24Time2a()[id.nobj];
         TypeID::M_ME_TC_1 -> ieee_754_qds_CP24Time2a: IEEE_754_QDS_CP24Time2a()[id.nobj];
@@ -1003,6 +997,14 @@ public function M_ME_NA_1_rec(io: M_ME_NA_1_io):
     tuple<uint64, nva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
     return (io.obj_addr, io.nva, QDS_rec(io.qds));
+}
+
+public function M_ME_TA_1_rec(io: M_ME_TA_1_io):
+    tuple<uint64, nva: uint16,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_ME_NC_1_rec(io: M_ME_NC_1_io):
@@ -1172,18 +1174,6 @@ public function NVA_QDS_CP56Time2a_ret (asdu: NVA_QDS_CP56Time2a): tuple<uint64,
     local qds_tuple = (asdu.qds.ov, asdu.qds.bl, asdu.qds.sb, asdu.qds.nt, asdu.qds.iv);
 
     return (0, asdu.info_obj_addr, asdu.NVA, qds_tuple, asdu.CP56Time2a);
-}
-
-public function NVA_QDS_CP24Time2a_ret (asdu: NVA_QDS_CP24Time2a): tuple<uint64, uint64, uint64, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP24TIME2A> {
-    local temp_ov = asdu.qds.ov;
-    local temp_bl = asdu.qds.bl;
-    local temp_sb = asdu.qds.sb;
-    local temp_nt = asdu.qds.nt;
-    local temp_iv = asdu.qds.iv;
-
-    local qds_tuple = (temp_ov, temp_bl, temp_sb, temp_nt, temp_iv);
-
-    return (0, asdu.info_obj_addr, asdu.NVA, qds_tuple, asdu.CP24Time2a);
 }
 
 public function SVA_QDS_CP56Time2a_ret (asdu: SVA_QDS_CP56Time2a): tuple<uint64, uint64, uint64, tuple<ov: uint8, bl: uint8, sb: uint8, nt: uint8, iv: uint8>, CP56TIME2A> {
