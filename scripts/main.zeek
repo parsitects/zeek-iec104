@@ -382,18 +382,6 @@ export {
         io: M_ME_TF_1_io &log;
     };
 
-    type C_IC_NA_1_io: record {
-        obj_addr: count &log;
-        qoi: count &log;
-    };
-
-    type C_IC_NA_1_log: record {
-        ts: time &log;
-        uid: string &log;
-        is_orig: bool &log;
-        io: C_IC_NA_1_io &log;
-    };
-
     type SCO: record {
         scs: bool &log;
         qu: count &log;
@@ -595,6 +583,18 @@ export {
         uid: string &log;
         is_orig: bool &log;
         io: M_EI_NA_1_io &log;
+    };
+
+    type C_IC_NA_1_io: record {
+        obj_addr: count &log;
+        qoi: count &log;
+    };
+
+    type C_IC_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_IC_NA_1_io &log;
     };
 
     type C_RD_NA_1_io: record {
@@ -1178,16 +1178,6 @@ event iec104::M_ME_TF_1(c: connection, is_orig: bool, io: M_ME_TF_1_io)
     Log::write(iec104::LOG_M_ME_TF_1, rec);
 }
 
-event iec104::C_IC_NA_1(c: connection, is_orig: bool, io: C_IC_NA_1_io)
-{
-    local rec = C_IC_NA_1_log(
-        $ts=current_event_time(),
-        $uid=c$uid,
-        $is_orig=is_orig,
-        $io=io);
-    Log::write(iec104::LOG_C_IC_NA_1, rec);
-}
-
 event iec104::C_SC_NA_1(c: connection, is_orig: bool, io: C_SC_NA_1_io)
 {
     local rec = C_SC_NA_1_log(
@@ -1326,6 +1316,16 @@ event iec104::M_EI_NA_1(c: connection, is_orig: bool, io: M_EI_NA_1_io)
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_M_EI_NA_1, rec);
+}
+
+event iec104::C_IC_NA_1(c: connection, is_orig: bool, io: C_IC_NA_1_io)
+{
+    local rec = C_IC_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_IC_NA_1, rec);
 }
 
 event iec104::C_RD_NA_1(c: connection, is_orig: bool, io: C_RD_NA_1_io)
