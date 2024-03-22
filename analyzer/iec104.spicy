@@ -672,27 +672,6 @@ type M_EI_NA_1_io = unit {
     };
 };
 
-type CP56TIME2A = unit {
-    milli: uint16;
-    #minute: uint8;
-    minute: bitfield(8) {
-        mins: 0..6;
-        iv: 7;
-    };
-    #hour: uint8;
-    hour: bitfield(8) {
-        hours: 0..6;
-        su: 7;
-    };
-    #day: uint8;
-    day_dow: bitfield(8) {
-        day: 0..4;
-        day_of_week: 5..7;
-    };
-    mon: uint8;
-    year: uint8;
-};
-
 type C_RD_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };

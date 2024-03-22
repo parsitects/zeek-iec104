@@ -620,106 +620,6 @@ export {
         io: C_RP_NA_1_io &log;
     };
 
-    type QOS_field: record {
-        ql: count &log &optional;
-        se: count &log &optional;
-    };
-
-    type SVA_QOS: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        SVA: count &log &optional;
-        qos: QOS_field &log &optional;
-    };
-
-    type QDS_field: record {
-        ov: count &log;
-        bl: count &log;
-        sb: count &log;
-        nt: count &log;
-        iv: count &log;
-    };
-
-    type minutes: record {
-        mins: count &log &optional;
-        iv: count &log &optional;
-    };
-
-    type hours: record {
-        hours: count &log &optional;
-        su: count &log &optional;
-    };
-
-    type day_dows: record {
-        day: count &log &optional;
-        day_of_week: count &log &optional;
-    };
-
-    type CP24TIME2A: record {
-        milli: count &log &optional;
-        minute: minutes &log &optional;
-    };
-
-    type CP56TIME2A: record {
-        milli: count &log &optional;
-        minute: minutes &log &optional;
-        hour: hours &log &optional;
-        day_dow: day_dows &log &optional;
-        mon: count &log &optional;
-        year: count &log &optional;
-    };
-
-    type DIQ_field: record {
-        dpi: count &log &optional;
-        bl: count &log &optional;
-        sb: count &log &optional;
-        nt: count &log &optional;
-        iv: count &log &optional;
-    };
-
-    type DIQ_CP56Time2a: record {
-        Asdu_num: count &log;
-        info_obj_type: count &log &optional;
-        info_obj_addr: count &log &optional;
-        diq: DIQ_field &log &optional;
-        CP56Time2a: CP56TIME2A &log &optional;
-    };
-
-    type DIQ_CP24Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        diq: DIQ_field &log &optional;
-        CP24Time2a: CP24TIME2A &log &optional;
-    };
-
-    type SVA_QDS_CP56Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        SVA: count &log &optional;
-        qds: QDS_field &log &optional;
-        CP56Time2a: CP56TIME2A &log &optional;
-    };
-
-    type L_IEEE_754_QDS_CP56Time2a: record {
-        ts: time &log;
-        uid: string &log;
-        id: conn_id &log;
-        is_orig: bool &log;
-        info_obj_addr: count &log;
-        # FIXME: Value is actually a short float.
-        value: count &log;
-        qds: QDS_field &log;
-        btt: CP56TIME2A &log;
-    };
-
-    type IEEE_754_QDS_CP24Time2a: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        value: count &log &optional;
-        qds: QDS_field &log &optional;
-        CP24Time2a: CP24TIME2A &log &optional;
-    };
-
     type Asdu: record {
         type_id: TypeID &log &optional;
         seq: count &log &optional;
@@ -842,29 +742,12 @@ export {
     global log_iec104: event(rec: Info);
 }
 
-global SVA_QOS_vec: vector of count;
-global SVA_QOS_temp: vector of count;
-
-global DIQ_CP56Time2a_vec: vector of count;
-global DIQ_CP56Time2a_temp: vector of count;
-global DIQ_CP24Time2a_vec: vector of count;
-global DIQ_CP24Time2a_temp: vector of count;
-global SVA_QDS_CP56Time2a_vec: vector of count;
-global SVA_QDS_CP56Time2a_temp: vector of count;
-global IEEE_754_QDS_CP56Time2a_vec: vector of count;
-global IEEE_754_QDS_CP56Time2a_temp: vector of count;
-global IEEE_754_QDS_CP24Time2a_vec: vector of count;
-global IEEE_754_QDS_CP24Time2a_temp: vector of count;
-global Read_Command_vec: vector of count;
-global Read_Command_temp: vector of count;
-
 redef record connection += {
     iec104: Info &optional;
 };
 
 const ports = {
-    # TODO: Replace with actual port(s).
-    2404/tcp # adapt port number in iec104.evt accordingly
+    2404/tcp
 };
 
 redef likely_server_ports += { ports };
