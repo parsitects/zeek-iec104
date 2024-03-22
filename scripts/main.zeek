@@ -13,7 +13,7 @@ global total_time: interval;
 export {
     ## Log stream identifier.
     redef enum Log::ID += {
-        LOG,
+        LOG_ASDU_IDENT,
         LOG_M_SP_NA_1,
         LOG_M_SP_TA_1,
         LOG_M_DP_NA_1,
@@ -620,54 +620,22 @@ export {
         io: C_RP_NA_1_io &log;
     };
 
-    type Asdu: record {
-        type_id: TypeID &log &optional;
-        seq: count &log &optional;
-        num_ix: count &log &optional;
-        # cause_tx: count &log &optional;
-        cause: COT &log &optional;
-        negative: count &log &optional;
-        test: count &log &optional;
-        originator_address: count &log &optional;
-        common_address: count &log &optional;
+    type AsduIdent: record {
+        type_id: TypeID &log;
+        nobj: count &log;
+        sq: bool &log;
+        cot: COT &log;
+        pn: bool &log;
+        test: bool &log;
+        originator_address: count &log;
+        common_address: count &log;
+    };
 
-        # interrogation_command: QOI &log &optional;
-        interrogation_command: vector of count &log &optional;
-
-        # single_point_information: SIQ &log &optional;
-        single_point_information: vector of count &log &optional;
-
-        single_command: vector of count &log &optional;
-
-        double_command: vector of count &log &optional;
-
-        regulating_step_command: vector of count &log &optional;
-        bit_string_32_bit: vector of count &log &optional;
-        setpoint_command_scaled_value: vector of count &log &optional;
-        measured_value_scaled_value: vector of count &log &optional;
-
-        step_position_information: vector of count &log &optional;
-
-        single_point_information_CP56Time2a: vector of count &log &optional;
-        single_point_information_CP24Time2a: vector of count &log &optional;
-        # double_point_information_CP56Time2a: DIQ_CP56Time2a &log &optional;
-        double_point_information_CP56Time2a: vector of count &log &optional;
-        double_point_information_CP24Time2a: vector of count &log &optional;
-
-        step_position_information_CP56Time2a: vector of count &log &optional;
-        step_position_information_CP24Time2a: vector of count &log &optional;
-        bit_string_32_bit_CP56Time2a: vector of count &log &optional;
-        bit_string_32_bit_CP24Time2a: vector of count &log &optional;
-        end_of_initialization: vector of count &log &optional;
-        measured_value_normalized_CP56Time2a: vector of count &log &optional;
-        measured_value_normalized_CP24Time2a: vector of count &log &optional;
-        measured_value_scaled_CP24Time2a: vector of count &log &optional;
-        measured_value_scaled_CP56Time2a: vector of count &log &optional;
-        measured_value_short_floating_point_CP56Time2a: vector of count &log &optional;
-        measured_value_short_floating_point_CP24Time2a: vector of count &log &optional;
-        read_Command: vector of count &log &optional;
-        qrp: vector of count &log &optional;
-
+    type AsduIdent_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        ident: AsduIdent &log;
     };
 
     type APCI_S: record {
@@ -696,55 +664,7 @@ export {
         type_id: TypeID &log;
         data: string &log;
     };
-
-    ## Record type containing the column fields of the iec104 log.
-    type Info: record {
-        ## Timestamp for when the activity happened.
-        ts: time &log;
-        ## Unique ID for the connection.
-        uid: string &log;
-        ## The connection's 4-tuple of endpoint addresses/ports.
-        id: conn_id &log;
-
-        # TODO: Adapt subsequent fields as needed.
-
-        apdu_len: count &log &optional;
-        # apdu_len : count &optional;
-
-        # apci_type : count &log;
-        # apci_type : count &optional;
-        apci_type: string &log &optional;
-
-        apci_tx: count &log &optional;
-        apci_rx: count &log &optional;
-
-        # TODO: Should that be an array of ASDUs?
-        asdu: Asdu &log &optional;
-        # asdu: count &log &optional;
-
-        asdu_uid: string &log &optional;
-
-        # Counters can be for statistics but also serve good indicator for correct parsing.
-        # type_i_counter: count &log;
-        type_i_counter: count &optional;
-        # type_s_counter: count &log;
-        type_s_counter: count &optional;
-        # type_u_counter: count &log;
-        type_u_counter: count &optional;
-
-        ## Request-side payload.
-        request: string &optional &log;
-        ## Response-side payload.
-        reply: string &optional &log;
-    };
-
-    ## Default hook into iec104 logging.
-    global log_iec104: event(rec: Info);
 }
-
-redef record connection += {
-    iec104: Info &optional;
-};
 
 const ports = {
     2404/tcp
@@ -754,7 +674,7 @@ redef likely_server_ports += { ports };
 
 event zeek_init() &priority=5
 {
-    Log::create_stream(iec104::LOG, [$columns=Info, $ev=log_iec104, $path="iec104"]);
+    Log::create_stream(iec104::LOG_ASDU_IDENT, [$columns=AsduIdent_log, $path="iec104-asdu-ident"]);
     Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
     Log::create_stream(iec104::LOG_M_SP_TA_1, [$columns=M_SP_TA_1_log, $path="iec104-M_SP_TA_1"]);
     Log::create_stream(iec104::LOG_M_DP_NA_1, [$columns=M_DP_NA_1_log, $path="iec104-M_DP_NA_1"]);
@@ -798,22 +718,6 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
 }
 
-# Initialize logging state.
-hook set_session(c: connection)
-{
-    if ( c?$iec104 ) {
-        c$iec104$ts = current_event_time();
-        return;
-    }
-
-    c$iec104 = Info($ts = current_event_time(),
-                    $uid = c$uid,
-                    $id = c$id,
-                    $apdu_len = apdu_len,
-                    $apci_type = apci_type);
-    c$iec104$asdu = Asdu();
-}
-
 event iec104::s(c: connection, is_orig: bool, rsn: count)
 {
     local rec = APCI_S($ts=current_event_time(),
@@ -836,23 +740,14 @@ event iec104::u(c: connection, is_orig: bool, startdt: count, stopdt: count, tes
     Log::write(iec104::LOG_APCI_U, rec);
 }
 
-event iec104::asdu(c: connection, type_id: TypeID, seq: count, num_ix: count, cause: COT,
-                   negative: count, test: count, originator_address: count, common_address: count
-                  ) &priority=3
+event iec104::asdu(c: connection, is_orig: bool, ident: AsduIdent)
 {
-    hook set_session(c);
-
-    local info = c$iec104;
-    info$asdu$type_id = type_id;
-    info$asdu$seq = seq;
-    info$asdu$num_ix = num_ix;
-
-    info$asdu$cause = cause;
-    info$asdu$negative = negative;
-    info$asdu$test = test;
-
-    info$asdu$originator_address = originator_address;
-    info$asdu$common_address = common_address;
+    local rec = AsduIdent_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $ident=ident);
+    Log::write(iec104::LOG_ASDU_IDENT, rec);
 }
 
 event iec104::M_SP_NA_1(c: connection, is_orig: bool, io: M_SP_NA_1_io)

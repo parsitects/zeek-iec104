@@ -743,8 +743,8 @@ type AsduIdent = unit {
         sq: 7;
     };
     : bitfield (8) {
-        cause_of_transmission: 0..5 &convert=COT($$);
-        negative: 6;
+        cot: 0..5 &convert=COT($$);
+        pn: 6;
         test: 7;
     };
     originator_address: uint8;
@@ -863,6 +863,12 @@ function CP24Time2a_rec(tt: CP24Time2a):
     tuple<ms: uint16, minute: uint8,>
 {
     return (tt.ms, tt.minute);
+}
+
+public function AsduIdent_rec(id: AsduIdent):
+    tuple<type_id: TypeID, nobj: uint8, sq: bool, cot: COT, pn: bool, test: bool, oa: uint8, ca: uint16>
+{
+    return (id.type_id, id.nobj, id.sq == 1, id.cot, id.pn == 1, id.test == 1, id.originator_address, id.common_address);
 }
 
 public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
