@@ -156,8 +156,8 @@ on iec104::M_EI_NA_1_io ->
 on iec104::C_RD_NA_1_io ->
     event iec104::C_RD_NA_1($conn, $is_orig, iec104::C_RD_NA_1_rec(self));
 
-on iec104::QRP ->
-    event iec104::QRP_evt($conn, iec104::QRP_ret(self));
+on iec104::C_RP_NA_1_io ->
+    event iec104::C_RP_NA_1($conn, $is_orig, iec104::C_RP_NA_1_rec(self));
 
 on iec104::Raw ->
     event iec104::Unknown_ASDU($conn, $is_orig, self.type_id, self.data);

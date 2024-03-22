@@ -51,12 +51,12 @@ export {
         LOG_M_EI_NA_1,
         LOG_C_IC_NA_1,
         LOG_C_RD_NA_1,
+        LOG_C_RP_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_SVA_QOS,
         LOG_DIQ_CP56Time2a,
         LOG_DIQ_CP24Time2a,
-        LOG_QRP,
         LOG_UNK,
     };
 
@@ -608,6 +608,18 @@ export {
         io: C_RD_NA_1_io &log;
     };
 
+    type C_RP_NA_1_io: record {
+        obj_addr: count &log;
+        qrp: count &log;
+    };
+
+    type C_RP_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_RP_NA_1_io &log;
+    };
+
     type QOS_field: record {
         ql: count &log &optional;
         se: count &log &optional;
@@ -706,12 +718,6 @@ export {
         value: count &log &optional;
         qds: QDS_field &log &optional;
         CP24Time2a: CP24TIME2A &log &optional;
-    };
-
-    type QRP: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
-        raw_data: string &log &optional;
     };
 
     type Asdu: record {
@@ -851,8 +857,6 @@ global IEEE_754_QDS_CP24Time2a_vec: vector of count;
 global IEEE_754_QDS_CP24Time2a_temp: vector of count;
 global Read_Command_vec: vector of count;
 global Read_Command_temp: vector of count;
-global QRP_vec: vector of count;
-global QRP_temp: vector of count;
 
 redef record connection += {
     iec104: Info &optional;
@@ -905,9 +909,9 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
     Log::create_stream(iec104::LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"]);
+    Log::create_stream(iec104::LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
-    Log::create_stream(iec104::LOG_QRP, [$columns=QRP, $path="iec104-C_RP_NA_1"]);
     Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
 }
 
@@ -1338,23 +1342,14 @@ event iec104::C_RD_NA_1(c: connection, is_orig: bool, io: C_RD_NA_1_io)
     Log::write(iec104::LOG_C_RD_NA_1, rec);
 }
 
-event iec104::QRP_evt(c: connection, qrp: QRP)
+event iec104::C_RP_NA_1(c: connection, is_orig: bool, io: C_RP_NA_1_io)
 {
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |QRP_vec| + 1;
-
-    QRP_temp += next_num;
-    QRP_vec += next_num;
-
-    local rec = QRP($Asdu_num=next_num);
-    rec$info_obj_addr = qrp$info_obj_addr;
-    rec$raw_data = qrp$raw_data;
-
-    Log::write(iec104::LOG_QRP, rec);
+    local rec = C_RP_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_RP_NA_1, rec);
 }
 
 event iec104::Unknown_ASDU(c: connection, is_orig: bool, type_id: iec104::TypeID, hex: string)

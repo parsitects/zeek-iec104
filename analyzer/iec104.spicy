@@ -697,9 +697,9 @@ type C_RD_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
-type QRP = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    raw_data: uint8;
+type C_RP_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    qrp: uint8;
 };
 
 type Ctrl_i = unit(inout apdu: Apdu) {
@@ -811,7 +811,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io()[id.nobj];
-        TypeID::C_RP_NA_1 -> qrp: QRP()[id.nobj];
+        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 40);
     };
 };
@@ -1153,6 +1153,8 @@ public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
     return (io.obj_addr,);
 }
 
-public function QRP_ret (asdu: QRP): tuple<uint64, uint64, uint8> {
-    return (0, asdu.info_obj_addr, asdu.raw_data);
+public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
+    tuple<uint64, qrp: uint8>
+{
+    return (io.obj_addr, io.qrp);
 }
