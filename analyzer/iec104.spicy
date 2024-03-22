@@ -693,8 +693,8 @@ type CP56TIME2A = unit {
     year: uint8;
 };
 
-type Read_Command = unit {
-    info_obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RD_NA_1_io = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
 type QRP = unit {
@@ -810,7 +810,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::C_RD_NA_1 -> read_command: Read_Command()[id.nobj];
+        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io()[id.nobj];
         TypeID::C_RP_NA_1 -> qrp: QRP()[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 40);
     };
@@ -1147,8 +1147,10 @@ public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
     return (io.obj_addr, io.coi, io.lpc == 1);
 }
 
-public function Read_Command_ret (asdu: Read_Command): tuple<uint64, uint64> {
-    return (0, asdu.info_obj_addr);
+public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
+    tuple<uint64>
+{
+    return (io.obj_addr,);
 }
 
 public function QRP_ret (asdu: QRP): tuple<uint64, uint64, uint8> {

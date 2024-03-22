@@ -153,8 +153,8 @@ on iec104::C_BO_TA_1_io ->
 on iec104::M_EI_NA_1_io ->
     event iec104::M_EI_NA_1($conn, $is_orig, iec104::M_EI_NA_1_rec(self));
 
-on iec104::Read_Command ->
-    event iec104::Read_Command_evt($conn, iec104::Read_Command_ret(self));
+on iec104::C_RD_NA_1_io ->
+    event iec104::C_RD_NA_1($conn, $is_orig, iec104::C_RD_NA_1_rec(self));
 
 on iec104::QRP ->
     event iec104::QRP_evt($conn, iec104::QRP_ret(self));

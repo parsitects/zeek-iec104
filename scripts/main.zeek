@@ -50,12 +50,12 @@ export {
         LOG_C_BO_TA_1,
         LOG_M_EI_NA_1,
         LOG_C_IC_NA_1,
+        LOG_C_RD_NA_1,
         LOG_APCI_U,
         LOG_APCI_S,
         LOG_SVA_QOS,
         LOG_DIQ_CP56Time2a,
         LOG_DIQ_CP24Time2a,
-        LOG_Read_Command,
         LOG_QRP,
         LOG_UNK,
     };
@@ -597,6 +597,17 @@ export {
         io: M_EI_NA_1_io &log;
     };
 
+    type C_RD_NA_1_io: record {
+        obj_addr: count &log;
+    };
+
+    type C_RD_NA_1_log: record {
+        ts: time &log;
+        uid: string &log;
+        is_orig: bool &log;
+        io: C_RD_NA_1_io &log;
+    };
+
     type QOS_field: record {
         ql: count &log &optional;
         se: count &log &optional;
@@ -695,11 +706,6 @@ export {
         value: count &log &optional;
         qds: QDS_field &log &optional;
         CP24Time2a: CP24TIME2A &log &optional;
-    };
-
-    type Read_Command: record {
-        Asdu_num: count &log;
-        info_obj_addr: count &log &optional;
     };
 
     type QRP: record {
@@ -898,9 +904,9 @@ event zeek_init() &priority=5
     Log::create_stream(iec104::LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"]);
     Log::create_stream(iec104::LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"]);
     Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
+    Log::create_stream(iec104::LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"]);
     Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
     Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
-    Log::create_stream(iec104::LOG_Read_Command, [$columns=Read_Command, $path="iec104-C_RD_NA_1"]);
     Log::create_stream(iec104::LOG_QRP, [$columns=QRP, $path="iec104-C_RP_NA_1"]);
     Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
 }
@@ -1322,22 +1328,14 @@ event iec104::M_EI_NA_1(c: connection, is_orig: bool, io: M_EI_NA_1_io)
     Log::write(iec104::LOG_M_EI_NA_1, rec);
 }
 
-event iec104::Read_Command_evt(c: connection, read_Command: Read_Command)
+event iec104::C_RD_NA_1(c: connection, is_orig: bool, io: C_RD_NA_1_io)
 {
-    hook set_session(c);
-
-    local info = c$iec104;
-
-    local next_num: count;
-    next_num = |Read_Command_vec| + 1;
-
-    Read_Command_temp += next_num;
-    Read_Command_vec += next_num;
-
-    local rec = Read_Command($Asdu_num=next_num);
-    rec$info_obj_addr = read_Command$info_obj_addr;
-
-    Log::write(iec104::LOG_Read_Command, rec);
+    local rec = C_RD_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_RD_NA_1, rec);
 }
 
 event iec104::QRP_evt(c: connection, qrp: QRP)
