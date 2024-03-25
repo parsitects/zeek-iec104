@@ -19,6 +19,6 @@ import zeek;
 #    zeek::reject_protocol("error while parsing iec104");
 #}
 
-on iec104::Apcis::%error {
+on iec104::Apdus::%error {
     zeek::reject_protocol("error while parsing iec104");
 }
