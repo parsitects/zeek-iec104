@@ -682,8 +682,6 @@ type C_RP_NA_1_io = unit {
 };
 
 type Ctrl_i = unit(inout apdu: Apdu) {
-    on %error { self.backtrack(); }
-
     : bitfield(32) {
       tag: 0 = 0;
       ssn: 1..15;
@@ -693,6 +691,7 @@ type Ctrl_i = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::I;
+        confirm;
     }
 };
 
@@ -707,6 +706,7 @@ type Ctrl_s = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::S;
+        confirm;
     }
 };
 
@@ -723,6 +723,7 @@ type Ctrl_u = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::U;
+        confirm;
     }
 };
 
