@@ -685,7 +685,7 @@ type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0 = 0;
       ssn: 1..15;
-      unused: 16; # = 0
+      unused: 16 = 0;
       rsn: 17..31;
     };
 
@@ -700,7 +700,7 @@ type Ctrl_s = unit(inout apdu: Apdu) {
 
     : bitfield(32) {
       tag: 0..1 = 1;
-      unused: 2..16; # = 0
+      unused: 2..16 = 0;
       rsn: 17..31;
     };
 
@@ -718,7 +718,7 @@ type Ctrl_u = unit(inout apdu: Apdu) {
       startdt: 2..3;
       stopdt: 4..5;
       testfr: 6..7;
-      zeroes: 8..31; # = 0
+      unused: 8..31 = 0;
     };
 
     on %done {
