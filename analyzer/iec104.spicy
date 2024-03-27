@@ -691,13 +691,10 @@ type Ctrl_i = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::I;
-        confirm;
     }
 };
 
 type Ctrl_s = unit(inout apdu: Apdu) {
-    on %error { self.backtrack(); }
-
     : bitfield(32) {
       tag: 0..1 = 1;
       unused: 2..16 = 0;
@@ -706,13 +703,10 @@ type Ctrl_s = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::S;
-        confirm;
     }
 };
 
 type Ctrl_u = unit(inout apdu: Apdu) {
-    on %error { self.backtrack(); }
-
     : bitfield(32) {
       tag: 0..1 = 3;
       startdt: 2..3;
@@ -723,7 +717,19 @@ type Ctrl_u = unit(inout apdu: Apdu) {
 
     on %done {
         apdu.format = Format::U;
-        confirm;
+    }
+};
+
+type Ctrl = unit(apdu: Apdu) {
+    xx: uint32 { self.set_input(self.start); }
+
+    i: Ctrl_i(apdu) if (4 < apdu.len);
+    s: Ctrl_s(apdu) if (4 == apdu.len && 1 == self.xx & 0x03);
+    u: Ctrl_u(apdu) if (4 == apdu.len && 3 == self.xx & 0x03);
+
+    var start: iterator<stream>;
+    on %init {
+        self.start = self.input();
     }
 };
 
@@ -812,12 +818,7 @@ public type Apdu = unit {
         if ($$ < 4) reject;
     }
 
-    # We cannot set self.format in unit hooks here because they are
-    # executed even in case of backtracing, so we must fall back to
-    # passing self to subunits and setting the value there.
-    ctrl_i: Ctrl_i(self) if (4 < self.len);
-    ctrl_s: Ctrl_s(self) &try if (4 == self.len);
-    ctrl_u: Ctrl_u(self) &try if (4 == self.len);
+    ctrl: Ctrl(self);
 
     # FIXME: Check that the size of information object is (len - 4).
     : Asdu(self) if (Format::I == self.format);

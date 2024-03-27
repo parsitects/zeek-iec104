@@ -33,10 +33,10 @@ export iec104::TypeID;
 #     event iec104::i($conn, self.ssn, self.rsn, self.asdu?);
 
 on iec104::Apdu if (self.format == iec104::Format::S) ->
-    event iec104::s($conn, $is_orig, self.ctrl_s.rsn);
+    event iec104::s($conn, $is_orig, self.ctrl.s.rsn);
 
 on iec104::Apdu if (self.format == iec104::Format::U)->
-    event iec104::u($conn, $is_orig, self.ctrl_u.startdt, self.ctrl_u.stopdt, self.ctrl_u.testfr);
+    event iec104::u($conn, $is_orig, self.ctrl.u.startdt, self.ctrl.u.stopdt, self.ctrl.u.testfr);
 
 # For the ASDU parsing
 
