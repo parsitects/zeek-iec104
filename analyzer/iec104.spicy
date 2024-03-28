@@ -792,7 +792,7 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io()[id.nobj];
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
-        * -> raw: Raw(id.type_id, apdu.len - 40);
+        * -> raw: Raw(id.type_id, apdu.len - 10);
     };
 };
 
