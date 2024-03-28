@@ -413,6 +413,13 @@ type M_SP_NA_1_io = unit {
     siq: SIQ;
 };
 
+type M_SP_NA_1_sq_io = unit(io: AsduIOsq) {
+    siq: SIQ;
+
+    var obj_addr: uint64;
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
 type M_SP_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     siq: SIQ;
@@ -758,7 +765,23 @@ type AsduIdent = unit {
     common_address: uint16;
 };
 
-type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
+type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
+    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+
+    switch (id.type_id) {
+        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_sq_io(self)[id.nobj];
+        # XXX: We should not have parsed `base_addr' if we don't know
+        # the TypeID.
+        * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.input();
+    };
+
+    var next_addr: uint64 = 0;
+    on base_addr {
+       self.next_addr = self.base_addr;
+    }
+};
+
+type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
@@ -804,7 +827,8 @@ type AsduIO = unit(apdu: Apdu, id: AsduIdent) {
 
 type Asdu = unit(apdu: Apdu) {
     id: AsduIdent;
-    io: AsduIO(apdu, self.id);
+    ios: AsduIOs(apdu, self.id) if (self.id.sq == 0);
+    iosq: AsduIOsq(apdu, self.id) if (self.id.sq == 1);
 };
 
 public type Apdus = unit {
@@ -817,10 +841,9 @@ public type Apdu = unit {
     len: uint8 {
         if ($$ < 4) reject;
     }
-
     ctrl: Ctrl(self);
 
-    # FIXME: Check that the size of information object is (len - 4).
+    # TODO: Check that the size of information object is (len - 4).
     : Asdu(self) if (Format::I == self.format);
 
     var format: Format;
@@ -874,6 +897,12 @@ public function AsduIdent_rec(id: AsduIdent):
 }
 
 public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
+    tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, SIQ_rec(io.siq));
+}
+
+public function M_SP_NA_1_sq_rec(io: M_SP_NA_1_sq_io):
     tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
     return (io.obj_addr, SIQ_rec(io.siq));
