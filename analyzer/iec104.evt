@@ -1,44 +1,17 @@
-import iec104;
-#import Zeek_iec104;
-
-# TODO: Adjust below how/when the analyzer will be activated. The example
-# defines a well-known port to trigger it. For more information, see:
-#
-#   https://docs.zeek.org/projects/spicy/en/latest/zeek.html#interface-definitions-evt-files
-#
-#protocol analyzer spicy::iec104 over TCP:
-#    parse originator with iec104::Packet,
-#    parse responder with iec104::Packet,
-#    port 2404/tcp; # adapt port number in main.zeek accordingly
-
-# TODO: Connect Spicy-side events with Zeek-side events. The example just
-# defines a simple example event that forwards the raw data (which in practice
-# you don't want to do!).
-#on iec104::Packet -> event iec104::message($conn, $is_orig, self.payload);
-
-# ========================================================
-
 protocol analyzer spicy::iec104 over TCP:
-    parse originator with iec104::Packet,
-    parse responder with iec104::Packet,
     parse with iec104::Apdus,
     port 2404/tcp;
 
+import iec104;
+
 export iec104::COT;
 export iec104::TypeID;
-
-# I-format APCIs have individual events for each ASDU type.
-#
-# on iec104::Apci_i ->
-#     event iec104::i($conn, self.ssn, self.rsn, self.asdu?);
 
 on iec104::Apdu if (self.format == iec104::Format::S) ->
     event iec104::s($conn, $is_orig, self.ctrl.s.rsn);
 
 on iec104::Apdu if (self.format == iec104::Format::U)->
     event iec104::u($conn, $is_orig, self.ctrl.u.startdt, self.ctrl.u.stopdt, self.ctrl.u.testfr);
-
-# For the ASDU parsing
 
 on iec104::AsduIdent ->
     event iec104::asdu($conn, $is_orig, iec104::AsduIdent_rec(self));
