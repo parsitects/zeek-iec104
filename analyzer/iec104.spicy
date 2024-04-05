@@ -766,22 +766,33 @@ type AsduIdent = unit {
 };
 
 type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
-    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    var start: iterator<stream>;
+    on %init {
+        self.start = self.input();
+    }
 
-    switch (id.type_id) {
-        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_sq_io(self)[id.nobj];
-        # XXX: We should not have parsed `base_addr' if we don't know
-        # the TypeID.
-        * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.input();
-    };
+    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 
     var next_addr: uint64 = 0;
     on base_addr {
        self.next_addr = self.base_addr;
     }
+
+    switch (id.type_id) {
+        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_sq_io(self)[id.nobj];
+        # XXX: We should not have parsed `base_addr' if we don't know
+        # the TypeID.
+        * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
+            self.set_input(self.start + (apdu.len - 10));
+        }
+    };
 };
 
 type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
+    var start: iterator<stream>;
+    on %init {
+        self.start = self.input();
+    }
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
