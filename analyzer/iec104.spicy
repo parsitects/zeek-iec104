@@ -373,6 +373,45 @@ type QDS = unit {
     };
 };
 
+type SCO = unit {
+    : bitfield(8) {
+        scs: 0;
+        # : 1 = 0;
+        qu: 2..6;
+        se: 7;
+    };
+};
+
+type DCO = unit {
+    : bitfield(8) {
+        dcs: 0..1;
+        qu: 2..6;
+        se: 7;
+    };
+};
+
+type RCO = unit {
+    : bitfield(8) {
+        rcs: 0..1;
+        qu: 2..6;
+        se: 7;
+    };
+};
+
+type QOS = unit {
+    : bitfield(8) {
+        ql: 0..6;
+        se: 7;
+    };
+};
+
+type COI = unit {
+    : bitfield(8) {
+        coi: 0..6;
+        lpc: 7;
+    };
+};
+
 type CP24Time2a = unit {
     ms: uint16;
     : bitfield(8) {
@@ -407,6 +446,8 @@ type CP56Time2a = unit {
         # : 7 = 0;
     };
 };
+
+################################################################################
 
 type M_SP_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
@@ -556,57 +597,35 @@ type C_IC_NA_1_io = unit {
 
 type C_SC_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    sco: bitfield(8) {
-        scs: 0;
-        # : 1 = 0;
-        qu: 2..6;
-        se: 7;
-    };
+    sco: SCO;
 };
 
 type C_DC_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    dco: bitfield(8) {
-        dcs: 0..1;
-        qu: 2..6;
-        se: 7;
-    };
+    dco: DCO;
 };
 
 type C_RC_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    rco: bitfield(8) {
-        rcs: 0..1;
-        qu: 2..6;
-        se: 7;
-    };
+    rco: RCO;
 };
 
 type C_SE_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     nva: uint16;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
+    qos: QOS;
 };
 
 type C_SE_NB_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     sva: uint16;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
+    qos: QOS;
 };
 
 type C_SE_NC_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     r32: real &type=spicy::RealType::IEEE754_Single;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
+    qos: QOS;
 };
 
 type C_BO_NA_1_io = unit {
@@ -616,52 +635,33 @@ type C_BO_NA_1_io = unit {
 
 type C_SC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    sco: bitfield(8) {
-        scs: 0;
-        # : 1 = 0;
-        qu: 2..6;
-        se: 7;
-    };
+    sco: SCO;
     tt: CP56Time2a;
 };
 
 type C_DC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    dco: bitfield(8) {
-        dcs: 0..1;
-        qu: 2..6;
-        se: 7;
-    };
+    dco: DCO;
     tt: CP56Time2a;
 };
 
 type C_RC_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    rco: bitfield(8) {
-        rcs: 0..1;
-        qu: 2..6;
-        se: 7;
-    };
+    rco: RCO;
     tt: CP56Time2a;
 };
 
 type C_SE_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     nva: uint16;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
+    qos: QOS;
     tt: CP56Time2a;
 };
 
 type C_SE_TC_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     r32: real &type=spicy::RealType::IEEE754_Single;
-    qos: bitfield(8) {
-        ql: 0..6;
-        se: 7;
-    };
+    qos: QOS;
     tt: CP56Time2a;
 };
 
@@ -673,10 +673,7 @@ type C_BO_TA_1_io = unit {
 
 type M_EI_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    : bitfield(8) {
-        coi: 0..6;
-        lpc: 7;
-    };
+    coi: COI;
 };
 
 type C_RD_NA_1_io = unit {
@@ -687,6 +684,8 @@ type C_RP_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qrp: uint8;
 };
+
+################################################################################
 
 type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
@@ -862,6 +861,8 @@ public type Apdu = unit {
     on %done { spicy::accept_input(); }
 };
 
+################################################################################
+
 function SIQ_rec(siq: SIQ): tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>
 {
     return (siq.spi == 1,
@@ -889,6 +890,31 @@ function QDS_rec(qds: QDS): tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bo
             qds.iv == 1);
 }
 
+function SCO_rec(sco: SCO): tuple<scs: bool, qu: uint8, se: bool>
+{
+    return (sco.scs == 1, sco.qu, sco.se == 1);
+}
+
+function DCO_rec(dco: DCO): tuple<dcs: uint8, qu: uint8, se: bool>
+{
+    return (dco.dcs, dco.qu, dco.se == 1);
+}
+
+function RCO_rec(rco: RCO): tuple<rcs: uint8, qu: uint8, se: bool>
+{
+    return (rco.rcs, rco.qu, rco.se == 1);
+}
+
+function QOS_rec(qos: QOS): tuple<ql: uint8, se: bool>
+{
+    return (qos.ql, qos.se == 1);
+}
+
+function COI_rec(coi: COI): tuple<coi: uint8, lpc: bool>
+{
+    return (coi.coi, coi.lpc == 1);
+}
+
 function CP56Time2a_rec(tt: CP56Time2a):
     tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>
 {
@@ -900,6 +926,8 @@ function CP24Time2a_rec(tt: CP24Time2a):
 {
     return (tt.ms, tt.minute);
 }
+
+################################################################################
 
 public function AsduIdent_rec(id: AsduIdent):
     tuple<type_id: TypeID, nobj: uint8, sq: bool, cot: COT, pn: bool, test: bool, oa: uint8, ca: uint16>
@@ -1076,37 +1104,37 @@ public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
 public function C_SC_NA_1_rec(io: C_SC_NA_1_io):
     tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, (io.sco.scs == 1, io.sco.qu, io.sco.se == 1));
+    return (io.obj_addr, SCO_rec(io.sco));
 }
 
 public function C_DC_NA_1_rec(io: C_DC_NA_1_io):
     tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, (io.dco.dcs, io.dco.qu, io.dco.se == 1));
+    return (io.obj_addr, DCO_rec(io.dco));
 }
 
 public function C_RC_NA_1_rec(io: C_RC_NA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, (io.rco.rcs, io.rco.qu, io.rco.se == 1));
+    return (io.obj_addr, RCO_rec(io.rco));
 }
 
 public function C_SE_NA_1_rec(io: C_SE_NA_1_io):
     tuple<uint64, nva: uint16, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.nva, (io.qos.ql, io.qos.se == 1));
+    return (io.obj_addr, io.nva, QOS_rec(io.qos));
 }
 
 public function C_SE_NB_1_rec(io: C_SE_NB_1_io):
     tuple<uint64, sva: uint16, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.sva, (io.qos.ql, io.qos.se == 1));
+    return (io.obj_addr, io.sva, QOS_rec(io.qos));
 }
 
 public function C_SE_NC_1_rec(io: C_SE_NC_1_io):
     tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.r32, (io.qos.ql, io.qos.se == 1));
+    return (io.obj_addr, io.r32, QOS_rec(io.qos));
 }
 
 public function C_BO_NA_1_rec(io: C_BO_NA_1_io):
@@ -1116,49 +1144,38 @@ public function C_BO_NA_1_rec(io: C_BO_NA_1_io):
 }
 
 public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
-    tuple<uint64, scs: bool, qu: uint8, se: bool,
+    tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.sco.scs == 1, io.sco.qu, io.sco.se == 1,
-            CP56Time2a_rec(io.tt));
+    return (io.obj_addr, SCO_rec(io.sco), CP56Time2a_rec(io.tt));
 }
 
 public function C_DC_TA_1_rec(io: C_DC_TA_1_io):
     tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr,
-            (io.dco.dcs, io.dco.qu, io.dco.se == 1),
-            CP56Time2a_rec(io.tt));
+    return (io.obj_addr, DCO_rec(io.dco), CP56Time2a_rec(io.tt));
 }
 
 public function C_RC_TA_1_rec(io: C_RC_TA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr,
-            (io.rco.rcs, io.rco.qu, io.rco.se == 1),
-            CP56Time2a_rec(io.tt));
+    return (io.obj_addr, RCO_rec(io.rco), CP56Time2a_rec(io.tt));
 }
 
 public function C_SE_TA_1_rec(io: C_SE_TA_1_io):
     tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr,
-            io.nva,
-            (io.qos.ql, io.qos.se == 1),
-            CP56Time2a_rec(io.tt));
+    return (io.obj_addr, io.nva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
 }
 
 public function C_SE_TC_1_rec(io: C_SE_TC_1_io):
     tuple<uint64, real, tuple<ql: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr,
-            io.r32,
-            (io.qos.ql, io.qos.se == 1),
-            CP56Time2a_rec(io.tt));
+    return (io.obj_addr, io.r32, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
 }
 
 public function C_BO_TA_1_rec(io: C_BO_TA_1_io):
@@ -1169,9 +1186,9 @@ public function C_BO_TA_1_rec(io: C_BO_TA_1_io):
 }
 
 public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
-    tuple<uint64, coi: uint8, lpc: bool>
+    tuple<uint64, tuple<coi: uint8, lpc: bool>>
 {
-    return (io.obj_addr, io.coi, io.lpc == 1);
+    return (io.obj_addr, COI_rec(io.coi));
 }
 
 public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
