@@ -16,6 +16,11 @@ on iec104::Apdu if (self.format == iec104::Format::U)->
 on iec104::AsduIdent ->
     event iec104::asdu($conn, $is_orig, iec104::AsduIdent_rec(self));
 
+on iec104::Raw ->
+    event iec104::Unknown_ASDU($conn, $is_orig, self.type_id, self.data);
+
+################################################################################
+
 on iec104::M_SP_NA_1_io ->
     event iec104::M_SP_NA_1($conn, $is_orig, iec104::M_SP_NA_1_rec(self));
 
@@ -133,5 +138,118 @@ on iec104::C_RD_NA_1_io ->
 on iec104::C_RP_NA_1_io ->
     event iec104::C_RP_NA_1($conn, $is_orig, iec104::C_RP_NA_1_rec(self));
 
-on iec104::Raw ->
-    event iec104::Unknown_ASDU($conn, $is_orig, self.type_id, self.data);
+################################################################################
+
+on iec104::M_SP_NA_1_sq_io ->
+    event iec104::M_SP_NA_1($conn, $is_orig, iec104::M_SP_NA_1_sq_rec(self));
+
+on iec104::M_SP_TA_1_sq_io ->
+    event iec104::M_SP_TA_1($conn, $is_orig, iec104::M_SP_TA_1_sq_rec(self));
+
+on iec104::M_DP_NA_1_sq_io ->
+    event iec104::M_DP_NA_1($conn, $is_orig, iec104::M_DP_NA_1_sq_rec(self));
+
+on iec104::M_DP_TA_1_sq_io ->
+    event iec104::M_DP_TA_1($conn, $is_orig, iec104::M_DP_TA_1_sq_rec(self));
+
+on iec104::M_ST_NA_1_sq_io ->
+    event iec104::M_ST_NA_1($conn, $is_orig, iec104::M_ST_NA_1_sq_rec(self));
+
+on iec104::M_ST_TA_1_sq_io ->
+    event iec104::M_ST_TA_1($conn, $is_orig, iec104::M_ST_TA_1_sq_rec(self));
+
+on iec104::M_BO_NA_1_sq_io ->
+    event iec104::M_BO_NA_1($conn, $is_orig, iec104::M_BO_NA_1_sq_rec(self));
+
+on iec104::M_BO_TA_1_sq_io ->
+    event iec104::M_BO_TA_1($conn, $is_orig, iec104::M_BO_TA_1_sq_rec(self));
+
+on iec104::M_ME_NA_1_sq_io ->
+    event iec104::M_ME_NA_1($conn, $is_orig, iec104::M_ME_NA_1_sq_rec(self));
+
+on iec104::M_ME_TA_1_sq_io ->
+    event iec104::M_ME_TA_1($conn, $is_orig, iec104::M_ME_TA_1_sq_rec(self));
+
+on iec104::M_ME_NB_1_sq_io ->
+    event iec104::M_ME_NB_1($conn, $is_orig, iec104::M_ME_NB_1_sq_rec(self));
+
+on iec104::M_ME_TB_1_sq_io ->
+    event iec104::M_ME_TB_1($conn, $is_orig, iec104::M_ME_TB_1_sq_rec(self));
+
+on iec104::M_ME_NC_1_sq_io ->
+    event iec104::M_ME_NC_1($conn, $is_orig, iec104::M_ME_NC_1_sq_rec(self));
+
+on iec104::M_ME_TC_1_sq_io ->
+    event iec104::M_ME_TC_1($conn, $is_orig, iec104::M_ME_TC_1_sq_rec(self));
+
+on iec104::M_SP_TB_1_sq_io ->
+    event iec104::M_SP_TB_1($conn, $is_orig, iec104::M_SP_TB_1_sq_rec(self));
+
+on iec104::M_DP_TB_1_sq_io ->
+    event iec104::M_DP_TB_1($conn, $is_orig, iec104::M_DP_TB_1_sq_rec(self));
+
+on iec104::M_ST_TB_1_sq_io ->
+    event iec104::M_ST_TB_1($conn, $is_orig, iec104::M_ST_TB_1_sq_rec(self));
+
+on iec104::M_BO_TB_1_sq_io ->
+    event iec104::M_BO_TB_1($conn, $is_orig, iec104::M_BO_TB_1_sq_rec(self));
+
+on iec104::M_ME_TD_1_sq_io ->
+    event iec104::M_ME_TD_1($conn, $is_orig, iec104::M_ME_TD_1_sq_rec(self));
+
+on iec104::M_ME_TE_1_sq_io ->
+    event iec104::M_ME_TE_1($conn, $is_orig, iec104::M_ME_TE_1_sq_rec(self));
+
+on iec104::M_ME_TF_1_sq_io ->
+    event iec104::M_ME_TF_1($conn, $is_orig, iec104::M_ME_TF_1_sq_rec(self));
+
+on iec104::C_IC_NA_1_sq_io ->
+    event iec104::C_IC_NA_1($conn, $is_orig, iec104::C_IC_NA_1_sq_rec(self));
+
+on iec104::C_SC_NA_1_sq_io ->
+    event iec104::C_SC_NA_1($conn, $is_orig, iec104::C_SC_NA_1_sq_rec(self));
+
+on iec104::C_DC_NA_1_sq_io ->
+    event iec104::C_DC_NA_1($conn, $is_orig, iec104::C_DC_NA_1_sq_rec(self));
+
+on iec104::C_RC_NA_1_sq_io ->
+    event iec104::C_RC_NA_1($conn, $is_orig, iec104::C_RC_NA_1_sq_rec(self));
+
+on iec104::C_SE_NA_1_sq_io ->
+    event iec104::C_SE_NA_1($conn, $is_orig, iec104::C_SE_NA_1_sq_rec(self));
+
+on iec104::C_SE_NB_1_sq_io ->
+    event iec104::C_SE_NB_1($conn, $is_orig, iec104::C_SE_NB_1_sq_rec(self));
+
+on iec104::C_SE_NC_1_sq_io ->
+    event iec104::C_SE_NC_1($conn, $is_orig, iec104::C_SE_NC_1_sq_rec(self));
+
+on iec104::C_BO_NA_1_sq_io ->
+    event iec104::C_BO_NA_1($conn, $is_orig, iec104::C_BO_NA_1_sq_rec(self));
+
+on iec104::C_SC_TA_1_sq_io ->
+    event iec104::C_SC_TA_1($conn, $is_orig, iec104::C_SC_TA_1_sq_rec(self));
+
+on iec104::C_DC_TA_1_sq_io ->
+    event iec104::C_DC_TA_1($conn, $is_orig, iec104::C_DC_TA_1_sq_rec(self));
+
+on iec104::C_RC_TA_1_sq_io ->
+    event iec104::C_RC_TA_1($conn, $is_orig, iec104::C_RC_TA_1_sq_rec(self));
+
+on iec104::C_SE_TA_1_sq_io ->
+    event iec104::C_SE_TA_1($conn, $is_orig, iec104::C_SE_TA_1_sq_rec(self));
+
+on iec104::C_SE_TC_1_sq_io ->
+    event iec104::C_SE_TC_1($conn, $is_orig, iec104::C_SE_TC_1_sq_rec(self));
+
+on iec104::C_BO_TA_1_sq_io ->
+    event iec104::C_BO_TA_1($conn, $is_orig, iec104::C_BO_TA_1_sq_rec(self));
+
+on iec104::M_EI_NA_1_sq_io ->
+    event iec104::M_EI_NA_1($conn, $is_orig, iec104::M_EI_NA_1_sq_rec(self));
+
+on iec104::C_RD_NA_1_sq_io ->
+    event iec104::C_RD_NA_1($conn, $is_orig, iec104::C_RD_NA_1_sq_rec(self));
+
+on iec104::C_RP_NA_1_sq_io ->
+    event iec104::C_RP_NA_1($conn, $is_orig, iec104::C_RP_NA_1_sq_rec(self));

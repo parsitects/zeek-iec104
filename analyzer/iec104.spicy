@@ -454,13 +454,6 @@ type M_SP_NA_1_io = unit {
     siq: SIQ;
 };
 
-type M_SP_NA_1_sq_io = unit(io: AsduIOsq) {
-    siq: SIQ;
-
-    var obj_addr: uint64;
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
 type M_SP_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     siq: SIQ;
@@ -687,6 +680,313 @@ type C_RP_NA_1_io = unit {
 
 ################################################################################
 
+type M_SP_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    siq: SIQ;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_SP_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    siq: SIQ;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_DP_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    diq: DIQ;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_DP_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    diq: DIQ;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ST_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    vti: uint8;
+    qds: QDS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ST_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    vti: uint8;
+    qds: QDS;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_BO_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    bsi: uint32;
+    qds: QDS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_BO_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    bsi: uint32;
+    qds: QDS;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    nva: uint16;
+    qds: QDS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_NB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sva: uint16;
+    qds: QDS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sva: uint16;
+    qds: QDS;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    nva: uint16;
+    qds: QDS;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_NC_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qds: QDS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TC_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qds: QDS;
+    tt: CP24Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_SP_TB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    siq: SIQ;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_DP_TB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    diq: DIQ;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ST_TB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    vti: uint8;
+    qds: QDS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_BO_TB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    bsi: uint32;
+    qds: QDS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TD_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    nva: uint16;
+    qds: QDS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TE_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sva: uint16;
+    qds: QDS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_ME_TF_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qds: QDS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_IC_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    qoi: uint8;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SC_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sco: SCO;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_DC_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    dco: DCO;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_RC_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    rco: RCO;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SE_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    nva: uint16;
+    qos: QOS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SE_NB_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sva: uint16;
+    qos: QOS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SE_NC_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qos: QOS;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_BO_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    bsi: uint32;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SC_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    sco: SCO;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_DC_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    dco: DCO;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_RC_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    rco: RCO;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SE_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    nva: uint16;
+    qos: QOS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_SE_TC_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    r32: real &type=spicy::RealType::IEEE754_Single;
+    qos: QOS;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_BO_TA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    bsi: uint32;
+    tt: CP56Time2a;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type M_EI_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    coi: COI;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_RD_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_RP_NA_1_sq_io = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    qrp: uint8;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+################################################################################
+
 type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0 = 0;
@@ -779,6 +1079,43 @@ type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
 
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_sq_io(self)[id.nobj];
+        TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_sq_io(self)[id.nobj];
+        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_sq_io(self)[id.nobj];
+        TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_sq_io(self)[id.nobj];
+        TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_sq_io(self)[id.nobj];
+        TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_sq_io(self)[id.nobj];
+        TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_sq_io(self)[id.nobj];
+        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_sq_io(self)[id.nobj];
+        TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_sq_io(self)[id.nobj];
+        TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_sq_io(self)[id.nobj];
         # XXX: We should not have parsed `base_addr' if we don't know
         # the TypeID.
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
@@ -927,21 +1264,15 @@ function CP24Time2a_rec(tt: CP24Time2a):
     return (tt.ms, tt.minute);
 }
 
-################################################################################
-
 public function AsduIdent_rec(id: AsduIdent):
     tuple<type_id: TypeID, nobj: uint8, sq: bool, cot: COT, pn: bool, test: bool, oa: uint8, ca: uint16>
 {
     return (id.type_id, id.nobj, id.sq == 1, id.cot, id.pn == 1, id.test == 1, id.originator_address, id.common_address);
 }
 
-public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
-    tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, SIQ_rec(io.siq));
-}
+################################################################################
 
-public function M_SP_NA_1_sq_rec(io: M_SP_NA_1_sq_io):
+public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
     tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
     return (io.obj_addr, SIQ_rec(io.siq));
@@ -1198,6 +1529,270 @@ public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
 }
 
 public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
+    tuple<uint64, qrp: uint8>
+{
+    return (io.obj_addr, io.qrp);
+}
+
+################################################################################
+
+public function M_SP_NA_1_sq_rec(io: M_SP_NA_1_sq_io):
+    tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, SIQ_rec(io.siq));
+}
+
+public function M_SP_TA_1_sq_rec(io: M_SP_TA_1_sq_io):
+    tuple<uint64,
+          tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
+}
+
+public function M_DP_NA_1_sq_rec(io: M_DP_NA_1_sq_io):
+    tuple<uint64, tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, DIQ_rec(io.diq));
+}
+
+public function M_DP_TA_1_sq_rec(io: M_DP_TA_1_sq_io):
+    tuple<uint64,
+          tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, DIQ_rec(io.diq), CP24Time2a_rec(io.tt));
+}
+
+public function M_ST_NA_1_sq_rec(io: M_ST_NA_1_sq_io):
+    tuple<uint64, vti: uint8, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, io.vti, QDS_rec(io.qds));
+}
+
+public function M_ST_TA_1_sq_rec(io: M_ST_TA_1_sq_io):
+    tuple<uint64, vti: uint8,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+}
+
+public function M_BO_NA_1_sq_rec(io: M_BO_NA_1_sq_io):
+    tuple<uint64, bsi: uint32, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, io.bsi, QDS_rec(io.qds));
+}
+
+public function M_BO_TA_1_sq_rec(io: M_BO_TA_1_sq_io):
+    tuple<uint64, bsi: uint32,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+}
+
+public function M_ME_NA_1_sq_rec(io: M_ME_NA_1_sq_io):
+    tuple<uint64, nva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, io.nva, QDS_rec(io.qds));
+}
+
+public function M_ME_NB_1_sq_rec(io: M_ME_NB_1_sq_io):
+    tuple<uint64, sva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, io.sva, QDS_rec(io.qds));
+}
+
+public function M_ME_TB_1_sq_rec(io: M_ME_TB_1_sq_io):
+    tuple<uint64, sva: uint16,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+}
+
+public function M_ME_TA_1_sq_rec(io: M_ME_TA_1_sq_io):
+    tuple<uint64, nva: uint16,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+}
+
+public function M_ME_NC_1_sq_rec(io: M_ME_NC_1_sq_io):
+    tuple<uint64, r32: real, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+{
+    return (io.obj_addr, io.r32, QDS_rec(io.qds));
+}
+
+public function M_ME_TC_1_sq_rec(io: M_ME_TC_1_sq_io):
+    tuple<uint64, r32: real,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8>>
+{
+    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+}
+
+public function M_SP_TB_1_sq_rec(io: M_SP_TB_1_sq_io):
+    tuple<uint64,
+          tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, SIQ_rec(io.siq), CP56Time2a_rec(io.tt));
+}
+
+public function M_DP_TB_1_sq_rec(io: M_DP_TB_1_sq_io):
+    tuple<uint64,
+          tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, DIQ_rec(io.diq), CP56Time2a_rec(io.tt));
+}
+
+public function M_ST_TB_1_sq_rec(io: M_ST_TB_1_sq_io):
+    tuple<uint64, vti: uint8,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function M_BO_TB_1_sq_rec(io: M_BO_TB_1_sq_io):
+    tuple<uint64, bsi: uint32,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function M_ME_TD_1_sq_rec(io: M_ME_TD_1_sq_io):
+    tuple<uint64, nva: uint16,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function M_ME_TE_1_sq_rec(io: M_ME_TE_1_sq_io):
+    tuple<uint64, sva: uint16,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function M_ME_TF_1_sq_rec(io: M_ME_TF_1_sq_io):
+    tuple<uint64, r32: real,
+          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+}
+
+public function C_IC_NA_1_sq_rec(io: C_IC_NA_1_sq_io):
+    tuple<uint64, uint8>
+{
+    return (io.obj_addr, io.qoi);
+}
+
+public function C_SC_NA_1_sq_rec(io: C_SC_NA_1_sq_io):
+    tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>>
+{
+    return (io.obj_addr, SCO_rec(io.sco));
+}
+
+public function C_DC_NA_1_sq_rec(io: C_DC_NA_1_sq_io):
+    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
+{
+    return (io.obj_addr, DCO_rec(io.dco));
+}
+
+public function C_RC_NA_1_sq_rec(io: C_RC_NA_1_sq_io):
+    tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
+{
+    return (io.obj_addr, RCO_rec(io.rco));
+}
+
+public function C_SE_NA_1_sq_rec(io: C_SE_NA_1_sq_io):
+    tuple<uint64, nva: uint16, tuple<ql: uint8, se: bool>>
+{
+    return (io.obj_addr, io.nva, QOS_rec(io.qos));
+}
+
+public function C_SE_NB_1_sq_rec(io: C_SE_NB_1_sq_io):
+    tuple<uint64, sva: uint16, tuple<ql: uint8, se: bool>>
+{
+    return (io.obj_addr, io.sva, QOS_rec(io.qos));
+}
+
+public function C_SE_NC_1_sq_rec(io: C_SE_NC_1_sq_io):
+    tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
+{
+    return (io.obj_addr, io.r32, QOS_rec(io.qos));
+}
+
+public function C_BO_NA_1_sq_rec(io: C_BO_NA_1_sq_io):
+    tuple<uint64, bsi: uint32>
+{
+    return (io.obj_addr, io.bsi);
+}
+
+public function C_SC_TA_1_sq_rec(io: C_SC_TA_1_sq_io):
+    tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, SCO_rec(io.sco), CP56Time2a_rec(io.tt));
+}
+
+public function C_DC_TA_1_sq_rec(io: C_DC_TA_1_sq_io):
+    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, DCO_rec(io.dco), CP56Time2a_rec(io.tt));
+}
+
+public function C_RC_TA_1_sq_rec(io: C_RC_TA_1_sq_io):
+    tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, RCO_rec(io.rco), CP56Time2a_rec(io.tt));
+}
+
+public function C_SE_TA_1_sq_rec(io: C_SE_TA_1_sq_io):
+    tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.nva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
+}
+
+public function C_SE_TC_1_sq_rec(io: C_SE_TC_1_sq_io):
+    tuple<uint64, real, tuple<ql: uint8, se: bool>,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.r32, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
+}
+
+public function C_BO_TA_1_sq_rec(io: C_BO_TA_1_sq_io):
+    tuple<uint64, uint32,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.bsi, CP56Time2a_rec(io.tt));
+}
+
+public function M_EI_NA_1_sq_rec(io: M_EI_NA_1_sq_io):
+    tuple<uint64, tuple<coi: uint8, lpc: bool>>
+{
+    return (io.obj_addr, COI_rec(io.coi));
+}
+
+public function C_RD_NA_1_sq_rec(io: C_RD_NA_1_sq_io):
+    tuple<uint64>
+{
+    return (io.obj_addr,);
+}
+
+public function C_RP_NA_1_sq_rec(io: C_RP_NA_1_sq_io):
     tuple<uint64, qrp: uint8>
 {
     return (io.obj_addr, io.qrp);
