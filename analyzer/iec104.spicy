@@ -273,7 +273,7 @@ public type TypeID = enum {
     ASDU_TYPE_255  = 255
 };
 
-public type COT = enum {
+public type CoT = enum {
     Cot_Unused  =  0, # Is not used
     Percyc      =  1, # Cyclic data
     Back        =  2, # Background scan
@@ -1056,7 +1056,7 @@ type AsduIdent = unit {
         sq: 7;
     };
     : bitfield (8) {
-        cot: 0..5 &convert=COT($$);
+        cot: 0..5 &convert=CoT($$);
         pn: 6;
         test: 7;
     };
@@ -1265,7 +1265,7 @@ function CP24Time2a_rec(tt: CP24Time2a):
 }
 
 public function AsduIdent_rec(id: AsduIdent):
-    tuple<type_id: TypeID, nobj: uint8, sq: bool, cot: COT, pn: bool, test: bool, oa: uint8, ca: uint16>
+    tuple<type_id: TypeID, nobj: uint8, sq: bool, cot: CoT, pn: bool, test: bool, oa: uint8, ca: uint16>
 {
     return (id.type_id, id.nobj, id.sq == 1, id.cot, id.pn == 1, id.test == 1, id.originator_address, id.common_address);
 }
