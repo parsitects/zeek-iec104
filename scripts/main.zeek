@@ -759,7 +759,7 @@ type RCO: record {
 
 type C_RC_NA_1_io: record {
     obj_addr: count &log;
-    sco: RCO &log;
+    rco: RCO &log;
 };
 
 type C_RC_NA_1_log: record {
@@ -1314,7 +1314,7 @@ event iec104::c_dc_na_1(c: connection, is_orig: bool, io: C_DC_NA_1_io)
 
 event iec104::c_rc_na_1(c: connection, is_orig: bool, io: C_RC_NA_1_io)
 {
-    local rec = C_DC_NA_1_log(
+    local rec = C_RC_NA_1_log(
         $ts=current_event_time(),
         $uid=c$uid,
         $is_orig=is_orig,
