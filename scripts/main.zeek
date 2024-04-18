@@ -332,16 +332,6 @@ type IEC104CoT: enum  {
 
 module iec104;
 
-global type_i_counter = 0;
-global type_s_counter = 0;
-global type_u_counter = 0;
-global apdu_len = 0;
-global apci_type = "";
-# global apci_tx: count &log;
-# global apci_rx: count &log;
-global begin_time: time;
-global total_time: interval;
-
 export {
     ## Log stream identifier.
     redef enum Log::ID += {
@@ -1471,5 +1461,4 @@ event iec104::unknown_asdu(c: connection, is_orig: bool, type_id: ::IEC104TypeID
                     $type_id=type_id,
                     $data=hex);
     Log::write(iec104::LOG_UNK, rec);
-
 }
