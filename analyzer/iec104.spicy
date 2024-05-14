@@ -479,13 +479,13 @@ type M_ST_TA_1_io = unit {
 
 type M_BO_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
 };
 
 type M_BO_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP24Time2a;
 };
@@ -550,7 +550,7 @@ type M_ST_TB_1_io = unit {
 
 type M_BO_TB_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP56Time2a;
 };
@@ -616,7 +616,7 @@ type C_SE_NC_1_io = unit {
 
 type C_BO_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
 };
 
 type C_SC_TA_1_io = unit {
@@ -653,7 +653,7 @@ type C_SE_TC_1_io = unit {
 
 type C_BO_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     tt: CP56Time2a;
 };
 
@@ -725,7 +725,7 @@ type M_ST_TA_1_sq_io = unit(io: AsduIOsq) {
 
 type M_BO_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
 
     on %done { self.obj_addr = io.next_addr++; }
@@ -733,7 +733,7 @@ type M_BO_NA_1_sq_io = unit(io: AsduIOsq) {
 
 type M_BO_TA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP24Time2a;
 
@@ -818,7 +818,7 @@ type M_ST_TB_1_sq_io = unit(io: AsduIOsq) {
 
 type M_BO_TB_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP56Time2a;
 
@@ -906,7 +906,7 @@ type C_SE_NC_1_sq_io = unit(io: AsduIOsq) {
 
 type C_BO_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
 
     on %done { self.obj_addr = io.next_addr++; }
 };
@@ -955,7 +955,7 @@ type C_SE_TC_1_sq_io = unit(io: AsduIOsq) {
 
 type C_BO_TA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    bsi: uint32;
+    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     tt: CP56Time2a;
 
     on %done { self.obj_addr = io.next_addr++; }
