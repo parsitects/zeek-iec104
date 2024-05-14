@@ -753,7 +753,7 @@ type DCO: record {
 
 type C_DC_NA_1_io: record {
     obj_addr: count &log;
-    sco: DCO &log;
+    dco: DCO &log;
 };
 
 type C_DC_NA_1_log: record {
