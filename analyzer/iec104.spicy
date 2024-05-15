@@ -405,6 +405,13 @@ type QOS = unit {
     };
 };
 
+type VTI = unit {
+    : bitfield(8) {
+        val: 0..6;
+        ts: 7;
+    };
+};
+
 type CP24Time2a = unit {
     ms: uint16;
     : bitfield(8) {
@@ -466,13 +473,13 @@ type M_DP_TA_1_io = unit {
 
 type M_ST_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
 };
 
 type M_ST_TA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
     tt: CP24Time2a;
 };
@@ -543,7 +550,7 @@ type M_DP_TB_1_io = unit {
 
 type M_ST_TB_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
     tt: CP56Time2a;
 };
@@ -708,7 +715,7 @@ type M_DP_TA_1_sq_io = unit(io: AsduIOsq) {
 
 type M_ST_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
 
     on %done { self.obj_addr = io.next_addr++; }
@@ -716,7 +723,7 @@ type M_ST_NA_1_sq_io = unit(io: AsduIOsq) {
 
 type M_ST_TA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
     tt: CP24Time2a;
 
@@ -809,7 +816,7 @@ type M_DP_TB_1_sq_io = unit(io: AsduIOsq) {
 
 type M_ST_TB_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
-    vti: uint8;
+    vti: VTI;
     qds: QDS;
     tt: CP56Time2a;
 
@@ -1246,6 +1253,19 @@ function QOS_rec(qos: QOS): tuple<ql: uint8, se: bool>
     return (qos.ql, qos.se == 1);
 }
 
+function VTI_rec(vti: VTI): tuple<val: int8, ts: bool>
+{
+    # Poor man's two's-complement, not sure how to make Spicy treat
+    # the 7 value bits as signed integer.
+    local x: int8;
+    if (vti.val < 64) {
+        x = int8(vti.val);
+    } else {
+        x = int8(-64) + int8(vti.val & 0x3f);
+    }
+    return (x, vti.ts == 1);
+}
+
 function CP56Time2a_rec(tt: CP56Time2a):
     tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>
 {
@@ -1295,17 +1315,18 @@ public function M_DP_TA_1_rec(io: M_DP_TA_1_io):
 }
 
 public function M_ST_NA_1_rec(io: M_ST_NA_1_io):
-    tuple<uint64, vti: uint8, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+    tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
 }
 
 public function M_ST_TA_1_rec(io: M_ST_TA_1_io):
-    tuple<uint64, vti: uint8,
+    tuple<uint64,
+          tuple<val: int8, ts: bool>,
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_BO_NA_1_rec(io: M_BO_NA_1_io):
@@ -1381,11 +1402,12 @@ public function M_DP_TB_1_rec(io: M_DP_TB_1_io):
 }
 
 public function M_ST_TB_1_rec(io: M_ST_TB_1_io):
-    tuple<uint64, vti: uint8,
+    tuple<uint64,
+          tuple<val: int8, ts: bool>,
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_BO_TB_1_rec(io: M_BO_TB_1_io):
@@ -1559,17 +1581,18 @@ public function M_DP_TA_1_sq_rec(io: M_DP_TA_1_sq_io):
 }
 
 public function M_ST_NA_1_sq_rec(io: M_ST_NA_1_sq_io):
-    tuple<uint64, vti: uint8, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
+    tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
 }
 
 public function M_ST_TA_1_sq_rec(io: M_ST_TA_1_sq_io):
-    tuple<uint64, vti: uint8,
+    tuple<uint64,
+          tuple<val: int8, ts: bool>,
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_BO_NA_1_sq_rec(io: M_BO_NA_1_sq_io):
@@ -1645,11 +1668,12 @@ public function M_DP_TB_1_sq_rec(io: M_DP_TB_1_sq_io):
 }
 
 public function M_ST_TB_1_sq_rec(io: M_ST_TB_1_sq_io):
-    tuple<uint64, vti: uint8,
+    tuple<uint64,
+          tuple<val: int8, ts: bool>,
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.vti, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_BO_TB_1_sq_rec(io: M_BO_TB_1_sq_io):

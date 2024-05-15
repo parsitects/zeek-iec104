@@ -458,6 +458,11 @@ type M_DP_TA_1_log: record {
     io: M_DP_TA_1_io &log;
 };
 
+type VTI: record {
+    val: int &log;
+    ts: bool &log;
+};
+
 type QDS: record {
     ov: bool &log;
     bl: bool &log;
@@ -468,7 +473,7 @@ type QDS: record {
 
 type M_ST_NA_1_io: record {
     obj_addr: count &log;
-    vti: count &log;
+    vti: VTI &log;
     qds: QDS &log;
 };
 
@@ -482,7 +487,7 @@ type M_ST_NA_1_log: record {
 
 type M_ST_TA_1_io: record {
     obj_addr: count &log;
-    vti: count &log;
+    vti: VTI &log;
     qds: QDS &log;
     tt: CP24Time2a &log;
 };
@@ -653,7 +658,7 @@ type M_DP_TB_1_log: record {
 
 type M_ST_TB_1_io: record {
     obj_addr: count &log;
-    vti: count &log;
+    vti: VTI &log;
     qds: QDS &log;
     tt: CP56Time2a &log;
 };
