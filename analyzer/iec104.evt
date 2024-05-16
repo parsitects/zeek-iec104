@@ -7,11 +7,14 @@ import iec104;
 export iec104::CoT;
 export iec104::TypeID;
 
-on iec104::Apdu if (self.format == iec104::Format::S) ->
-    event iec104::s($conn, $is_orig, self.ctrl.s.rsn);
+on iec104::Ctrl_s ->
+    event iec104::s($conn, $is_orig, self.rsn);
 
-on iec104::Apdu if (self.format == iec104::Format::U)->
-    event iec104::u($conn, $is_orig, self.ctrl.u.startdt, self.ctrl.u.stopdt, self.ctrl.u.testfr);
+on iec104::Ctrl_u ->
+    event iec104::u($conn, $is_orig, self.startdt, self.stopdt, self.testfr);
+
+on iec104::Ctrl_i ->
+    event iec104::i($conn, $is_orig, self.ssn, self.rsn);
 
 on iec104::AsduIdent ->
     event iec104::asdu($conn, $is_orig, iec104::AsduIdent_rec(self));

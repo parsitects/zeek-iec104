@@ -993,7 +993,7 @@ type C_RP_NA_1_sq_io = unit(io: AsduIOsq) {
 
 ################################################################################
 
-type Ctrl_i = unit(inout apdu: Apdu) {
+public type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0 = 0;
       ssn: 1..15;
@@ -1006,7 +1006,7 @@ type Ctrl_i = unit(inout apdu: Apdu) {
     }
 };
 
-type Ctrl_s = unit(inout apdu: Apdu) {
+public type Ctrl_s = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0..1 = 1;
       unused: 2..16 = 0;
@@ -1018,7 +1018,7 @@ type Ctrl_s = unit(inout apdu: Apdu) {
     }
 };
 
-type Ctrl_u = unit(inout apdu: Apdu) {
+public type Ctrl_u = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0..1 = 3;
       startdt: 2..3;
