@@ -1038,50 +1038,61 @@ const ports = {
 
 redef likely_server_ports += { ports };
 
+function add_log(id: Log::ID, stream: Log::Stream, json: bool)
+{
+    Log::create_stream(id, stream);
+    if (json) {
+        local filter = Log::get_filter(id, "default");
+        filter$config = table(["use_json"] = "T",
+                              ["json_timestamps"] = "JSON::TS_ISO8601");
+        Log::add_filter(id, filter);
+    }
+}
+
 event zeek_init() &priority=5
 {
-    Log::create_stream(iec104::LOG_ASDU_IDENT, [$columns=AsduIdent_log, $path="iec104-asdu-ident"]);
-    Log::create_stream(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"]);
-    Log::create_stream(iec104::LOG_M_SP_TA_1, [$columns=M_SP_TA_1_log, $path="iec104-M_SP_TA_1"]);
-    Log::create_stream(iec104::LOG_M_DP_NA_1, [$columns=M_DP_NA_1_log, $path="iec104-M_DP_NA_1"]);
-    Log::create_stream(iec104::LOG_M_DP_TA_1, [$columns=M_DP_TA_1_log, $path="iec104-M_DP_TA_1"]);
-    Log::create_stream(iec104::LOG_M_ST_NA_1, [$columns=M_ST_NA_1_log, $path="iec104-M_ST_NA_1"]);
-    Log::create_stream(iec104::LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"]);
-    Log::create_stream(iec104::LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"]);
-    Log::create_stream(iec104::LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"]);
-    Log::create_stream(iec104::LOG_M_ME_NA_1, [$columns=M_ME_NA_1_log, $path="iec104-M_ME_NA_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TA_1, [$columns=M_ME_TA_1_log, $path="iec104-M_ME_TA_1"]);
-    Log::create_stream(iec104::LOG_M_ME_NB_1, [$columns=M_ME_NB_1_log, $path="iec104-M_ME_NB_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TB_1, [$columns=M_ME_TB_1_log, $path="iec104-M_ME_TB_1"]);
-    Log::create_stream(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"]);
-    Log::create_stream(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"]);
-    Log::create_stream(iec104::LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"]);
-    Log::create_stream(iec104::LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"]);
-    Log::create_stream(iec104::LOG_M_BO_TB_1, [$columns=M_BO_TB_1_log, $path="iec104-M_BO_TB_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TD_1, [$columns=M_ME_TD_1_log, $path="iec104-M_ME_TD_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TE_1, [$columns=M_ME_TE_1_log, $path="iec104-M_ME_TE_1"]);
-    Log::create_stream(iec104::LOG_M_ME_TF_1, [$columns=M_ME_TF_1_log, $path="iec104-M_ME_TF_1"]);
-    Log::create_stream(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"]);
-    Log::create_stream(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"]);
-    Log::create_stream(iec104::LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"]);
-    Log::create_stream(iec104::LOG_C_SE_NA_1, [$columns=C_SE_NA_1_log, $path="iec104-C_SE_NA_1"]);
-    Log::create_stream(iec104::LOG_C_SE_NB_1, [$columns=C_SE_NB_1_log, $path="iec104-C_SE_NB_1"]);
-    Log::create_stream(iec104::LOG_C_SE_NC_1, [$columns=C_SE_NC_1_log, $path="iec104-C_SE_NC_1"]);
-    Log::create_stream(iec104::LOG_C_BO_NA_1, [$columns=C_BO_NA_1_log, $path="iec104-C_BO_NA_1"]);
-    Log::create_stream(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"]);
-    Log::create_stream(iec104::LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"]);
-    Log::create_stream(iec104::LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"]);
-    Log::create_stream(iec104::LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"]);
-    Log::create_stream(iec104::LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"]);
-    Log::create_stream(iec104::LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"]);
-    Log::create_stream(iec104::LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"]);
-    Log::create_stream(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"]);
-    Log::create_stream(iec104::LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"]);
-    Log::create_stream(iec104::LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"]);
-    Log::create_stream(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"]);
-    Log::create_stream(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"]);
-    Log::create_stream(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"]);
+    add_log(iec104::LOG_ASDU_IDENT, [$columns=AsduIdent_log, $path="iec104-asdu-ident"], T);
+    add_log(iec104::LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"], T);
+    add_log(iec104::LOG_M_SP_TA_1, [$columns=M_SP_TA_1_log, $path="iec104-M_SP_TA_1"], T);
+    add_log(iec104::LOG_M_DP_NA_1, [$columns=M_DP_NA_1_log, $path="iec104-M_DP_NA_1"], T);
+    add_log(iec104::LOG_M_DP_TA_1, [$columns=M_DP_TA_1_log, $path="iec104-M_DP_TA_1"], T);
+    add_log(iec104::LOG_M_ST_NA_1, [$columns=M_ST_NA_1_log, $path="iec104-M_ST_NA_1"], T);
+    add_log(iec104::LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"], T);
+    add_log(iec104::LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"], T);
+    add_log(iec104::LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"], T);
+    add_log(iec104::LOG_M_ME_NA_1, [$columns=M_ME_NA_1_log, $path="iec104-M_ME_NA_1"], T);
+    add_log(iec104::LOG_M_ME_TA_1, [$columns=M_ME_TA_1_log, $path="iec104-M_ME_TA_1"], T);
+    add_log(iec104::LOG_M_ME_NB_1, [$columns=M_ME_NB_1_log, $path="iec104-M_ME_NB_1"], T);
+    add_log(iec104::LOG_M_ME_TB_1, [$columns=M_ME_TB_1_log, $path="iec104-M_ME_TB_1"], T);
+    add_log(iec104::LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"], T);
+    add_log(iec104::LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"], T);
+    add_log(iec104::LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"], T);
+    add_log(iec104::LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"], T);
+    add_log(iec104::LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"], T);
+    add_log(iec104::LOG_M_BO_TB_1, [$columns=M_BO_TB_1_log, $path="iec104-M_BO_TB_1"], T);
+    add_log(iec104::LOG_M_ME_TD_1, [$columns=M_ME_TD_1_log, $path="iec104-M_ME_TD_1"], T);
+    add_log(iec104::LOG_M_ME_TE_1, [$columns=M_ME_TE_1_log, $path="iec104-M_ME_TE_1"], T);
+    add_log(iec104::LOG_M_ME_TF_1, [$columns=M_ME_TF_1_log, $path="iec104-M_ME_TF_1"], T);
+    add_log(iec104::LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"], T);
+    add_log(iec104::LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"], T);
+    add_log(iec104::LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"], T);
+    add_log(iec104::LOG_C_SE_NA_1, [$columns=C_SE_NA_1_log, $path="iec104-C_SE_NA_1"], T);
+    add_log(iec104::LOG_C_SE_NB_1, [$columns=C_SE_NB_1_log, $path="iec104-C_SE_NB_1"], T);
+    add_log(iec104::LOG_C_SE_NC_1, [$columns=C_SE_NC_1_log, $path="iec104-C_SE_NC_1"], T);
+    add_log(iec104::LOG_C_BO_NA_1, [$columns=C_BO_NA_1_log, $path="iec104-C_BO_NA_1"], T);
+    add_log(iec104::LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"], T);
+    add_log(iec104::LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"], T);
+    add_log(iec104::LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"], T);
+    add_log(iec104::LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"], T);
+    add_log(iec104::LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"], T);
+    add_log(iec104::LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"], T);
+    add_log(iec104::LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], T);
+    add_log(iec104::LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"], T);
+    add_log(iec104::LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"], T);
+    add_log(iec104::LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], T);
+    add_log(iec104::LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], T);
+    add_log(iec104::LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], T);
+    add_log(iec104::LOG_UNK, [$columns=UNK, $path="iec104-unk"], T);
 }
 
 event iec104::s(c: connection, is_orig: bool, rsn: count)
