@@ -582,7 +582,7 @@ type C_SC_TA_1_io: record {
 
 type C_DC_TA_1_io: record {
     obj_addr: count;
-    sco: DCO;
+    dco: DCO;
     tt: CP56Time2a;
 } &log;
 
