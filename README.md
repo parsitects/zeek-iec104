@@ -8,7 +8,7 @@ power transmission grids. As many other industrial protocols, it was first used 
 
 The parsing logic of this plugin was developed based on the corresponding Wireshark disssector and the technology report produced by the Brno University of Technology (see *Resources*).
 
-This parser produces one log file, `iec104.log`, defined under [scripts/main.zeek](./scripts/main.zeek).
+This parser produces one log file, `iec104.log`, defined under [scripts/iec104.zeek](./scripts/iec104.zeek).
 
 The *Logging Capabilities* section below provides more details for the current fields that are supported.
 
