@@ -25,6 +25,15 @@ function tt56_str(tt: CP56Time2a): string
         " SU:", tt$su, " IV:", tt$iv);
 }
 
+function tt24_str(tt: CP24Time2a): string
+{
+    local seconds = tt$ms / 1000;
+    local ms = tt$ms % 1000;
+    return cat(zfill(cat(tt$minute), 2), ":",
+               zfill(cat(seconds), 2), ".", ljust(cat(ms), 3, "0"),
+               " IV:", tt$iv);
+}
+
 function asdu_info(c: connection): string
 {
     if (c?$asdu_ident) {
@@ -95,7 +104,10 @@ event iec104::m_sp_ta_1
     (c: connection, is_orig: bool, io: M_SP_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_SP_TA_1 obj_addr=", io$obj_addr,
+              " SIQ=", io$siq,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_dp_na_1
@@ -111,7 +123,10 @@ event iec104::m_dp_ta_1
     (c: connection, is_orig: bool, io: M_DP_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_DP_TA_1 obj_addr=", io$obj_addr,
+              " DIQ=", io$diq,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_st_na_1
@@ -128,7 +143,11 @@ event iec104::m_st_ta_1
     (c: connection, is_orig: bool, io: M_ST_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_ST_TA_1 obj_addr=", io$obj_addr,
+              " VTI=", io$vti,
+              " QDS=", io$qds,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_bo_na_1
@@ -145,7 +164,11 @@ event iec104::m_bo_ta_1
     (c: connection, is_orig: bool, io: M_BO_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_BO_TA_1 obj_addr=", io$obj_addr,
+              " BSI=", fmt("0x%x", io$bsi),
+              " QDS=", io$qds,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_me_na_1
@@ -162,7 +185,11 @@ event iec104::m_me_ta_1
     (c: connection, is_orig: bool, io: M_ME_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_ME_TA_1 obj_addr=", io$obj_addr,
+              " NVA=", io$nva,
+              " QDS=", io$qds,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_me_nb_1
@@ -172,14 +199,18 @@ event iec104::m_me_nb_1
     print asdu_info(c),
           cat("M_ME_NB_1 obj_addr=", io$obj_addr,
               " SVA=", io$sva,
-              " QDS:", io$qds);
+              " QDS=", io$qds);
 }
 
 event iec104::m_me_tb_1
     (c: connection, is_orig: bool, io: M_ME_TB_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_ME_TB_1 obj_addr=", io$obj_addr,
+              " SVA=", io$sva,
+              " QDS=", io$qds,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_me_nc_1
@@ -196,7 +227,11 @@ event iec104::m_me_tc_1
     (c: connection, is_orig: bool, io: M_ME_TC_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("M_ME_TC_1 obj_addr=", io$obj_addr,
+              " R32=", io$r32,
+              " QDS=", io$qds,
+              " TT=", tt24_str(io$tt));
 }
 
 event iec104::m_sp_tb_1
@@ -344,42 +379,61 @@ event iec104::c_sc_ta_1
     (c: connection, is_orig: bool, io: C_SC_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("C_SC_TA_1 obj_addr=", io$obj_addr,
+              " SCO=", io$sco,
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::c_dc_ta_1
     (c: connection, is_orig: bool, io: C_DC_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("C_DC_TA_1 obj_addr=", io$obj_addr,
+              " DCO=", io$dco,
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::c_rc_ta_1
     (c: connection, is_orig: bool, io: C_RC_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("C_RC_TA_1 obj_addr=", io$obj_addr,
+              " RCO=", io$rco,
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::c_se_ta_1
     (c: connection, is_orig: bool, io: C_SE_TA_1_io)
     &priority=-10
 {
-    # TODO
+          cat("C_SE_TA_1 obj_addr=", io$obj_addr,
+              " NVA=", io$nva,
+              " QOS=", io$qos,
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::c_se_tc_1
     (c: connection, is_orig: bool, io: C_SE_TC_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("C_SE_TC_1 obj_addr=", io$obj_addr,
+              " R32=", io$r32,
+              " QOS=", io$qos,
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::c_bo_ta_1
     (c: connection, is_orig: bool, io: C_BO_TA_1_io)
     &priority=-10
 {
-    # TODO
+    print asdu_info(c),
+          cat("C_BO_TA_1 obj_addr=", io$obj_addr,
+              " BSI=", fmt("0x%x", io$bsi),
+              " TT=", tt56_str(io$tt));
 }
 
 event iec104::m_ei_na_1
@@ -405,19 +459,23 @@ event iec104::c_rd_na_1
     (c: connection, is_orig: bool, io: C_RD_NA_1_io)
     &priority=-10
 {
-    # TODO
+   print asdu_info(c),
+         cat("C_RD_NA_1 obj_addr=", io$obj_addr);
 }
 
 event iec104::c_rp_na_1
     (c: connection, is_orig: bool, io: C_RP_NA_1_io)
     &priority=-10
 {
-    # TODO
+   print asdu_info(c),
+         cat("C_RP_NA_1 obj_addr=", io$obj_addr,
+             " QRP=", io$qrp);
 }
 
 event iec104::unknown_asdu
     (c: connection, is_orig: bool, type_id: ::IEC104TypeID, hex: string)
     &priority=-10
 {
-    # TODO
+   print asdu_info(c),
+         cat("UNKNOWN TypeID=", type_id, " bytes=", hex);
 }

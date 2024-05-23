@@ -356,6 +356,7 @@ type M_SP_NA_1_io: record {
 type CP24Time2a: record {
     ms: count;
     minute: count;
+    iv: bool;
 } &log;
 
 type M_SP_TA_1_io: record {
