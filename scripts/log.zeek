@@ -39,6 +39,7 @@ redef enum Log::ID += {
     LOG_M_EI_NA_1,
     LOG_C_IC_NA_1,
     LOG_C_RD_NA_1,
+    LOG_C_CS_NA_1,
     LOG_C_RP_NA_1,
     LOG_APCI_U,
     LOG_APCI_S,
@@ -344,6 +345,14 @@ type C_RD_NA_1_log: record {
     io: C_RD_NA_1_io;
 } &log;
 
+type C_CS_NA_1_log: record {
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_CS_NA_1_io;
+} &log;
+
 type C_RP_NA_1_log: record {
     ts: time;
     uid: string;
@@ -447,6 +456,7 @@ event zeek_init() &priority=5
     add_log(LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], T);
     add_log(LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"], T);
     add_log(LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"], T);
+    add_log(LOG_C_CS_NA_1, [$columns=C_CS_NA_1_log, $path="iec104-C_CS_NA_1"], T);
     add_log(LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], T);
     add_log(LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], T);
     add_log(LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], T);
@@ -985,6 +995,19 @@ event iec104::c_rd_na_1
         $is_orig=is_orig,
         $io=io);
     Log::write(iec104::LOG_C_RD_NA_1, rec);
+}
+
+event iec104::c_cs_na_1
+    (c: connection, is_orig: bool, io: C_CS_NA_1_io)
+    &priority=-5
+{
+    local rec = C_CS_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $id=c$id,
+        $is_orig=is_orig,
+        $io=io);
+    Log::write(iec104::LOG_C_CS_NA_1, rec);
 }
 
 event iec104::c_rp_na_1

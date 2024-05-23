@@ -627,6 +627,11 @@ type C_RD_NA_1_io: record {
     obj_addr: count;
 } &log;
 
+type C_CS_NA_1_io: record {
+    obj_addr: count;
+    tt: CP56Time2a;
+} &log;
+
 type C_RP_NA_1_io: record {
     obj_addr: count;
     qrp: count;

@@ -676,6 +676,12 @@ type C_RD_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
+type C_CS_NA_1_io = unit {
+    # XXX: obj_addr should always be 0?
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    tt: CP56Time2a;
+};
+
 type C_RP_NA_1_io = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
     qrp: uint8;
@@ -1173,6 +1179,8 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io()[id.nobj];
+        # XXX: id.nobj must be 1 for C_CS_NA_1?
+        TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj];
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10);
     };
@@ -1542,6 +1550,13 @@ public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
     tuple<uint64>
 {
     return (io.obj_addr,);
+}
+
+public function C_CS_NA_1_rec(io: C_CS_NA_1_io):
+    tuple<uint64,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, CP56Time2a_rec(io.tt),);
 }
 
 public function C_RP_NA_1_rec(io: C_RP_NA_1_io):

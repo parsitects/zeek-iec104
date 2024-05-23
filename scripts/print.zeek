@@ -463,6 +463,15 @@ event iec104::c_rd_na_1
          cat("C_RD_NA_1 obj_addr=", io$obj_addr);
 }
 
+event iec104::c_cs_na_1
+    (c: connection, is_orig: bool, io: C_CS_NA_1_io)
+    &priority=-10
+{
+   print asdu_info(c),
+         cat("C_CS_NA_1 obj_addr=", io$obj_addr,
+             " TT=", tt56_str(io$tt));
+}
+
 event iec104::c_rp_na_1
     (c: connection, is_orig: bool, io: C_RP_NA_1_io)
     &priority=-10

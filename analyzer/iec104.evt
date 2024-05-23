@@ -138,6 +138,9 @@ on iec104::M_EI_NA_1_io ->
 on iec104::C_RD_NA_1_io ->
     event iec104::c_rd_na_1($conn, $is_orig, iec104::C_RD_NA_1_rec(self));
 
+on iec104::C_CS_NA_1_io ->
+    event iec104::c_cs_na_1($conn, $is_orig, iec104::C_CS_NA_1_rec(self));
+
 on iec104::C_RP_NA_1_io ->
     event iec104::c_rp_na_1($conn, $is_orig, iec104::C_RP_NA_1_rec(self));
 
