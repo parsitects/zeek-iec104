@@ -333,314 +333,314 @@ type IEC104CoT: enum {
 module iec104;
 
 type SIQ: record {
-    spi: bool &log;
-    bl: bool &log;
-    sb: bool &log;
-    nt: bool &log;
-    iv: bool &log;
-};
+    spi: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
 
 type DIQ: record {
-    dpi: count &log;
-    bl: bool &log;
-    sb: bool &log;
-    nt: bool &log;
-    iv: bool &log;
-};
+    dpi: count;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
 
 type M_SP_NA_1_io: record {
-    obj_addr: count &log;
-    siq: SIQ &log;
-};
+    obj_addr: count;
+    siq: SIQ;
+} &log;
 
 type CP24Time2a: record {
-    ms: count &log;
-    minute: count &log;
-};
+    ms: count;
+    minute: count;
+} &log;
 
 type M_SP_TA_1_io: record {
-    obj_addr: count &log;
-    siq: SIQ &log;
-    tt: CP24Time2a &log;
-};
+    obj_addr: count;
+    siq: SIQ;
+    tt: CP24Time2a;
+} &log;
 
 type M_DP_NA_1_io: record {
-    obj_addr: count &log;
-    diq: DIQ &log;
-};
+    obj_addr: count;
+    diq: DIQ;
+} &log;
 
 type M_DP_TA_1_io: record {
-    obj_addr: count &log;
-    diq: DIQ &log;
-    tt: CP24Time2a &log;
-};
+    obj_addr: count;
+    diq: DIQ;
+    tt: CP24Time2a;
+} &log;
 
 type VTI: record {
-    val: int &log;
-    ts: bool &log;
-};
+    val: int;
+    ts: bool;
+} &log;
 
 type QDS: record {
-    ov: bool &log;
-    bl: bool &log;
-    sb: bool &log;
-    nt: bool &log;
-    iv: bool &log;
-};
+    ov: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
 
 type M_ST_NA_1_io: record {
-    obj_addr: count &log;
-    vti: VTI &log;
-    qds: QDS &log;
-};
+    obj_addr: count;
+    vti: VTI;
+    qds: QDS;
+} &log;
 
 type M_ST_TA_1_io: record {
-    obj_addr: count &log;
-    vti: VTI &log;
-    qds: QDS &log;
-    tt: CP24Time2a &log;
-};
+    obj_addr: count;
+    vti: VTI;
+    qds: QDS;
+    tt: CP24Time2a;
+} &log;
 
 type M_BO_NA_1_io: record {
-    obj_addr: count &log;
-    bsi: count &log;
-    qds: QDS &log;
-};
+    obj_addr: count;
+    bsi: count;
+    qds: QDS;
+} &log;
 
 type M_BO_TA_1_io: record {
-    obj_addr: count &log;
-    bsi: count &log;
-    qds: QDS &log;
+    obj_addr: count;
+    bsi: count;
+    qds: QDS;
     tt: CP24Time2a;
-};
+} &log;
 
 type M_ME_NA_1_io: record {
-    obj_addr: count &log;
-    nva: count &log;
-    qds: QDS &log;
-};
+    obj_addr: count;
+    nva: count;
+    qds: QDS;
+} &log;
 
 type M_ME_TA_1_io: record {
-    obj_addr: count &log;
-    nva: count &log;
-    qds: QDS &log;
-    tt: CP24Time2a &log;
-};
+    obj_addr: count;
+    nva: count;
+    qds: QDS;
+    tt: CP24Time2a;
+} &log;
 
 type M_ME_NB_1_io: record {
-    obj_addr: count &log;
-    sva: count &log;
-    qds: QDS &log;
-};
+    obj_addr: count;
+    sva: count;
+    qds: QDS;
+} &log;
 
 type M_ME_TB_1_io: record {
-    obj_addr: count &log;
-    sva: count &log;
-    qds: QDS &log;
+    obj_addr: count;
+    sva: count;
+    qds: QDS;
     tt: CP24Time2a;
-};
+} &log;
 
 type M_ME_NC_1_io: record {
-    obj_addr: count &log;
-    r32: double &log;
-    qds: QDS &log;
-};
+    obj_addr: count;
+    r32: double;
+    qds: QDS;
+} &log;
 
 type M_ME_TC_1_io: record {
-    obj_addr: count &log;
-    r32: double &log;
-    qds: QDS &log;
+    obj_addr: count;
+    r32: double;
+    qds: QDS;
     tt: CP24Time2a;
-};
+} &log;
 
 type CP56Time2a: record {
-    ms: count &log;
-    minute: count &log;
-    iv: bool &log;
-    hour: count &log;
-    su: bool &log;
-    day: count &log;
-    dow: count &log;
-    month: count &log;
-    year: count &log;
-};
+    ms: count;
+    minute: count;
+    iv: bool;
+    hour: count;
+    su: bool;
+    day: count;
+    dow: count;
+    month: count;
+    year: count;
+} &log;
 
 type M_SP_TB_1_io: record {
-    obj_addr: count &log;
-    siq: SIQ &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    siq: SIQ;
+    tt: CP56Time2a;
+} &log;
 
 type M_DP_TB_1_io: record {
-    obj_addr: count &log;
-    diq: DIQ &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    diq: DIQ;
+    tt: CP56Time2a;
+} &log;
 
 type M_ST_TB_1_io: record {
-    obj_addr: count &log;
-    vti: VTI &log;
-    qds: QDS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    vti: VTI;
+    qds: QDS;
+    tt: CP56Time2a;
+} &log;
 
 type M_BO_TB_1_io: record {
-    obj_addr: count &log;
-    bsi: count &log;
-    qds: QDS &log;
+    obj_addr: count;
+    bsi: count;
+    qds: QDS;
     tt: CP56Time2a;
-};
+} &log;
 
 type M_ME_TD_1_io: record {
-    obj_addr: count &log;
-    nva: count &log;
-    qds: QDS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    nva: count;
+    qds: QDS;
+    tt: CP56Time2a;
+} &log;
 
 type M_ME_TE_1_io: record {
-    obj_addr: count &log;
-    sva: count &log;
-    qds: QDS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    sva: count;
+    qds: QDS;
+    tt: CP56Time2a;
+} &log;
 
 type M_ME_TF_1_io: record {
-    obj_addr: count &log;
-    r32: double &log;
-    qds: QDS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    r32: double;
+    qds: QDS;
+    tt: CP56Time2a;
+} &log;
 
 type SCO: record {
-    scs: bool &log;
-    qu: count &log;
-    se: bool &log;
-};
+    scs: bool;
+    qu: count;
+    se: bool;
+} &log;
 
 type C_SC_NA_1_io: record {
-    obj_addr: count &log;
-    sco: SCO &log;
-};
+    obj_addr: count;
+    sco: SCO;
+} &log;
 
 type DCO: record {
-    dcs: count &log;
-    qu: count &log;
-    se: bool &log;
-};
+    dcs: count;
+    qu: count;
+    se: bool;
+} &log;
 
 type C_DC_NA_1_io: record {
-    obj_addr: count &log;
-    dco: DCO &log;
-};
+    obj_addr: count;
+    dco: DCO;
+} &log;
 
 type RCO: record {
-    rcs: count &log;
-    qu: count &log;
-    se: bool &log;
-};
+    rcs: count;
+    qu: count;
+    se: bool;
+} &log;
 
 type C_RC_NA_1_io: record {
-    obj_addr: count &log;
-    rco: RCO &log;
-};
+    obj_addr: count;
+    rco: RCO;
+} &log;
 
 type QOS: record {
-    ql: count &log;
-    se: bool &log;
-};
+    ql: count;
+    se: bool;
+} &log;
 
 type C_SE_NA_1_io: record {
-    obj_addr: count &log;
-    nva: count &log;
-    qos: QOS &log;
-};
+    obj_addr: count;
+    nva: count;
+    qos: QOS;
+} &log;
 
 type C_SE_NB_1_io: record {
-    obj_addr: count &log;
-    sva: count &log;
-    qos: QOS &log;
-};
+    obj_addr: count;
+    sva: count;
+    qos: QOS;
+} &log;
 
 type C_SE_NC_1_io: record {
-    obj_addr: count &log;
-    r32: double &log;
-    qos: QOS &log;
-};
+    obj_addr: count;
+    r32: double;
+    qos: QOS;
+} &log;
 
 type C_BO_NA_1_io: record {
-    obj_addr: count &log;
-    bsi: count &log;
-};
+    obj_addr: count;
+    bsi: count;
+} &log;
 
 type C_SC_TA_1_io: record {
-    obj_addr: count &log;
-    sco: SCO &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    sco: SCO;
+    tt: CP56Time2a;
+} &log;
 
 type C_DC_TA_1_io: record {
-    obj_addr: count &log;
-    sco: DCO &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    sco: DCO;
+    tt: CP56Time2a;
+} &log;
 
 type C_RC_TA_1_io: record {
-    obj_addr: count &log;
-    rco: RCO &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    rco: RCO;
+    tt: CP56Time2a;
+} &log;
 
 type C_SE_TA_1_io: record {
-    obj_addr: count &log;
-    nva: count &log;
-    qos: QOS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    nva: count;
+    qos: QOS;
+    tt: CP56Time2a;
+} &log;
 
 type C_SE_TC_1_io: record {
-    obj_addr: count &log;
-    r32: double &log;
-    qos: QOS &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    r32: double;
+    qos: QOS;
+    tt: CP56Time2a;
+} &log;
 
 type C_BO_TA_1_io: record {
-    obj_addr: count &log;
-    bsi: count &log;
-    tt: CP56Time2a &log;
-};
+    obj_addr: count;
+    bsi: count;
+    tt: CP56Time2a;
+} &log;
 
 type M_EI_NA_1_io: record {
-    obj_addr: count &log;
-    coi: count &log;
-    lpc: bool &log;
-};
+    obj_addr: count;
+    coi: count;
+    lpc: bool;
+} &log;
 
 type C_IC_NA_1_io: record {
-    obj_addr: count &log;
-    qoi: count &log;
-};
+    obj_addr: count;
+    qoi: count;
+} &log;
 
 type C_RD_NA_1_io: record {
-    obj_addr: count &log;
-};
+    obj_addr: count;
+} &log;
 
 type C_RP_NA_1_io: record {
-    obj_addr: count &log;
-    qrp: count &log;
-};
+    obj_addr: count;
+    qrp: count;
+} &log;
 
 type AsduIdent: record {
-    type_id: ::IEC104TypeID &log;
-    nobj: count &log;
-    sq: bool &log;
-    cot: ::IEC104CoT &log;
-    pn: bool &log;
-    test: bool &log;
-    originator_address: count &log;
-    common_address: count &log;
-};
+    type_id: ::IEC104TypeID;
+    nobj: count;
+    sq: bool;
+    cot: ::IEC104CoT;
+    pn: bool;
+    test: bool;
+    originator_address: count;
+    common_address: count;
+} &log;
 
 const ports = {
     2404/tcp

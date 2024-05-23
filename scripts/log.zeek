@@ -49,351 +49,351 @@ redef enum Log::ID += {
 };
 
 type M_SP_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_SP_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_SP_NA_1_io;
+} &log;
 
 type M_SP_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_SP_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_SP_TA_1_io;
+} &log;
 
 type M_DP_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_DP_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_DP_NA_1_io;
+} &log;
 
 type M_DP_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_DP_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_DP_TA_1_io;
+} &log;
 type M_ST_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ST_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ST_NA_1_io;
+} &log;
 
 type M_ST_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ST_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ST_TA_1_io;
+} &log;
 
 type M_BO_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_BO_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_BO_NA_1_io;
+} &log;
 
 type M_BO_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_BO_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_BO_TA_1_io;
+} &log;
 
 type M_ME_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_NA_1_io;
+} &log;
 
 type M_ME_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TA_1_io;
+} &log;
 
 type M_ME_NB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_NB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_NB_1_io;
+} &log;
 
 type M_ME_TB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TB_1_io;
+} &log;
 
 type M_ME_NC_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_NC_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_NC_1_io;
+} &log;
 
 type M_ME_TC_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TC_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TC_1_io;
+} &log;
 
 type M_SP_TB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_SP_TB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_SP_TB_1_io;
+} &log;
 
 type M_DP_TB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_DP_TB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_DP_TB_1_io;
+} &log;
 
 type M_ST_TB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ST_TB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ST_TB_1_io;
+} &log;
 
 type M_BO_TB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_BO_TB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_BO_TB_1_io;
+} &log;
 
 type M_ME_TD_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TD_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TD_1_io;
+} &log;
 
 type M_ME_TE_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TE_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TE_1_io;
+} &log;
 
 type M_ME_TF_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_ME_TF_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_ME_TF_1_io;
+} &log;
 
 type C_SC_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SC_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SC_NA_1_io;
+} &log;
 
 type C_DC_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_DC_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_DC_NA_1_io;
+} &log;
 
 type C_RC_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_RC_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_RC_NA_1_io;
+} &log;
 
 type C_SE_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SE_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SE_NA_1_io;
+} &log;
 
 type C_SE_NB_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SE_NB_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SE_NB_1_io;
+} &log;
 
 type C_SE_NC_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SE_NC_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SE_NC_1_io;
+} &log;
 
 type C_BO_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_BO_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_BO_NA_1_io;
+} &log;
 
 type C_SC_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SC_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SC_TA_1_io;
+} &log;
 
 type C_DC_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_DC_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_DC_TA_1_io;
+} &log;
 
 type C_RC_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_RC_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_RC_TA_1_io;
+} &log;
 
 type C_SE_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SE_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SE_TA_1_io;
+} &log;
 
 type C_SE_TC_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_SE_TC_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_SE_TC_1_io;
+} &log;
 
 type C_BO_TA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_BO_TA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_BO_TA_1_io;
+} &log;
 
 type M_EI_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: M_EI_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: M_EI_NA_1_io;
+} &log;
 
 type C_IC_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_IC_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_IC_NA_1_io;
+} &log;
 
 type C_RD_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_RD_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_RD_NA_1_io;
+} &log;
 
 type C_RP_NA_1_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    io: C_RP_NA_1_io &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    io: C_RP_NA_1_io;
+} &log;
 
 type AsduIdent_log: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    ident: AsduIdent &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    ident: AsduIdent;
+} &log;
 
 type APCI_S: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    rsn: count &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    rsn: count;
+} &log;
 
 type APCI_U: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    startdt: count &log;
-    stopdt: count &log;
-    testfr: count &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    startdt: count;
+    stopdt: count;
+    testfr: count;
+} &log;
 
 type APCI_I: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    ssn: count &log;
-    rsn: count &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    ssn: count;
+    rsn: count;
+} &log;
 
 type UNK: record {
-    ts: time &log;
-    uid: string &log;
-    id: conn_id &log;
-    is_orig: bool &log;
-    type_id: ::IEC104TypeID &log;
-    data: string &log;
-};
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    type_id: ::IEC104TypeID;
+    data: string;
+} &log;
 
 function add_log(id: Log::ID, stream: Log::Stream, json: bool)
 {
