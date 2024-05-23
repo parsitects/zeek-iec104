@@ -42,6 +42,7 @@ redef enum Log::ID += {
     LOG_C_RP_NA_1,
     LOG_APCI_U,
     LOG_APCI_S,
+    LOG_APCI_I,
     LOG_SVA_QOS,
     LOG_DIQ_CP56Time2a,
     LOG_DIQ_CP24Time2a,
@@ -449,6 +450,7 @@ event zeek_init() &priority=5
     add_log(LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], T);
     add_log(LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], T);
     add_log(LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], T);
+    add_log(LOG_APCI_I, [$columns=APCI_I, $path="iec104-apci_i"], T);
     add_log(LOG_UNK, [$columns=UNK, $path="iec104-unk"], T);
 }
 
@@ -476,6 +478,19 @@ event iec104::u
                        $stopdt=stopdt,
                        $testfr=testfr);
     Log::write(iec104::LOG_APCI_U, rec);
+}
+
+event iec104::i
+    (c: connection, is_orig: bool, ssn: count, rsn: count)
+    &priority=-5
+{
+    local rec = APCI_I($ts=current_event_time(),
+                       $uid=c$uid,
+                       $id=c$id,
+                       $is_orig=is_orig,
+                       $ssn=ssn,
+                       $rsn=rsn);
+    Log::write(iec104::LOG_APCI_I, rec);
 }
 
 event iec104::asdu
