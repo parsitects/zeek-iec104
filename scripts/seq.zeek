@@ -14,31 +14,42 @@ redef record connection += {
 function update_counters(send: APDU_Counters, recv: APDU_Counters, ssn: count, rsn: count)
 {
     if (send$v_s != ssn || send$v_r != rsn) {
-        print fmt("  WEIRD: Sequence number mismatch: expected (Tx:%d, Rx:%d), got (Tx:%d, Rx:%d).  Adjusting.",
-                  send$v_s, send$v_r, ssn, rsn);
+        if (send$v_s != 0 || send$v_r != 0) {
+            print fmt("  WEIRD: Sequence number mismatch: expected (Tx:%d, Rx:%d), got (Tx:%d, Rx:%d).  Adjusting.",
+                      send$v_s, send$v_r, ssn, rsn);
+        }
         send$v_r = rsn;
         send$v_s = ssn;
+
+        if (recv$v_s == 0 && recv$v_r == 0) {
+            # Freshly instantiated counters for an already-established
+            # connection.
+            recv$v_s = rsn;
+            recv$v_r = ssn;
+        }
     }
 
-    send$v_s += 1;
-    recv$v_r += 1;
+    send$v_s = (send$v_s + 1) % 0x8000;
+    recv$v_r = (recv$v_r + 1) % 0x8000;
     recv$ack = rsn;
 }
 
 function check_rsn(cs: APDU_Counters, cr: APDU_Counters, rsn: count)
 {
-    if (rsn < cs$v_r) {
-        print fmt("  WEIRD: S-Format packet with Rx counter %d, %d already seen.",
+    if (rsn != cs$v_r) {
+        print fmt("  WEIRD: S-Format packet with Rx counter %d, expected %d.",
                   rsn, cs$v_r);
+        cs$v_r = rsn;
     }
 
     # XXX: Any other sanity checks?
     cr$ack = rsn;
 }
 
-event iec104::s(c: connection, is_orig: bool, rsn: count) &priority=-10
+event iec104::s
+    (c: connection, is_orig: bool, rsn: count)
+    &priority=-15
 {
-    print "  SEQ: ORIG", c$orig_counters, "RESP", c$resp_counters;
     if (is_orig) {
         check_rsn(c$orig_counters, c$resp_counters, rsn);
     } else {
@@ -46,7 +57,9 @@ event iec104::s(c: connection, is_orig: bool, rsn: count) &priority=-10
     }
 }
 
-event iec104::i(c: connection, is_orig: bool, ssn: count, rsn: count)
+event iec104::i
+    (c: connection, is_orig: bool, ssn: count, rsn: count)
+    &priority=-15
 {
     if (is_orig) {
         update_counters(c$orig_counters, c$resp_counters, ssn, rsn);
