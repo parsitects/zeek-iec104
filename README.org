@@ -119,7 +119,7 @@ the following ASDU information object types:
 
 * Logging capabilities
 
-This plugin creates many log files, all of which start with a `iec104-`
+This plugin creates many log files, all of which start with a ~iec104-~
 prefix.  All logs have the following fields:
 
 - ~ts~ :: Message timestamp.
@@ -131,6 +131,12 @@ prefix.  All logs have the following fields:
 - ~is_orig~ :: True if the message is from the connection originator.
 - ~apdu~ :: APDU counter, increased for each APDU.  Useful for cross-linking
   data from different logs.
+
+By default log files are in JSON format, but that can be changed by setting
+the ~iec104::log_as_json~ (defined in ~scripts/log.zeek~) to ~F~, either by
+changing the source or in another script using the following statement:
+
+: redef iec104::log_as_json = F;
 
 ** iec104-apci_i.log
 

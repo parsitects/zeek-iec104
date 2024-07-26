@@ -1,5 +1,7 @@
 module iec104;
 
+const log_as_json = T &redef;
+
 redef enum Log::ID += {
     LOG_ASDU_IDENT,
     LOG_M_SP_NA_1,
@@ -558,51 +560,51 @@ function add_log(id: Log::ID, stream: Log::Stream, json: bool)
 
 event zeek_init() &priority=5
 {
-    add_log(LOG_ASDU_IDENT, [$columns=AsduIdent_log, $path="iec104-asdu-ident"], T);
-    add_log(LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"], T);
-    add_log(LOG_M_SP_TA_1, [$columns=M_SP_TA_1_log, $path="iec104-M_SP_TA_1"], T);
-    add_log(LOG_M_DP_NA_1, [$columns=M_DP_NA_1_log, $path="iec104-M_DP_NA_1"], T);
-    add_log(LOG_M_DP_TA_1, [$columns=M_DP_TA_1_log, $path="iec104-M_DP_TA_1"], T);
-    add_log(LOG_M_ST_NA_1, [$columns=M_ST_NA_1_log, $path="iec104-M_ST_NA_1"], T);
-    add_log(LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"], T);
-    add_log(LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"], T);
-    add_log(LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"], T);
-    add_log(LOG_M_ME_NA_1, [$columns=M_ME_NA_1_log, $path="iec104-M_ME_NA_1"], T);
-    add_log(LOG_M_ME_TA_1, [$columns=M_ME_TA_1_log, $path="iec104-M_ME_TA_1"], T);
-    add_log(LOG_M_ME_NB_1, [$columns=M_ME_NB_1_log, $path="iec104-M_ME_NB_1"], T);
-    add_log(LOG_M_ME_TB_1, [$columns=M_ME_TB_1_log, $path="iec104-M_ME_TB_1"], T);
-    add_log(LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"], T);
-    add_log(LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"], T);
-    add_log(LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"], T);
-    add_log(LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"], T);
-    add_log(LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"], T);
-    add_log(LOG_M_BO_TB_1, [$columns=M_BO_TB_1_log, $path="iec104-M_BO_TB_1"], T);
-    add_log(LOG_M_ME_TD_1, [$columns=M_ME_TD_1_log, $path="iec104-M_ME_TD_1"], T);
-    add_log(LOG_M_ME_TE_1, [$columns=M_ME_TE_1_log, $path="iec104-M_ME_TE_1"], T);
-    add_log(LOG_M_ME_TF_1, [$columns=M_ME_TF_1_log, $path="iec104-M_ME_TF_1"], T);
-    add_log(LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"], T);
-    add_log(LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"], T);
-    add_log(LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"], T);
-    add_log(LOG_C_SE_NA_1, [$columns=C_SE_NA_1_log, $path="iec104-C_SE_NA_1"], T);
-    add_log(LOG_C_SE_NB_1, [$columns=C_SE_NB_1_log, $path="iec104-C_SE_NB_1"], T);
-    add_log(LOG_C_SE_NC_1, [$columns=C_SE_NC_1_log, $path="iec104-C_SE_NC_1"], T);
-    add_log(LOG_C_BO_NA_1, [$columns=C_BO_NA_1_log, $path="iec104-C_BO_NA_1"], T);
-    add_log(LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"], T);
-    add_log(LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"], T);
-    add_log(LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"], T);
-    add_log(LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"], T);
-    add_log(LOG_C_SE_TB_1, [$columns=C_SE_TB_1_log, $path="iec104-C_SE_TB_1"], T);
-    add_log(LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"], T);
-    add_log(LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"], T);
-    add_log(LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], T);
-    add_log(LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"], T);
-    add_log(LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"], T);
-    add_log(LOG_C_CS_NA_1, [$columns=C_CS_NA_1_log, $path="iec104-C_CS_NA_1"], T);
-    add_log(LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], T);
-    add_log(LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], T);
-    add_log(LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], T);
-    add_log(LOG_APCI_I, [$columns=APCI_I, $path="iec104-apci_i"], T);
-    add_log(LOG_UNK, [$columns=UNK, $path="iec104-unk"], T);
+    add_log(LOG_ASDU_IDENT, [$columns=AsduIdent_log, $path="iec104-asdu-ident"], log_as_json);
+    add_log(LOG_M_SP_NA_1, [$columns=M_SP_NA_1_log, $path="iec104-M_SP_NA_1"], log_as_json);
+    add_log(LOG_M_SP_TA_1, [$columns=M_SP_TA_1_log, $path="iec104-M_SP_TA_1"], log_as_json);
+    add_log(LOG_M_DP_NA_1, [$columns=M_DP_NA_1_log, $path="iec104-M_DP_NA_1"], log_as_json);
+    add_log(LOG_M_DP_TA_1, [$columns=M_DP_TA_1_log, $path="iec104-M_DP_TA_1"], log_as_json);
+    add_log(LOG_M_ST_NA_1, [$columns=M_ST_NA_1_log, $path="iec104-M_ST_NA_1"], log_as_json);
+    add_log(LOG_M_ST_TA_1, [$columns=M_ST_TA_1_log, $path="iec104-M_ST_TA_1"], log_as_json);
+    add_log(LOG_M_BO_NA_1, [$columns=M_BO_NA_1_log, $path="iec104-M_BO_NA_1"], log_as_json);
+    add_log(LOG_M_BO_TA_1, [$columns=M_BO_TA_1_log, $path="iec104-M_BO_TA_1"], log_as_json);
+    add_log(LOG_M_ME_NA_1, [$columns=M_ME_NA_1_log, $path="iec104-M_ME_NA_1"], log_as_json);
+    add_log(LOG_M_ME_TA_1, [$columns=M_ME_TA_1_log, $path="iec104-M_ME_TA_1"], log_as_json);
+    add_log(LOG_M_ME_NB_1, [$columns=M_ME_NB_1_log, $path="iec104-M_ME_NB_1"], log_as_json);
+    add_log(LOG_M_ME_TB_1, [$columns=M_ME_TB_1_log, $path="iec104-M_ME_TB_1"], log_as_json);
+    add_log(LOG_M_ME_NC_1, [$columns=M_ME_NC_1_log, $path="iec104-M_ME_NC_1"], log_as_json);
+    add_log(LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"], log_as_json);
+    add_log(LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"], log_as_json);
+    add_log(LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"], log_as_json);
+    add_log(LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"], log_as_json);
+    add_log(LOG_M_BO_TB_1, [$columns=M_BO_TB_1_log, $path="iec104-M_BO_TB_1"], log_as_json);
+    add_log(LOG_M_ME_TD_1, [$columns=M_ME_TD_1_log, $path="iec104-M_ME_TD_1"], log_as_json);
+    add_log(LOG_M_ME_TE_1, [$columns=M_ME_TE_1_log, $path="iec104-M_ME_TE_1"], log_as_json);
+    add_log(LOG_M_ME_TF_1, [$columns=M_ME_TF_1_log, $path="iec104-M_ME_TF_1"], log_as_json);
+    add_log(LOG_C_SC_NA_1, [$columns=C_SC_NA_1_log, $path="iec104-C_SC_NA_1"], log_as_json);
+    add_log(LOG_C_DC_NA_1, [$columns=C_DC_NA_1_log, $path="iec104-C_DC_NA_1"], log_as_json);
+    add_log(LOG_C_RC_NA_1, [$columns=C_RC_NA_1_log, $path="iec104-C_RC_NA_1"], log_as_json);
+    add_log(LOG_C_SE_NA_1, [$columns=C_SE_NA_1_log, $path="iec104-C_SE_NA_1"], log_as_json);
+    add_log(LOG_C_SE_NB_1, [$columns=C_SE_NB_1_log, $path="iec104-C_SE_NB_1"], log_as_json);
+    add_log(LOG_C_SE_NC_1, [$columns=C_SE_NC_1_log, $path="iec104-C_SE_NC_1"], log_as_json);
+    add_log(LOG_C_BO_NA_1, [$columns=C_BO_NA_1_log, $path="iec104-C_BO_NA_1"], log_as_json);
+    add_log(LOG_C_SC_TA_1, [$columns=C_SC_TA_1_log, $path="iec104-C_SC_TA_1"], log_as_json);
+    add_log(LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"], log_as_json);
+    add_log(LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"], log_as_json);
+    add_log(LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"], log_as_json);
+    add_log(LOG_C_SE_TB_1, [$columns=C_SE_TB_1_log, $path="iec104-C_SE_TB_1"], log_as_json);
+    add_log(LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"], log_as_json);
+    add_log(LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"], log_as_json);
+    add_log(LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], log_as_json);
+    add_log(LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"], log_as_json);
+    add_log(LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"], log_as_json);
+    add_log(LOG_C_CS_NA_1, [$columns=C_CS_NA_1_log, $path="iec104-C_CS_NA_1"], log_as_json);
+    add_log(LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], log_as_json);
+    add_log(LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], log_as_json);
+    add_log(LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], log_as_json);
+    add_log(LOG_APCI_I, [$columns=APCI_I, $path="iec104-apci_i"], log_as_json);
+    add_log(LOG_UNK, [$columns=UNK, $path="iec104-unk"], log_as_json);
 }
 
 event iec104::s
