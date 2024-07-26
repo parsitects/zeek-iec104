@@ -92,7 +92,7 @@ the following ASDU information object types:
 | ~C_DC_TA_1~ |     59 | yes         |
 | ~C_RC_TA_1~ |     60 | yes         |
 | ~C_SE_TA_1~ |     61 | yes         |
-| ~C_SE_TB_1~ |     62 |             |
+| ~C_SE_TB_1~ |     62 | yes         |
 | ~C_SE_TC_1~ |     63 | yes         |
 | ~C_BO_TA_1~ |     64 | yes         |
 | ~M_EI_NA_1~ |     70 | yes         |

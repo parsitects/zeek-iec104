@@ -126,6 +126,9 @@ on iec104::C_RC_TA_1_io ->
 on iec104::C_SE_TA_1_io ->
     event iec104::c_se_ta_1($conn, $is_orig, iec104::C_SE_TA_1_rec(self));
 
+on iec104::C_SE_TB_1_io ->
+    event iec104::c_se_tb_1($conn, $is_orig, iec104::C_SE_TB_1_rec(self));
+
 on iec104::C_SE_TC_1_io ->
     event iec104::c_se_tc_1($conn, $is_orig, iec104::C_SE_TC_1_rec(self));
 
@@ -244,6 +247,9 @@ on iec104::C_RC_TA_1_sq_io ->
 
 on iec104::C_SE_TA_1_sq_io ->
     event iec104::c_se_ta_1($conn, $is_orig, iec104::C_SE_TA_1_sq_rec(self));
+
+on iec104::C_SE_TB_1_sq_io ->
+    event iec104::c_se_tb_1($conn, $is_orig, iec104::C_SE_TB_1_sq_rec(self));
 
 on iec104::C_SE_TC_1_sq_io ->
     event iec104::c_se_tc_1($conn, $is_orig, iec104::C_SE_TC_1_sq_rec(self));

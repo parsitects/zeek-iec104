@@ -34,6 +34,7 @@ redef enum Log::ID += {
     LOG_C_DC_TA_1,
     LOG_C_RC_TA_1,
     LOG_C_SE_TA_1,
+    LOG_C_SE_TB_1,
     LOG_C_SE_TC_1,
     LOG_C_BO_TA_1,
     LOG_M_EI_NA_1,
@@ -401,6 +402,17 @@ type C_SE_TA_1_log: record {
     io: C_SE_TA_1_io;
 } &log;
 
+type C_SE_TB_1_log: record {
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    apdu: count;
+    type_id: ::IEC104TypeID;
+    type_id_code: int;
+    io: C_SE_TB_1_io;
+} &log;
+
 type C_SE_TC_1_log: record {
     ts: time;
     uid: string;
@@ -579,6 +591,7 @@ event zeek_init() &priority=5
     add_log(LOG_C_DC_TA_1, [$columns=C_DC_TA_1_log, $path="iec104-C_DC_TA_1"], T);
     add_log(LOG_C_RC_TA_1, [$columns=C_RC_TA_1_log, $path="iec104-C_RC_TA_1"], T);
     add_log(LOG_C_SE_TA_1, [$columns=C_SE_TA_1_log, $path="iec104-C_SE_TA_1"], T);
+    add_log(LOG_C_SE_TB_1, [$columns=C_SE_TB_1_log, $path="iec104-C_SE_TB_1"], T);
     add_log(LOG_C_SE_TC_1, [$columns=C_SE_TC_1_log, $path="iec104-C_SE_TC_1"], T);
     add_log(LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"], T);
     add_log(LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], T);
@@ -1161,6 +1174,22 @@ event iec104::c_se_ta_1
         $type_id_code=enum_to_int(C_SE_TA_1),
         $io=io);
     Log::write(iec104::LOG_C_SE_TA_1, rec);
+}
+
+event iec104::c_se_tb_1
+    (c: connection, is_orig: bool, io: C_SE_TB_1_io)
+    &priority=-5
+{
+    local rec = C_SE_TB_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $id=c$id,
+        $is_orig=is_orig,
+        $apdu=c$apdu_counter,
+        $type_id=C_SE_TB_1,
+        $type_id_code=enum_to_int(C_SE_TB_1),
+        $io=io);
+    Log::write(iec104::LOG_C_SE_TB_1, rec);
 }
 
 event iec104::c_se_tc_1

@@ -415,6 +415,16 @@ event iec104::c_se_ta_1
               " TT=", tt56_str(io$tt));
 }
 
+event iec104::c_se_tb_1
+    (c: connection, is_orig: bool, io: C_SE_TB_1_io)
+    &priority=-10
+{
+          cat("C_SE_TB_1 obj_addr=", io$obj_addr,
+              " SVA=", io$sva,
+              " QOS=", io$qos,
+              " TT=", tt56_str(io$tt));
+}
+
 event iec104::c_se_tc_1
     (c: connection, is_orig: bool, io: C_SE_TC_1_io)
     &priority=-10

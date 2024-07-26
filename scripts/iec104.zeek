@@ -599,6 +599,13 @@ type C_SE_TA_1_io: record {
     tt: CP56Time2a;
 } &log;
 
+type C_SE_TB_1_io: record {
+    obj_addr: count;
+    sva: count;
+    qos: QOS;
+    tt: CP56Time2a;
+} &log;
+
 type C_SE_TC_1_io: record {
     obj_addr: count;
     r32: double;
