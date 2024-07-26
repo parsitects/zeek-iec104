@@ -1,0 +1,44 @@
+68 34               ; iec104::Apdu len=52
+5A 14 7C 00         ; iec104::Ctrl_i tag=0 ssn=2605 rsn=62
+
+                    ; iec104::AsduIdent
+0B                  ; type_id=TypeID::M_ME_NB_1
+07                  ; nobj=7 sq=0
+03                  ; cot=CoT::Spont pn=0 test=0
+00                  ; originator_address=0
+0C 00               ; common_address=12
+
+                    ; iec104::M_ME_NB_1_io
+10 30 00            ; obj_addr=12304
+BE 09               ; sva=2494
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+11 30 00            ; obj_addr=12305
+90 09               ; sva=2448
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+0E 30 00            ; obj_addr=12302
+75 00               ; sva=117
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+28 30 00            ; obj_addr=12328
+25 09               ; sva=2341
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+29 30 00            ; obj_addr=12329
+75 00               ; sva=117
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+0F 30 00            ; obj_addr=12303
+0F 0A               ; sva=2575
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NB_1_io
+2E 30 00            ; obj_addr=12334
+AE 05               ; sva=1454
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0

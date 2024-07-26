@@ -1,0 +1,170 @@
+68 fa               ; iec104::Apdu len=250
+de 0a aa 0c         ; iec104::Ctrl_i tag=0 ssn=1391 rsn=1621
+
+                    ; iec104::AsduIdent
+24                  ; type_id=TypeID::M_ME_TF_1
+10                  ; nobj=16 sq=0
+03                  ; cot=CoT::Spont pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+                    ; iec104::M_ME_TF_1_io
+5a 16 00            ; obj_addr=5722
+17 d9 96 40         ; r32=4.714
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c5 cb               ; ms=52165
+1e                  ; minute=30 iv=0
+0d                  ; hour=13 su=0
+05                  ; day=5 dow=0
+0c                  ; month=12
+17                  ; year=23
+
+                    ; iec104::M_ME_TF_1_io
+5b 16 00            ; obj_addr=5723
+b8 1e 45 3f         ; r32=0.77
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c5 cb               ; ms=52165
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+5d 16 00            ; obj_addr=5725
+3a cc c6 40         ; r32=6.21243
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c5 cb               ; ms=52165
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+62 16 00            ; obj_addr=5730
+00 40 23 44         ; r32=653
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c5 cb               ; ms=52165
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+;; Something is fucked up at this point.
+
+                    ; iec104::M_ME_TF_1_io
+49 16 00            ; obj_addr=5705
+2f dd 24 41         ; r32=10.304
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c6 cb               ; ms=52166
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+4f 16 00            ; obj_addr=5711
+54 e3 55 40         ; r32=3.342
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c7 cb               ; ms=52167
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+50 16 00            ; obj_addr=5712
+d1 22 9b 3f         ; r32=1.212
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+c7 cb               ; ms=52167
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+48 16 00            ; obj_addr=5704
+4c 37 25 41         ; r32=10.326
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+33 cc               ; ms=52275
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+4b 16 00            ; obj_addr=5707
+33 b3 47 43         ; r32=199.7
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+33 cc               ; ms=52275
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+4c 16 00            ; obj_addr=5708
+b4 c8 5e 40         ; r32=3.481
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+33 cc               ; ms=52275
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+4d 16 00            ; obj_addr=5709
+5c 8f 62 3f         ; r32=0.885
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+33 cc               ; ms=52275
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+4e 16 00            ; obj_addr=5710
+00 00 47 43         ; r32=199
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+33 cc               ; ms=52275
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+05 16 00            ; obj_addr=5637
+4e 7e 28 41         ; r32=10.5308
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+06 cd               ; ms=52486
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+08 16 00            ; obj_addr=5640
+00 18 28 41         ; r32=10.5059
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+2a cd               ; ms=52522
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+06 16 00            ; obj_addr=5638
+ca 2f 28 41         ; r32=10.5117
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+eb cd               ; ms=52715
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+80 15 00            ; obj_addr=5504
+49 d3 84 43         ; r32=265.651
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+ff cd               ; ms=52735
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+68 28               ; iec104::Apdu len=40
+e0 0a aa 0c         ; iec104::Ctrl_i tag=0 ssn=1392 rsn=1621
+
+                    ; iec104::AsduIdent
+24                  ; type_id=TypeID::M_ME_TF_1
+02                  ; nobj=2 sq=0
+03                  ; cot=CoT::Spont pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+                    ; iec104::M_ME_TF_1_io
+07 16 00            ; obj_addr=5639
+00 30 28 41         ; r32=10.5117
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::CP56Time2a
+09 cf               ; ms=53001
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
+
+                    ; iec104::M_ME_TF_1_io
+60 16 00            ; obj_addr=5728
+08 ac d2 40         ; r32=6.5835
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+9b cf               ; ms=53147
+1e 0d 05 0c 17      ; minute=30 iv=0 hour=13 su=0 day=5 dow=0 month=12 year=23
