@@ -680,7 +680,34 @@ type M_EI_NA_1_io = unit {
     };
 };
 
-type C_RD_NA_1_io = unit {
+# Theoretically C_RD_NA_1_io could be defined as follows:
+#
+#     type C_RD_NA_1_io = unit(pn: uint8) {
+#         obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+#         raw_data: uint8 if (pn == 0);
+#     };
+#
+# But this does not work in the case when raw_data filed must not be
+# parsed (pn == 1 case).  This seems to be because the generated
+# parser seems to be checking for end of input before proceeding to
+# the next field, even if it turns out the field condition fails and
+# the field should not be parsed. Of course this is only a problem if
+# the optional field is at the end of unit (which it is in this case).
+#
+# The solution implemented here is removing the condition by
+# open-coding both condition branches.  This also means that the event
+# file has two entries for this one unit.
+type C_RD_NA_1_io = unit(pn: uint8) {
+    a: C_RD_NA_1_io_a if (pn == 0);
+    b: C_RD_NA_1_io_b if (pn == 1);
+};
+
+type C_RD_NA_1_io_a = unit {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    raw_data: uint8;
+};
+
+type C_RD_NA_1_io_b = unit {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 };
 
@@ -1001,7 +1028,20 @@ type M_EI_NA_1_sq_io = unit(io: AsduIOsq) {
     on %done { self.obj_addr = io.next_addr++; }
 };
 
-type C_RD_NA_1_sq_io = unit(io: AsduIOsq) {
+# Same workaround for Spicy parser as for C_RD_NA_1_io above.
+type C_RD_NA_1_sq_io = unit(io: AsduIOsq, pn: uint8) {
+    a: C_RD_NA_1_sq_io_a(io) if (pn == 0);
+    b: C_RD_NA_1_sq_io_b(io) if (pn == 1);
+};
+
+type C_RD_NA_1_sq_io_a = unit(io: AsduIOsq) {
+    var obj_addr: uint64;
+    raw_data: uint8;
+
+    on %done { self.obj_addr = io.next_addr++; }
+};
+
+type C_RD_NA_1_sq_io_b = unit(io: AsduIOsq) {
     var obj_addr: uint64;
 
     on %done { self.obj_addr = io.next_addr++; }
@@ -1144,7 +1184,7 @@ type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_sq_io(self)[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_sq_io(self)[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_sq_io(self, id.pn)[id.nobj];
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_sq_io(self)[id.nobj];
         # XXX: We should not have parsed `base_addr' if we don't know
         # the TypeID.
@@ -1197,7 +1237,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io()[id.nobj];
+        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io(id.pn)[id.nobj];
         # XXX: id.nobj must be 1 for C_CS_NA_1?
         TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj];
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
@@ -1572,10 +1612,16 @@ public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
     return (io.obj_addr, io.coi, io.lpc == 1);
 }
 
-public function C_RD_NA_1_rec(io: C_RD_NA_1_io):
-    tuple<uint64>
+public function C_RD_NA_1_rec_a(io: C_RD_NA_1_io_a):
+    tuple<uint64, optional<uint8>>
 {
-    return (io.obj_addr,);
+    return (io.obj_addr, io.raw_data);
+}
+
+public function C_RD_NA_1_rec_b(io: C_RD_NA_1_io_b):
+    tuple<uint64, optional<uint8>>
+{
+    return (io.obj_addr, Null);
 }
 
 public function C_CS_NA_1_rec(io: C_CS_NA_1_io):
@@ -1852,10 +1898,16 @@ public function M_EI_NA_1_sq_rec(io: M_EI_NA_1_sq_io):
     return (io.obj_addr, io.coi, io.lpc == 1);
 }
 
-public function C_RD_NA_1_sq_rec(io: C_RD_NA_1_sq_io):
-    tuple<uint64>
+public function C_RD_NA_1_sq_rec_a(io: C_RD_NA_1_sq_io_a):
+    tuple<uint64, optional<uint8>>
 {
-    return (io.obj_addr,);
+    return (io.obj_addr, io.raw_data);
+}
+
+public function C_RD_NA_1_sq_rec_b(io: C_RD_NA_1_sq_io_b):
+    tuple<uint64, optional<uint8>>
+{
+    return (io.obj_addr, Null);
 }
 
 public function C_RP_NA_1_sq_rec(io: C_RP_NA_1_sq_io):

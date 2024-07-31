@@ -632,6 +632,7 @@ type C_IC_NA_1_io: record {
 
 type C_RD_NA_1_io: record {
     obj_addr: count;
+    raw_data: count &optional;
 } &log;
 
 type C_CS_NA_1_io: record {

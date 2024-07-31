@@ -469,8 +469,12 @@ event iec104::c_rd_na_1
     (c: connection, is_orig: bool, io: C_RD_NA_1_io)
     &priority=-10
 {
-   print asdu_info(c),
-         cat("C_RD_NA_1 obj_addr=", io$obj_addr);
+    local dump: string = cat("C_RD_NA_1 obj_addr=", io$obj_addr);
+    if (io?$raw_data) {
+        dump += cat(" raw_data=", io$raw_data);
+    }
+
+    print asdu_info(c), dump;
 }
 
 event iec104::c_cs_na_1
