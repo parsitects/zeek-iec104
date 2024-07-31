@@ -7,6 +7,28 @@
 [[https://docs.zeek.org/projects/spicy/en/latest/][Spicy]] for parsing and
 logging fields used by the IEC 104 protocol.
 
+** Differences from upstream
+
+- More ASDU type parsing implemented
+- APDU contents logged to log files (only if ~log.zeek~ script is loaded)
+  + For unknown (unimplemented) ASDU types hex dump of content is logged
+- Zeek events generated only for high-level units (i.e., no separate events
+  for internal units like ~CP56Time2a~ or bit-fields):
+  + Control part of an APCI (S, U and I format headers)
+  + Identification part of an ASDU
+  + Object specific information of an ASDU
+- Easy to correlate APDU sub-part event generation, with the parts mentioned
+  above in sequence:
+  + APCI control field
+  + ASDU common part (Cause of Transmission, address fields)
+  + Object-specific ASDU part (object information)
+- All events carry communication direction information
+- ~print.zeek~ script to dump APCIs to console (good for analyzing captured
+  traffic with no need to correlate different log files)
+- Proper parsing (and logging) of R32 (float) and VTI (7-bit signed
+  integer) values
+- Logging in TSV (Zeek default) or JSON formats
+
 * Installation
 
 To build and install the parser into Zeek the following can be used:
@@ -39,7 +61,27 @@ The plugin is implemented using following files:
    capabilities]] below.
  - ~scripts/print.zeek~ :: Support script that prints communication in
    sequential manner in a way that can be easily cross-checked with other
-   tools (e.g., Wireshark).
+   tools (e.g., Wireshark).  This is how the initial output of analyzing
+   ~testing/Traces/first/iec104.pcap~ using this script looks like:
+   #+begin_example
+     1372918997.053303 10.20.102.1:46413 -> 10.20.100.108:2404, U TESTFR act
+     1372918997.053845 10.20.102.1:46413 <- 10.20.100.108:2404, U TESTFR con
+     1372918997.306461 10.20.102.1:46413 -> 10.20.100.108:2404, U STARTDT act
+     1372918997.307014 10.20.102.1:46413 <- 10.20.100.108:2404, U STARTDT con
+     1372918997.321659 10.20.102.1:46413 -> 10.20.100.108:2404, I ssn:0, rsn:0
+       ASDU Act OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.323589 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:0, rsn:0
+       ASDU Init OA=0 CA=10, M_EI_NA_1 obj_addr=0 COI=0 LPC=F
+     1372918997.331734 10.20.102.1:46413 -> 10.20.100.108:2404, I ssn:1, rsn:1
+       ASDU Act OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.333710 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:1, rsn:1
+       ASDU Actcon OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.333710 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:2, rsn:1
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=1 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=2 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=3 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=4 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+   #+end_example
  - ~scripts/seq.zeek~ :: APCI Send and Receive sequence number tracking.
 
 ** Supported information object types
