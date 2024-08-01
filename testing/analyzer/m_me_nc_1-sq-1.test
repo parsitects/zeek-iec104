@@ -12,10 +12,10 @@
                     ; iec104::AsduIOsq
 c7 15 00            ; base_addr=5575
 
-                    ; iec104::M_ME_NC_1_sq_io
+                    ; iec104::M_ME_NC_1_io
 20 b0 c6 40         ; r32=6.209
 00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
 
-                    ; iec104::M_ME_NC_1_sq_io
+                    ; iec104::M_ME_NC_1_io
 ac 1c da be         ; r32=-0.426
 00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
