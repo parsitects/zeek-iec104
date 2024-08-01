@@ -682,12 +682,17 @@ type C_BO_TA_1_io = unit {
     tt: CP56Time2a;
 };
 
-type M_EI_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_EI_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     : bitfield(8) {
         coi: 0..6;
         lpc: 7;
     };
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 # Theoretically C_RD_NA_1_io could be defined as follows:
@@ -1012,16 +1017,6 @@ type C_BO_TA_1_sq_io = unit(io: AsduIOsq) {
     on %done { self.obj_addr = io.next_addr++; }
 };
 
-type M_EI_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    : bitfield(8) {
-        coi: 0..6;
-        lpc: 7;
-    };
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
 # Same workaround for Spicy parser as for C_RD_NA_1_io above.
 type C_RD_NA_1_sq_io = unit(io: AsduIOsq, pn: uint8) {
     a: C_RD_NA_1_sq_io_a(io) if (pn == 0);
@@ -1180,7 +1175,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_sq_io(self)[id.nobj];
         TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_sq_io(self)[id.nobj];
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_sq_io(self)[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_sq_io(self, id.pn)[id.nobj];
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_sq_io(self)[id.nobj];
@@ -1229,7 +1224,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_io()[id.nobj];
         TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_io()[id.nobj];
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
-        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
+        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io(id.pn)[id.nobj];
         # XXX: id.nobj must be 1 for C_CS_NA_1?
@@ -1603,7 +1598,7 @@ public function C_BO_TA_1_rec(io: C_BO_TA_1_io):
 public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
     tuple<uint64, coi: uint8, lpc: bool>
 {
-    return (io.obj_addr, io.coi, io.lpc == 1);
+    return (io.oa, io.coi, io.lpc == 1);
 }
 
 public function C_RD_NA_1_rec_a(io: C_RD_NA_1_io_a):
@@ -1872,12 +1867,6 @@ public function C_BO_TA_1_sq_rec(io: C_BO_TA_1_sq_io):
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
     return (io.obj_addr, io.bsi, CP56Time2a_rec(io.tt));
-}
-
-public function M_EI_NA_1_sq_rec(io: M_EI_NA_1_sq_io):
-    tuple<uint64, coi: uint8, lpc: bool>
-{
-    return (io.obj_addr, io.coi, io.lpc == 1);
 }
 
 public function C_RD_NA_1_sq_rec_a(io: C_RD_NA_1_sq_io_a):
