@@ -608,9 +608,14 @@ type C_DC_NA_1_io = unit {
     dco: DCO;
 };
 
-type C_RC_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RC_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     rco: RCO;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type C_SE_NA_1_io = unit {
@@ -920,13 +925,6 @@ type C_DC_NA_1_sq_io = unit(io: AsduIOsq) {
     on %done { self.obj_addr = io.next_addr++; }
 };
 
-type C_RC_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    rco: RCO;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
 type C_SE_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
     nva: uint16;
@@ -1163,7 +1161,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_sq_io(self)[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_sq_io(self)[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_sq_io(self)[id.nobj];
         TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_sq_io(self)[id.nobj];
         TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_sq_io(self)[id.nobj];
@@ -1212,7 +1210,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
-        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io()[id.nobj];
+        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io()[id.nobj];
         TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io()[id.nobj];
         TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io()[id.nobj];
@@ -1519,7 +1517,7 @@ public function C_DC_NA_1_rec(io: C_DC_NA_1_io):
 public function C_RC_NA_1_rec(io: C_RC_NA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, RCO_rec(io.rco));
+    return (io.oa, RCO_rec(io.rco));
 }
 
 public function C_SE_NA_1_rec(io: C_SE_NA_1_io):
@@ -1788,12 +1786,6 @@ public function C_DC_NA_1_sq_rec(io: C_DC_NA_1_sq_io):
     tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
 {
     return (io.obj_addr, DCO_rec(io.dco));
-}
-
-public function C_RC_NA_1_sq_rec(io: C_RC_NA_1_sq_io):
-    tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
-{
-    return (io.obj_addr, RCO_rec(io.rco));
 }
 
 public function C_SE_NA_1_sq_rec(io: C_SE_NA_1_sq_io):

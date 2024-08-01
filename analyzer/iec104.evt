@@ -218,9 +218,6 @@ on iec104::C_SC_NA_1_sq_io ->
 on iec104::C_DC_NA_1_sq_io ->
     event iec104::c_dc_na_1($conn, $is_orig, iec104::C_DC_NA_1_sq_rec(self));
 
-on iec104::C_RC_NA_1_sq_io ->
-    event iec104::c_rc_na_1($conn, $is_orig, iec104::C_RC_NA_1_sq_rec(self));
-
 on iec104::C_SE_NA_1_sq_io ->
     event iec104::c_se_na_1($conn, $is_orig, iec104::C_SE_NA_1_sq_rec(self));
 
