@@ -27,9 +27,6 @@ on iec104::Raw ->
 on iec104::M_SP_NA_1_io ->
     event iec104::m_sp_na_1($conn, $is_orig, iec104::M_SP_NA_1_rec(self));
 
-on iec104::M_SP_NA_1_sq_io ->
-    event iec104::m_sp_na_1($conn, $is_orig, iec104::M_SP_NA_1_sq_rec(self));
-
 on iec104::M_SP_TA_1_io ->
     event iec104::m_sp_ta_1($conn, $is_orig, iec104::M_SP_TA_1_rec(self));
 
@@ -151,9 +148,6 @@ on iec104::C_RP_NA_1_io ->
     event iec104::c_rp_na_1($conn, $is_orig, iec104::C_RP_NA_1_rec(self));
 
 ################################################################################
-
-on iec104::M_SP_NA_1_sq_io ->
-    event iec104::m_sp_na_1($conn, $is_orig, iec104::M_SP_NA_1_sq_rec(self));
 
 on iec104::M_SP_TA_1_sq_io ->
     event iec104::m_sp_ta_1($conn, $is_orig, iec104::M_SP_TA_1_sq_rec(self));
