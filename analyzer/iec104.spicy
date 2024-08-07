@@ -523,14 +523,14 @@ type M_ME_TA_1_io = unit {
     tt: CP24Time2a;
 };
 
-type M_ME_NC_1_io = unit(io: optional<AsduIOsq>) {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!io);
+type M_ME_NC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qds: QDS;
 
     var oa: uint64;
     on %done {
-        self.oa = io ? (*io).next_addr++ : self.obj_addr;
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
     }
 };
 
@@ -1128,9 +1128,11 @@ type AsduIdent = unit {
     };
     originator_address: uint8;
     common_address: uint16;
+
+    var next_addr: uint64 = 0;
 };
 
-type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
+type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
     var start: iterator<stream>;
     on %init {
         self.start = self.input();
@@ -1138,8 +1140,10 @@ type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
 
     base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 
+    # FIXME: Remove this when we're done with refactoring.
     var next_addr: uint64 = 0;
     on base_addr {
+       id.next_addr = self.base_addr;
        self.next_addr = self.base_addr;
     }
 
@@ -1156,7 +1160,7 @@ type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_sq_io(self)[id.nobj];
         TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_sq_io(self)[id.nobj];
         TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(self)[id.nobj];
+        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(id)[id.nobj];
         TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_sq_io(self)[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_sq_io(self)[id.nobj];
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_sq_io(self)[id.nobj];
@@ -1209,7 +1213,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_io()[id.nobj];
         TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_io()[id.nobj];
         TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_io()[id.nobj];
-        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(Null)[id.nobj];
+        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(id)[id.nobj];
         TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_io()[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io()[id.nobj];
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io()[id.nobj];
