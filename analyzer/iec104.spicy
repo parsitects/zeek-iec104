@@ -1196,10 +1196,6 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
 };
 
 type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
-    var start: iterator<stream>;
-    on %init {
-        self.start = self.input();
-    }
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
