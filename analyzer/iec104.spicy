@@ -491,10 +491,15 @@ type M_DP_TA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
-type M_ST_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ST_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     vti: VTI;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type M_ST_TA_1_io = unit {
@@ -772,14 +777,6 @@ type C_RP_NA_1_io = unit {
 };
 
 ################################################################################
-
-type M_ST_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    vti: VTI;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
 
 type M_ST_TA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
@@ -1122,7 +1119,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
         TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io(id)[id.nobj];
         TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io(id)[id.nobj];
-        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_sq_io(self)[id.nobj];
+        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io(id)[id.nobj];
         TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_sq_io(self)[id.nobj];
         TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_sq_io(self)[id.nobj];
         TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_sq_io(self)[id.nobj];
@@ -1171,7 +1168,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
         TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io(id)[id.nobj];
         TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io(id)[id.nobj];
-        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io()[id.nobj];
+        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io(id)[id.nobj];
         TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_io()[id.nobj];
         TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_io()[id.nobj];
         TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_io()[id.nobj];
@@ -1351,7 +1348,7 @@ public function M_DP_TA_1_rec(io: M_DP_TA_1_io):
 public function M_ST_NA_1_rec(io: M_ST_NA_1_io):
     tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
+    return (io.oa, VTI_rec(io.vti), QDS_rec(io.qds));
 }
 
 public function M_ST_TA_1_rec(io: M_ST_TA_1_io):
@@ -1605,12 +1602,6 @@ public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
 }
 
 ################################################################################
-
-public function M_ST_NA_1_sq_rec(io: M_ST_NA_1_sq_io):
-    tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
-}
 
 public function M_ST_TA_1_sq_rec(io: M_ST_TA_1_sq_io):
     tuple<uint64,
