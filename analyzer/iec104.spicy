@@ -459,10 +459,15 @@ type M_SP_NA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
-type M_SP_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_SP_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     siq: SIQ;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type M_DP_NA_1_io = unit {
@@ -757,14 +762,6 @@ type C_RP_NA_1_io = unit {
 };
 
 ################################################################################
-
-type M_SP_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    siq: SIQ;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
 
 type M_DP_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
@@ -1127,7 +1124,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
 
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io(id)[id.nobj];
-        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_sq_io(self)[id.nobj];
+        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
         TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_sq_io(self)[id.nobj];
         TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_sq_io(self)[id.nobj];
         TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_sq_io(self)[id.nobj];
@@ -1176,7 +1173,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
 type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io(id)[id.nobj];
-        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
+        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
         TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io()[id.nobj];
         TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io()[id.nobj];
         TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io()[id.nobj];
@@ -1339,7 +1336,7 @@ public function M_SP_TA_1_rec(io: M_SP_TA_1_io):
           tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv:bool>>
 {
-    return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
+    return (io.oa, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
 }
 
 public function M_DP_NA_1_rec(io: M_DP_NA_1_io):
@@ -1613,14 +1610,6 @@ public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
 }
 
 ################################################################################
-
-public function M_SP_TA_1_sq_rec(io: M_SP_TA_1_sq_io):
-    tuple<uint64,
-          tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
-}
 
 public function M_DP_NA_1_sq_rec(io: M_DP_NA_1_sq_io):
     tuple<uint64, tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>>
