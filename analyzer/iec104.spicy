@@ -652,11 +652,16 @@ type M_BO_TB_1_io = unit(inout id: AsduIdent) {
     }
 };
 
-type M_ME_TD_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TD_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type M_ME_TE_1_io = unit {
@@ -832,15 +837,6 @@ type C_RP_NA_1_io = unit {
 };
 
 ################################################################################
-
-type M_ME_TD_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
 
 type M_ME_TE_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
@@ -1093,7 +1089,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io(id)[id.nobj];
         TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io(id)[id.nobj];
         TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io(id)[id.nobj];
-        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_sq_io(self)[id.nobj];
+        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io(id)[id.nobj];
         TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_sq_io(self)[id.nobj];
         TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_sq_io(self)[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_sq_io(self)[id.nobj];
@@ -1142,7 +1138,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io(id)[id.nobj];
         TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io(id)[id.nobj];
         TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io(id)[id.nobj];
-        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io()[id.nobj];
+        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io(id)[id.nobj];
         TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_io()[id.nobj];
         TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io()[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
@@ -1414,7 +1410,7 @@ public function M_ME_TD_1_rec(io: M_ME_TD_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_ME_TE_1_rec(io: M_ME_TE_1_io):
@@ -1562,14 +1558,6 @@ public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
 }
 
 ################################################################################
-
-public function M_ME_TD_1_sq_rec(io: M_ME_TD_1_sq_io):
-    tuple<uint64, nva: uint16,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
 
 public function M_ME_TE_1_sq_rec(io: M_ME_TE_1_sq_io):
     tuple<uint64, sva: uint16,
