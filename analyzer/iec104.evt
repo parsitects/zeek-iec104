@@ -149,9 +149,6 @@ on iec104::C_RP_NA_1_io ->
 
 ################################################################################
 
-on iec104::M_BO_TA_1_sq_io ->
-    event iec104::m_bo_ta_1($conn, $is_orig, iec104::M_BO_TA_1_sq_rec(self));
-
 on iec104::M_ME_NA_1_sq_io ->
     event iec104::m_me_na_1($conn, $is_orig, iec104::M_ME_NA_1_sq_rec(self));
 
