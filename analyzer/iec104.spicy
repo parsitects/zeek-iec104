@@ -745,10 +745,15 @@ type C_SE_NB_1_io = unit(inout id: AsduIdent) {
     }
 };
 
-type C_SE_NC_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_NC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qos: QOS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type C_BO_NA_1_io = unit {
@@ -871,14 +876,6 @@ type C_RP_NA_1_io = unit {
 type C_IC_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
     qoi: uint8;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_NC_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qos: QOS;
 
     on %done { self.obj_addr = io.next_addr++; }
 };
@@ -1079,7 +1076,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io(id)[id.nobj];
-        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_sq_io(self)[id.nobj];
+        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io(id)[id.nobj];
         TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_sq_io(self)[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_sq_io(self)[id.nobj];
         TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_sq_io(self)[id.nobj];
@@ -1128,7 +1125,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io(id)[id.nobj];
         TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io(id)[id.nobj];
-        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io()[id.nobj];
+        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io(id)[id.nobj];
         TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_io()[id.nobj];
         TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
         TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
@@ -1450,7 +1447,7 @@ public function C_SE_NB_1_rec(io: C_SE_NB_1_io):
 public function C_SE_NC_1_rec(io: C_SE_NC_1_io):
     tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.r32, QOS_rec(io.qos));
+    return (io.oa, io.r32, QOS_rec(io.qos));
 }
 
 public function C_BO_NA_1_rec(io: C_BO_NA_1_io):
@@ -1545,12 +1542,6 @@ public function C_IC_NA_1_sq_rec(io: C_IC_NA_1_sq_io):
     tuple<uint64, uint8>
 {
     return (io.obj_addr, io.qoi);
-}
-
-public function C_SE_NC_1_sq_rec(io: C_SE_NC_1_sq_io):
-    tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
-{
-    return (io.obj_addr, io.r32, QOS_rec(io.qos));
 }
 
 public function C_BO_NA_1_sq_rec(io: C_BO_NA_1_sq_io):
