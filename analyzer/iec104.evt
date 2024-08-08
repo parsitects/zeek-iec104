@@ -152,8 +152,5 @@ on iec104::C_RP_NA_1_io ->
 on iec104::C_IC_NA_1_sq_io ->
     event iec104::c_ic_na_1($conn, $is_orig, iec104::C_IC_NA_1_sq_rec(self));
 
-on iec104::C_BO_TA_1_sq_io ->
-    event iec104::c_bo_ta_1($conn, $is_orig, iec104::C_BO_TA_1_sq_rec(self));
-
 on iec104::C_RP_NA_1_sq_io ->
     event iec104::c_rp_na_1($conn, $is_orig, iec104::C_RP_NA_1_sq_rec(self));
