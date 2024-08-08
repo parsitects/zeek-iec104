@@ -905,9 +905,14 @@ type C_CS_NA_1_io = unit {
     tt: CP56Time2a;
 };
 
-type C_RP_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RP_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     qrp: uint8;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 ################################################################################
@@ -915,13 +920,6 @@ type C_RP_NA_1_io = unit {
 type C_IC_NA_1_sq_io = unit(io: AsduIOsq) {
     var obj_addr: uint64;
     qoi: uint8;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_RP_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    qrp: uint8;
 
     on %done { self.obj_addr = io.next_addr++; }
 };
@@ -1061,7 +1059,7 @@ type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_sq_io(self)[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
-        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_sq_io(self)[id.nobj];
+        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
         # XXX: We should not have parsed `base_addr' if we don't know
         # the TypeID.
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
@@ -1112,7 +1110,7 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
         # XXX: id.nobj must be 1 for C_CS_NA_1?
         TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj];
-        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
+        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10);
     };
 };
@@ -1506,7 +1504,7 @@ public function C_CS_NA_1_rec(io: C_CS_NA_1_io):
 public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
     tuple<uint64, qrp: uint8>
 {
-    return (io.obj_addr, io.qrp);
+    return (io.oa, io.qrp);
 }
 
 ################################################################################
@@ -1515,10 +1513,4 @@ public function C_IC_NA_1_sq_rec(io: C_IC_NA_1_sq_io):
     tuple<uint64, uint8>
 {
     return (io.obj_addr, io.qoi);
-}
-
-public function C_RP_NA_1_sq_rec(io: C_RP_NA_1_sq_io):
-    tuple<uint64, qrp: uint8>
-{
-    return (io.obj_addr, io.qrp);
 }
