@@ -922,6 +922,40 @@ type C_RP_NA_1_io = unit(inout id: AsduIdent) {
 
 ################################################################################
 
+
+public type Apdus = unit {
+    %port = 2404/tcp &originator;
+    : (Apdu &synchronize)[];
+};
+
+public type Apdu = unit {
+    : int8(0x68);
+    len: uint8 {
+        if ($$ < 4) reject;
+    }
+    ctrl: Ctrl(self);
+
+    # TODO: Check that the size of information object is (len - 4).
+    : Asdu(self) if (Format::I == self.format);
+
+    var format: Format;
+
+    on %done { spicy::accept_input(); }
+};
+
+type Ctrl = unit(apdu: Apdu) {
+    xx: uint32 { self.set_input(self.start); }
+
+    i: Ctrl_i(apdu) if (4 < apdu.len);
+    s: Ctrl_s(apdu) if (4 == apdu.len && 1 == self.xx & 0x03);
+    u: Ctrl_u(apdu) if (4 == apdu.len && 3 == self.xx & 0x03);
+
+    var start: iterator<stream>;
+    on %init {
+        self.start = self.input();
+    }
+};
+
 public type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
       tag: 0 = 0;
@@ -961,27 +995,9 @@ public type Ctrl_u = unit(inout apdu: Apdu) {
     }
 };
 
-type Ctrl = unit(apdu: Apdu) {
-    xx: uint32 { self.set_input(self.start); }
-
-    i: Ctrl_i(apdu) if (4 < apdu.len);
-    s: Ctrl_s(apdu) if (4 == apdu.len && 1 == self.xx & 0x03);
-    u: Ctrl_u(apdu) if (4 == apdu.len && 3 == self.xx & 0x03);
-
-    var start: iterator<stream>;
-    on %init {
-        self.start = self.input();
-    }
-};
-
-type Raw = unit(tid: TypeID, nbytes: uint8) {
-    data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
-
-    on %init {
-        self.type_id = tid;
-    }
-
-    var type_id: TypeID = tid;
+type Asdu = unit(apdu: Apdu) {
+    id: AsduIdent;
+    ios: AsduIOs(apdu, self.id);
 };
 
 type AsduIdent = unit {
@@ -1001,70 +1017,18 @@ type AsduIdent = unit {
     var next_addr: uint64 = 0;
 };
 
-type AsduIOsq = unit(apdu: Apdu, inout id: AsduIdent) {
+type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
     var start: iterator<stream>;
     on %init {
         self.start = self.input();
     }
 
-    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (id.sq);
 
-    # FIXME: Remove this when we're done with refactoring.
-    var next_addr: uint64 = 0;
     on base_addr {
        id.next_addr = self.base_addr;
-       self.next_addr = self.base_addr;
     }
 
-    switch (id.type_id) {
-        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io(id)[id.nobj];
-        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
-        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io(id)[id.nobj];
-        TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io(id)[id.nobj];
-        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io(id)[id.nobj];
-        TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_io(id)[id.nobj];
-        TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_io(id)[id.nobj];
-        TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_io(id)[id.nobj];
-        TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_io(id)[id.nobj];
-        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_io(id)[id.nobj];
-        TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_io(id)[id.nobj];
-        TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_io(id)[id.nobj];
-        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(id)[id.nobj];
-        TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_io(id)[id.nobj];
-        TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io(id)[id.nobj];
-        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io(id)[id.nobj];
-        TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io(id)[id.nobj];
-        TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io(id)[id.nobj];
-        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io(id)[id.nobj];
-        TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_io(id)[id.nobj];
-        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io(id)[id.nobj];
-        TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io(id)[id.nobj];
-        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io(id)[id.nobj];
-        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
-        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io(id)[id.nobj];
-        TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io(id)[id.nobj];
-        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io(id)[id.nobj];
-        TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_io(id)[id.nobj];
-        TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io(id)[id.nobj];
-        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io(id)[id.nobj];
-        TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io(id)[id.nobj];
-        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_io(id)[id.nobj];
-        TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_io(id)[id.nobj];
-        TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_io(id)[id.nobj];
-        TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io(id)[id.nobj];
-        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
-        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io(id)[id.nobj];
-        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
-        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
-        # XXX: We should not have parsed `base_addr' if we don't know
-        # the TypeID.
-        * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
-            self.set_input(self.start + (apdu.len - 10));
-        }
-    };
-};
-
-type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
     switch (id.type_id) {
         TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io(id)[id.nobj];
         TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
@@ -1105,36 +1069,22 @@ type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io(id)[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
         # XXX: id.nobj must be 1 for C_CS_NA_1?
-        TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj];
+        TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj] if (!id.sq);
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
-        * -> raw: Raw(id.type_id, apdu.len - 10);
+        * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
+            self.set_input(self.start + (apdu.len - 10));
+        }
     };
 };
 
-type Asdu = unit(apdu: Apdu) {
-    id: AsduIdent;
-    ios: AsduIOs(apdu, self.id) if (self.id.sq == 0);
-    iosq: AsduIOsq(apdu, self.id) if (self.id.sq == 1);
-};
+type Raw = unit(tid: TypeID, nbytes: uint8) {
+    data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
 
-public type Apdus = unit {
-    %port = 2404/tcp &originator;
-    : (Apdu &synchronize)[];
-};
-
-public type Apdu = unit {
-    : int8(0x68);
-    len: uint8 {
-        if ($$ < 4) reject;
+    on %init {
+        self.type_id = tid;
     }
-    ctrl: Ctrl(self);
 
-    # TODO: Check that the size of information object is (len - 4).
-    : Asdu(self) if (Format::I == self.format);
-
-    var format: Format;
-
-    on %done { spicy::accept_input(); }
+    var type_id: TypeID = tid;
 };
 
 ################################################################################

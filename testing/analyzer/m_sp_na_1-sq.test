@@ -8,7 +8,7 @@
 00                  ; originator_address=0
 90 01               ; common_address=400
 
-                    ; iec104::AsduIOsq
+                    ; iec104::AsduIOs
 e9 03 00            ; base_addr=1001
 
                     ; iec104::M_SP_NA_1_io

@@ -10,7 +10,7 @@ d2                  ; nobj=82 sq=1
 00                  ; originator_address=0
 90 01               ; common_address=400
 
-                    ; iec104::AsduIOsq
+                    ; iec104::AsduIOs
 e7 04 00            ; base_addr=1255
 
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
@@ -106,7 +106,7 @@ e7 04 00            ; base_addr=1255
 00                  ; originator_address=0
 90 01               ; common_address=400
 
-                    ; iec104::AsduIOsq
+                    ; iec104::AsduIOs
 a1 0f 00            ; base_addr=4001
 
 02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
