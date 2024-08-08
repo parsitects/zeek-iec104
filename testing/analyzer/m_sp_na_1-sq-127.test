@@ -8,260 +8,260 @@ ff                  ; nobj=127 sq=1
 00                  ; originator_address=0
 90 01               ; common_address=400
 
-                    ; iec104::AsduIOsq
+                    ; iec104::AsduIOs
 e9 03 00            ; base_addr=1001
 
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
-                    ; iec104::M_SP_NA_1_sq_io
+                    ; iec104::M_SP_NA_1_io
 00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0

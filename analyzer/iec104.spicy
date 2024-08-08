@@ -449,245 +449,430 @@ type CP56Time2a = unit {
 
 ################################################################################
 
-type M_SP_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_SP_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     siq: SIQ;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_SP_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_SP_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     siq: SIQ;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_DP_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_DP_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     diq: DIQ;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_DP_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_DP_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     diq: DIQ;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ST_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ST_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     vti: VTI;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ST_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ST_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     vti: VTI;
     qds: QDS;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_BO_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_BO_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_BO_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_BO_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_NB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_NB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sva: uint16;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sva: uint16;
     qds: QDS;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qds: QDS;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_NC_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_NC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qds: QDS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TC_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qds: QDS;
     tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_SP_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_SP_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     siq: SIQ;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_DP_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_DP_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     diq: DIQ;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ST_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ST_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     vti: VTI;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_BO_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_BO_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TD_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TD_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TE_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TE_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sva: uint16;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_ME_TF_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_ME_TF_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qds: QDS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_IC_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
-    qoi: uint8;
-};
-
-type C_SC_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SC_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sco: SCO;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_DC_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_DC_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     dco: DCO;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_RC_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RC_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     rco: RCO;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SE_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qos: QOS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SE_NB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_NB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sva: uint16;
     qos: QOS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SE_NC_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_NC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qos: QOS;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_BO_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_BO_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     bsi: uint32 &byte-order=spicy::ByteOrder::Big;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SC_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SC_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sco: SCO;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_DC_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_DC_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     dco: DCO;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_RC_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RC_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     rco: RCO;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SE_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     nva: uint16;
     qos: QOS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_SE_TB_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sva: uint16;
     qos: QOS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-
-type C_SE_TC_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_SE_TC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     r32: real &type=spicy::RealType::IEEE754_Single;
     qos: QOS;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type C_BO_TA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_BO_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     bsi: uint32 &byte-order=spicy::ByteOrder::Big;
     tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-type M_EI_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type M_EI_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     : bitfield(8) {
         coi: 0..6;
         lpc: 7;
     };
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
-# Theoretically C_RD_NA_1_io could be defined as follows:
+type C_IC_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    qoi: uint8;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
+# Theoretically C_RD_NA_1_io could be defined as follows (ignoring the
+# SEQ stuff):
 #
 #     type C_RD_NA_1_io = unit(pn: uint8) {
 #         obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
 #         raw_data: uint8 if (pn == 0);
 #     };
 #
-# But this does not work in the case when raw_data filed must not be
+# But this does not work in the case when raw_data field must not be
 # parsed (pn == 1 case).  This seems to be because the generated
 # parser seems to be checking for end of input before proceeding to
 # the next field, even if it turns out the field condition fails and
@@ -697,14 +882,22 @@ type M_EI_NA_1_io = unit {
 # The solution implemented here is removing the condition by
 # open-coding both condition branches.  This also means that the event
 # file has two entries for this one unit.
-type C_RD_NA_1_io = unit(pn: uint8) {
-    a: C_RD_NA_1_io_a if (pn == 0);
-    b: C_RD_NA_1_io_b if (pn == 1);
+#
+# Sequence of C_RD_NA_1 records only makes sense in the presence of
+# raw_data field.
+type C_RD_NA_1_xx = unit(inout id: AsduIdent) {
+    a: C_RD_NA_1_io_a(id) if (id.pn == 0);
+    b: C_RD_NA_1_io_b if (id.pn == 1);
 };
 
-type C_RD_NA_1_io_a = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RD_NA_1_io_a = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     raw_data: uint8;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 type C_RD_NA_1_io_b = unit {
@@ -717,344 +910,51 @@ type C_CS_NA_1_io = unit {
     tt: CP56Time2a;
 };
 
-type C_RP_NA_1_io = unit {
-    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+type C_RP_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     qrp: uint8;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
 };
 
 ################################################################################
 
-type M_SP_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    siq: SIQ;
 
-    on %done { self.obj_addr = io.next_addr++; }
+public type Apdus = unit {
+    %port = 2404/tcp &originator;
+    : (Apdu &synchronize)[];
 };
 
-type M_SP_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    siq: SIQ;
-    tt: CP24Time2a;
+public type Apdu = unit {
+    : int8(0x68);
+    len: uint8 {
+        if ($$ < 4) reject;
+    }
+    ctrl: Ctrl(self);
 
-    on %done { self.obj_addr = io.next_addr++; }
+    # TODO: Check that the size of information object is (len - 4).
+    : Asdu(self) if (Format::I == self.format);
+
+    var format: Format;
+
+    on %done { spicy::accept_input(); }
 };
 
-type M_DP_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    diq: DIQ;
+type Ctrl = unit(apdu: Apdu) {
+    xx: uint32 { self.set_input(self.start); }
 
-    on %done { self.obj_addr = io.next_addr++; }
+    i: Ctrl_i(apdu) if (4 < apdu.len);
+    s: Ctrl_s(apdu) if (4 == apdu.len && 1 == self.xx & 0x03);
+    u: Ctrl_u(apdu) if (4 == apdu.len && 3 == self.xx & 0x03);
+
+    var start: iterator<stream>;
+    on %init {
+        self.start = self.input();
+    }
 };
-
-type M_DP_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    diq: DIQ;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ST_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    vti: VTI;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ST_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    vti: VTI;
-    qds: QDS;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_BO_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_BO_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
-    qds: QDS;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_NB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sva: uint16;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sva: uint16;
-    qds: QDS;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qds: QDS;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_NC_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qds: QDS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TC_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qds: QDS;
-    tt: CP24Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_SP_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    siq: SIQ;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_DP_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    diq: DIQ;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ST_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    vti: VTI;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_BO_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TD_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TE_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sva: uint16;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_ME_TF_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qds: QDS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_IC_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    qoi: uint8;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SC_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sco: SCO;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_DC_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    dco: DCO;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_RC_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    rco: RCO;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qos: QOS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_NB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sva: uint16;
-    qos: QOS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_NC_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qos: QOS;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_BO_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SC_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sco: SCO;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_DC_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    dco: DCO;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_RC_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    rco: RCO;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    nva: uint16;
-    qos: QOS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_TB_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    sva: uint16;
-    qos: QOS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_SE_TC_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    r32: real &type=spicy::RealType::IEEE754_Single;
-    qos: QOS;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_BO_TA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    bsi: uint32 &byte-order=spicy::ByteOrder::Big;
-    tt: CP56Time2a;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type M_EI_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    : bitfield(8) {
-        coi: 0..6;
-        lpc: 7;
-    };
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-# Same workaround for Spicy parser as for C_RD_NA_1_io above.
-type C_RD_NA_1_sq_io = unit(io: AsduIOsq, pn: uint8) {
-    a: C_RD_NA_1_sq_io_a(io) if (pn == 0);
-    b: C_RD_NA_1_sq_io_b(io) if (pn == 1);
-};
-
-type C_RD_NA_1_sq_io_a = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    raw_data: uint8;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_RD_NA_1_sq_io_b = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-type C_RP_NA_1_sq_io = unit(io: AsduIOsq) {
-    var obj_addr: uint64;
-    qrp: uint8;
-
-    on %done { self.obj_addr = io.next_addr++; }
-};
-
-################################################################################
 
 public type Ctrl_i = unit(inout apdu: Apdu) {
     : bitfield(32) {
@@ -1095,27 +995,9 @@ public type Ctrl_u = unit(inout apdu: Apdu) {
     }
 };
 
-type Ctrl = unit(apdu: Apdu) {
-    xx: uint32 { self.set_input(self.start); }
-
-    i: Ctrl_i(apdu) if (4 < apdu.len);
-    s: Ctrl_s(apdu) if (4 == apdu.len && 1 == self.xx & 0x03);
-    u: Ctrl_u(apdu) if (4 == apdu.len && 3 == self.xx & 0x03);
-
-    var start: iterator<stream>;
-    on %init {
-        self.start = self.input();
-    }
-};
-
-type Raw = unit(tid: TypeID, nbytes: uint8) {
-    data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
-
-    on %init {
-        self.type_id = tid;
-    }
-
-    var type_id: TypeID = tid;
+type Asdu = unit(apdu: Apdu) {
+    id: AsduIdent;
+    ios: AsduIOs(apdu, self.id);
 };
 
 type AsduIdent = unit {
@@ -1131,144 +1013,78 @@ type AsduIdent = unit {
     };
     originator_address: uint8;
     common_address: uint16;
+
+    var next_addr: uint64 = 0;
 };
 
-type AsduIOsq = unit(apdu: Apdu, id: AsduIdent) {
+type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
     var start: iterator<stream>;
     on %init {
         self.start = self.input();
     }
 
-    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little);
+    base_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (id.sq);
 
-    var next_addr: uint64 = 0;
     on base_addr {
-       self.next_addr = self.base_addr;
+       id.next_addr = self.base_addr;
     }
 
     switch (id.type_id) {
-        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_sq_io(self)[id.nobj];
-        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_sq_io(self)[id.nobj];
-        TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_sq_io(self)[id.nobj];
-        TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_sq_io(self)[id.nobj];
-        TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_sq_io(self)[id.nobj];
-        TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_sq_io(self)[id.nobj];
-        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_sq_io(self)[id.nobj];
-        TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_sq_io(self)[id.nobj];
-        TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_sq_io(self)[id.nobj];
-        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_sq_io(self)[id.nobj];
-        TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_sq_io(self)[id.nobj];
-        TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_sq_io(self)[id.nobj];
-        TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_sq_io(self)[id.nobj];
-        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_sq_io(self)[id.nobj];
-        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_sq_io(self, id.pn)[id.nobj];
-        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_sq_io(self)[id.nobj];
-        # XXX: We should not have parsed `base_addr' if we don't know
-        # the TypeID.
+        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io(id)[id.nobj];
+        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io(id)[id.nobj];
+        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io(id)[id.nobj];
+        TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io(id)[id.nobj];
+        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io(id)[id.nobj];
+        TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_io(id)[id.nobj];
+        TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_io(id)[id.nobj];
+        TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_io(id)[id.nobj];
+        TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_io(id)[id.nobj];
+        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_io(id)[id.nobj];
+        TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_io(id)[id.nobj];
+        TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_io(id)[id.nobj];
+        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io(id)[id.nobj];
+        TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_io(id)[id.nobj];
+        TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io(id)[id.nobj];
+        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io(id)[id.nobj];
+        TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io(id)[id.nobj];
+        TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io(id)[id.nobj];
+        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io(id)[id.nobj];
+        TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_io(id)[id.nobj];
+        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io(id)[id.nobj];
+        TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io(id)[id.nobj];
+        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io(id)[id.nobj];
+        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
+        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io(id)[id.nobj];
+        TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io(id)[id.nobj];
+        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io(id)[id.nobj];
+        TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_io(id)[id.nobj];
+        TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io(id)[id.nobj];
+        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io(id)[id.nobj];
+        TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io(id)[id.nobj];
+        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_io(id)[id.nobj];
+        TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_io(id)[id.nobj];
+        TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_io(id)[id.nobj];
+        TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io(id)[id.nobj];
+        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
+        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io(id)[id.nobj];
+        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
+        # XXX: id.nobj must be 1 for C_CS_NA_1?
+        TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj] if (!id.sq);
+        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
             self.set_input(self.start + (apdu.len - 10));
         }
     };
 };
 
-type AsduIOs = unit(apdu: Apdu, id: AsduIdent) {
-    var start: iterator<stream>;
+type Raw = unit(tid: TypeID, nbytes: uint8) {
+    data: bytes &size=(nbytes) &convert=spicy::bytes_to_hexstring($$);
+
     on %init {
-        self.start = self.input();
+        self.type_id = tid;
     }
-    switch (id.type_id) {
-        TypeID::M_SP_NA_1 -> m_sp_na_1: M_SP_NA_1_io()[id.nobj];
-        TypeID::M_SP_TA_1 -> m_sp_ta_1: M_SP_TA_1_io()[id.nobj];
-        TypeID::M_DP_NA_1 -> m_dp_na_1: M_DP_NA_1_io()[id.nobj];
-        TypeID::M_DP_TA_1 -> m_dp_ta_1: M_DP_TA_1_io()[id.nobj];
-        TypeID::M_ST_NA_1 -> m_st_na_1: M_ST_NA_1_io()[id.nobj];
-        TypeID::M_ST_TA_1 -> m_st_ta_1: M_ST_TA_1_io()[id.nobj];
-        TypeID::M_BO_NA_1 -> m_bo_na_1: M_BO_NA_1_io()[id.nobj];
-        TypeID::M_BO_TA_1 -> m_bo_ta_1: M_BO_TA_1_io()[id.nobj];
-        TypeID::M_ME_NA_1 -> m_me_na_1: M_ME_NA_1_io()[id.nobj];
-        TypeID::M_ME_TA_1 -> m_me_ta_1: M_ME_TA_1_io()[id.nobj];
-        TypeID::M_ME_NB_1 -> m_me_nb_1: M_ME_NB_1_io()[id.nobj];
-        TypeID::M_ME_TB_1 -> m_me_tb_1: M_ME_TB_1_io()[id.nobj];
-        TypeID::M_ME_NC_1 -> m_me_nc_1: M_ME_NC_1_io()[id.nobj];
-        TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_io()[id.nobj];
-        TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io()[id.nobj];
-        TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io()[id.nobj];
-        TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io()[id.nobj];
-        TypeID::M_BO_TB_1 -> m_bo_tb_1: M_BO_TB_1_io()[id.nobj];
-        TypeID::M_ME_TD_1 -> m_me_td_1: M_ME_TD_1_io()[id.nobj];
-        TypeID::M_ME_TE_1 -> m_me_te_1: M_ME_TE_1_io()[id.nobj];
-        TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io()[id.nobj];
-        TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io()[id.nobj];
-        TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io()[id.nobj];
-        TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io()[id.nobj];
-        TypeID::C_SE_NA_1 -> c_se_na_1: C_SE_NA_1_io()[id.nobj];
-        TypeID::C_SE_NB_1 -> c_se_nb_1: C_SE_NB_1_io()[id.nobj];
-        TypeID::C_SE_NC_1 -> c_se_nc_1: C_SE_NC_1_io()[id.nobj];
-        TypeID::C_BO_NA_1 -> c_bo_na_1: C_BO_NA_1_io()[id.nobj];
-        TypeID::C_SC_TA_1 -> c_sc_ta_1: C_SC_TA_1_io()[id.nobj];
-        TypeID::C_DC_TA_1 -> c_dc_ta_1: C_DC_TA_1_io()[id.nobj];
-        TypeID::C_RC_TA_1 -> c_rc_ta_1: C_RC_TA_1_io()[id.nobj];
-        TypeID::C_SE_TA_1 -> c_se_ta_1: C_SE_TA_1_io()[id.nobj];
-        TypeID::C_SE_TB_1 -> c_se_tb_1: C_SE_TB_1_io()[id.nobj];
-        TypeID::C_SE_TC_1 -> c_se_tc_1: C_SE_TC_1_io()[id.nobj];
-        TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io()[id.nobj];
-        TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io()[id.nobj];
-        TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io()[id.nobj];
-        TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_io(id.pn)[id.nobj];
-        # XXX: id.nobj must be 1 for C_CS_NA_1?
-        TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj];
-        TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io()[id.nobj];
-        * -> raw: Raw(id.type_id, apdu.len - 10);
-    };
-};
 
-type Asdu = unit(apdu: Apdu) {
-    id: AsduIdent;
-    ios: AsduIOs(apdu, self.id) if (self.id.sq == 0);
-    iosq: AsduIOsq(apdu, self.id) if (self.id.sq == 1);
-};
-
-public type Apdus = unit {
-    %port = 2404/tcp &originator;
-    : (Apdu &synchronize)[];
-};
-
-public type Apdu = unit {
-    : int8(0x68);
-    len: uint8 {
-        if ($$ < 4) reject;
-    }
-    ctrl: Ctrl(self);
-
-    # TODO: Check that the size of information object is (len - 4).
-    : Asdu(self) if (Format::I == self.format);
-
-    var format: Format;
-
-    on %done { spicy::accept_input(); }
+    var type_id: TypeID = tid;
 };
 
 ################################################################################
@@ -1356,7 +1172,7 @@ public function AsduIdent_rec(id: AsduIdent):
 public function M_SP_NA_1_rec(io: M_SP_NA_1_io):
     tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, SIQ_rec(io.siq));
+    return (io.oa, SIQ_rec(io.siq));
 }
 
 public function M_SP_TA_1_rec(io: M_SP_TA_1_io):
@@ -1364,13 +1180,13 @@ public function M_SP_TA_1_rec(io: M_SP_TA_1_io):
           tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv:bool>>
 {
-    return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
+    return (io.oa, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
 }
 
 public function M_DP_NA_1_rec(io: M_DP_NA_1_io):
     tuple<uint64, tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, DIQ_rec(io.diq));
+    return (io.oa, DIQ_rec(io.diq));
 }
 
 public function M_DP_TA_1_rec(io: M_DP_TA_1_io):
@@ -1378,13 +1194,13 @@ public function M_DP_TA_1_rec(io: M_DP_TA_1_io):
           tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, DIQ_rec(io.diq), CP24Time2a_rec(io.tt));
+    return (io.oa, DIQ_rec(io.diq), CP24Time2a_rec(io.tt));
 }
 
 public function M_ST_NA_1_rec(io: M_ST_NA_1_io):
     tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
+    return (io.oa, VTI_rec(io.vti), QDS_rec(io.qds));
 }
 
 public function M_ST_TA_1_rec(io: M_ST_TA_1_io):
@@ -1393,13 +1209,13 @@ public function M_ST_TA_1_rec(io: M_ST_TA_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.oa, VTI_rec(io.vti), QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_BO_NA_1_rec(io: M_BO_NA_1_io):
     tuple<uint64, bsi: uint32, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds));
+    return (io.oa, io.bsi, QDS_rec(io.qds));
 }
 
 public function M_BO_TA_1_rec(io: M_BO_TA_1_io):
@@ -1407,19 +1223,19 @@ public function M_BO_TA_1_rec(io: M_BO_TA_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.oa, io.bsi, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_ME_NA_1_rec(io: M_ME_NA_1_io):
     tuple<uint64, nva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.nva, QDS_rec(io.qds));
+    return (io.oa, io.nva, QDS_rec(io.qds));
 }
 
 public function M_ME_NB_1_rec(io: M_ME_NB_1_io):
     tuple<uint64, sva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.sva, QDS_rec(io.qds));
+    return (io.oa, io.sva, QDS_rec(io.qds));
 }
 
 public function M_ME_TB_1_rec(io: M_ME_TB_1_io):
@@ -1427,7 +1243,7 @@ public function M_ME_TB_1_rec(io: M_ME_TB_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.oa, io.sva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_ME_TA_1_rec(io: M_ME_TA_1_io):
@@ -1435,13 +1251,13 @@ public function M_ME_TA_1_rec(io: M_ME_TA_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.oa, io.nva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_ME_NC_1_rec(io: M_ME_NC_1_io):
     tuple<uint64, r32: real, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
-    return (io.obj_addr, io.r32, QDS_rec(io.qds));
+    return (io.oa, io.r32, QDS_rec(io.qds));
 }
 
 public function M_ME_TC_1_rec(io: M_ME_TC_1_io):
@@ -1449,7 +1265,7 @@ public function M_ME_TC_1_rec(io: M_ME_TC_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
-    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
+    return (io.oa, io.r32, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
 }
 
 public function M_SP_TB_1_rec(io: M_SP_TB_1_io):
@@ -1457,7 +1273,7 @@ public function M_SP_TB_1_rec(io: M_SP_TB_1_io):
           tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, SIQ_rec(io.siq), CP56Time2a_rec(io.tt));
+    return (io.oa, SIQ_rec(io.siq), CP56Time2a_rec(io.tt));
 }
 
 public function M_DP_TB_1_rec(io: M_DP_TB_1_io):
@@ -1465,7 +1281,7 @@ public function M_DP_TB_1_rec(io: M_DP_TB_1_io):
           tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, DIQ_rec(io.diq), CP56Time2a_rec(io.tt));
+    return (io.oa, DIQ_rec(io.diq), CP56Time2a_rec(io.tt));
 }
 
 public function M_ST_TB_1_rec(io: M_ST_TB_1_io):
@@ -1474,7 +1290,7 @@ public function M_ST_TB_1_rec(io: M_ST_TB_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, VTI_rec(io.vti), QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_BO_TB_1_rec(io: M_BO_TB_1_io):
@@ -1482,7 +1298,7 @@ public function M_BO_TB_1_rec(io: M_BO_TB_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, io.bsi, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_ME_TD_1_rec(io: M_ME_TD_1_io):
@@ -1490,7 +1306,7 @@ public function M_ME_TD_1_rec(io: M_ME_TD_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_ME_TE_1_rec(io: M_ME_TE_1_io):
@@ -1498,7 +1314,7 @@ public function M_ME_TE_1_rec(io: M_ME_TE_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, io.sva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function M_ME_TF_1_rec(io: M_ME_TF_1_io):
@@ -1506,116 +1322,116 @@ public function M_ME_TF_1_rec(io: M_ME_TF_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
+    return (io.oa, io.r32, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
 }
 
 public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
     tuple<uint64, uint8>
 {
-    return (io.obj_addr, io.qoi);
+    return (io.oa, io.qoi);
 }
 
 public function C_SC_NA_1_rec(io: C_SC_NA_1_io):
     tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, SCO_rec(io.sco));
+    return (io.oa, SCO_rec(io.sco));
 }
 
 public function C_DC_NA_1_rec(io: C_DC_NA_1_io):
     tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, DCO_rec(io.dco));
+    return (io.oa, DCO_rec(io.dco));
 }
 
 public function C_RC_NA_1_rec(io: C_RC_NA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
 {
-    return (io.obj_addr, RCO_rec(io.rco));
+    return (io.oa, RCO_rec(io.rco));
 }
 
 public function C_SE_NA_1_rec(io: C_SE_NA_1_io):
     tuple<uint64, nva: uint16, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.nva, QOS_rec(io.qos));
+    return (io.oa, io.nva, QOS_rec(io.qos));
 }
 
 public function C_SE_NB_1_rec(io: C_SE_NB_1_io):
     tuple<uint64, sva: uint16, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.sva, QOS_rec(io.qos));
+    return (io.oa, io.sva, QOS_rec(io.qos));
 }
 
 public function C_SE_NC_1_rec(io: C_SE_NC_1_io):
     tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
 {
-    return (io.obj_addr, io.r32, QOS_rec(io.qos));
+    return (io.oa, io.r32, QOS_rec(io.qos));
 }
 
 public function C_BO_NA_1_rec(io: C_BO_NA_1_io):
     tuple<uint64, bsi: uint32>
 {
-    return (io.obj_addr, io.bsi);
+    return (io.oa, io.bsi);
 }
 
 public function C_SC_TA_1_rec(io: C_SC_TA_1_io):
     tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, SCO_rec(io.sco), CP56Time2a_rec(io.tt));
+    return (io.oa, SCO_rec(io.sco), CP56Time2a_rec(io.tt));
 }
 
 public function C_DC_TA_1_rec(io: C_DC_TA_1_io):
     tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, DCO_rec(io.dco), CP56Time2a_rec(io.tt));
+    return (io.oa, DCO_rec(io.dco), CP56Time2a_rec(io.tt));
 }
 
 public function C_RC_TA_1_rec(io: C_RC_TA_1_io):
     tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, RCO_rec(io.rco), CP56Time2a_rec(io.tt));
+    return (io.oa, RCO_rec(io.rco), CP56Time2a_rec(io.tt));
 }
 
 public function C_SE_TA_1_rec(io: C_SE_TA_1_io):
     tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.nva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
+    return (io.oa, io.nva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
 }
 
 public function C_SE_TB_1_rec(io: C_SE_TB_1_io):
     tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.sva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
+    return (io.oa, io.sva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
 }
 
 public function C_SE_TC_1_rec(io: C_SE_TC_1_io):
     tuple<uint64, real, tuple<ql: uint8, se: bool>,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.r32, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
+    return (io.oa, io.r32, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
 }
 
 public function C_BO_TA_1_rec(io: C_BO_TA_1_io):
     tuple<uint64, uint32,
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
-    return (io.obj_addr, io.bsi, CP56Time2a_rec(io.tt));
+    return (io.oa, io.bsi, CP56Time2a_rec(io.tt));
 }
 
 public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
     tuple<uint64, coi: uint8, lpc: bool>
 {
-    return (io.obj_addr, io.coi, io.lpc == 1);
+    return (io.oa, io.coi, io.lpc == 1);
 }
 
 public function C_RD_NA_1_rec_a(io: C_RD_NA_1_io_a):
     tuple<uint64, optional<uint8>>
 {
-    return (io.obj_addr, io.raw_data);
+    return (io.oa, io.raw_data);
 }
 
 public function C_RD_NA_1_rec_b(io: C_RD_NA_1_io_b):
@@ -1634,284 +1450,5 @@ public function C_CS_NA_1_rec(io: C_CS_NA_1_io):
 public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
     tuple<uint64, qrp: uint8>
 {
-    return (io.obj_addr, io.qrp);
-}
-
-################################################################################
-
-public function M_SP_NA_1_sq_rec(io: M_SP_NA_1_sq_io):
-    tuple<uint64, tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, SIQ_rec(io.siq));
-}
-
-public function M_SP_TA_1_sq_rec(io: M_SP_TA_1_sq_io):
-    tuple<uint64,
-          tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, SIQ_rec(io.siq), CP24Time2a_rec(io.tt));
-}
-
-public function M_DP_NA_1_sq_rec(io: M_DP_NA_1_sq_io):
-    tuple<uint64, tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, DIQ_rec(io.diq));
-}
-
-public function M_DP_TA_1_sq_rec(io: M_DP_TA_1_sq_io):
-    tuple<uint64,
-          tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, DIQ_rec(io.diq), CP24Time2a_rec(io.tt));
-}
-
-public function M_ST_NA_1_sq_rec(io: M_ST_NA_1_sq_io):
-    tuple<uint64, tuple<val: int8, ts: bool>, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds));
-}
-
-public function M_ST_TA_1_sq_rec(io: M_ST_TA_1_sq_io):
-    tuple<uint64,
-          tuple<val: int8, ts: bool>,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP24Time2a_rec(io.tt));
-}
-
-public function M_BO_NA_1_sq_rec(io: M_BO_NA_1_sq_io):
-    tuple<uint64, bsi: uint32, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds));
-}
-
-public function M_BO_TA_1_sq_rec(io: M_BO_TA_1_sq_io):
-    tuple<uint64, bsi: uint32,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
-}
-
-public function M_ME_NA_1_sq_rec(io: M_ME_NA_1_sq_io):
-    tuple<uint64, nva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, io.nva, QDS_rec(io.qds));
-}
-
-public function M_ME_NB_1_sq_rec(io: M_ME_NB_1_sq_io):
-    tuple<uint64, sva: uint16, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, io.sva, QDS_rec(io.qds));
-}
-
-public function M_ME_TB_1_sq_rec(io: M_ME_TB_1_sq_io):
-    tuple<uint64, sva: uint16,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
-}
-
-public function M_ME_TA_1_sq_rec(io: M_ME_TA_1_sq_io):
-    tuple<uint64, nva: uint16,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
-}
-
-public function M_ME_NC_1_sq_rec(io: M_ME_NC_1_sq_io):
-    tuple<uint64, r32: real, tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
-{
-    return (io.obj_addr, io.r32, QDS_rec(io.qds));
-}
-
-public function M_ME_TC_1_sq_rec(io: M_ME_TC_1_sq_io):
-    tuple<uint64, r32: real,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool>>
-{
-    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP24Time2a_rec(io.tt));
-}
-
-public function M_SP_TB_1_sq_rec(io: M_SP_TB_1_sq_io):
-    tuple<uint64,
-          tuple<spi: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, SIQ_rec(io.siq), CP56Time2a_rec(io.tt));
-}
-
-public function M_DP_TB_1_sq_rec(io: M_DP_TB_1_sq_io):
-    tuple<uint64,
-          tuple<dpi: uint8, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, DIQ_rec(io.diq), CP56Time2a_rec(io.tt));
-}
-
-public function M_ST_TB_1_sq_rec(io: M_ST_TB_1_sq_io):
-    tuple<uint64,
-          tuple<val: int8, ts: bool>,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, VTI_rec(io.vti), QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
-
-public function M_BO_TB_1_sq_rec(io: M_BO_TB_1_sq_io):
-    tuple<uint64, bsi: uint32,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.bsi, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
-
-public function M_ME_TD_1_sq_rec(io: M_ME_TD_1_sq_io):
-    tuple<uint64, nva: uint16,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.nva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
-
-public function M_ME_TE_1_sq_rec(io: M_ME_TE_1_sq_io):
-    tuple<uint64, sva: uint16,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.sva, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
-
-public function M_ME_TF_1_sq_rec(io: M_ME_TF_1_sq_io):
-    tuple<uint64, r32: real,
-          tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.r32, QDS_rec(io.qds), CP56Time2a_rec(io.tt));
-}
-
-public function C_IC_NA_1_sq_rec(io: C_IC_NA_1_sq_io):
-    tuple<uint64, uint8>
-{
-    return (io.obj_addr, io.qoi);
-}
-
-public function C_SC_NA_1_sq_rec(io: C_SC_NA_1_sq_io):
-    tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>>
-{
-    return (io.obj_addr, SCO_rec(io.sco));
-}
-
-public function C_DC_NA_1_sq_rec(io: C_DC_NA_1_sq_io):
-    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>>
-{
-    return (io.obj_addr, DCO_rec(io.dco));
-}
-
-public function C_RC_NA_1_sq_rec(io: C_RC_NA_1_sq_io):
-    tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>>
-{
-    return (io.obj_addr, RCO_rec(io.rco));
-}
-
-public function C_SE_NA_1_sq_rec(io: C_SE_NA_1_sq_io):
-    tuple<uint64, nva: uint16, tuple<ql: uint8, se: bool>>
-{
-    return (io.obj_addr, io.nva, QOS_rec(io.qos));
-}
-
-public function C_SE_NB_1_sq_rec(io: C_SE_NB_1_sq_io):
-    tuple<uint64, sva: uint16, tuple<ql: uint8, se: bool>>
-{
-    return (io.obj_addr, io.sva, QOS_rec(io.qos));
-}
-
-public function C_SE_NC_1_sq_rec(io: C_SE_NC_1_sq_io):
-    tuple<uint64, r32: real, tuple<ql: uint8, se: bool>>
-{
-    return (io.obj_addr, io.r32, QOS_rec(io.qos));
-}
-
-public function C_BO_NA_1_sq_rec(io: C_BO_NA_1_sq_io):
-    tuple<uint64, bsi: uint32>
-{
-    return (io.obj_addr, io.bsi);
-}
-
-public function C_SC_TA_1_sq_rec(io: C_SC_TA_1_sq_io):
-    tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, SCO_rec(io.sco), CP56Time2a_rec(io.tt));
-}
-
-public function C_DC_TA_1_sq_rec(io: C_DC_TA_1_sq_io):
-    tuple<uint64, tuple<dcs: uint8, qu: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, DCO_rec(io.dco), CP56Time2a_rec(io.tt));
-}
-
-public function C_RC_TA_1_sq_rec(io: C_RC_TA_1_sq_io):
-    tuple<uint64, tuple<rcs: uint8, qu: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, RCO_rec(io.rco), CP56Time2a_rec(io.tt));
-}
-
-public function C_SE_TA_1_sq_rec(io: C_SE_TA_1_sq_io):
-    tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.nva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
-}
-
-public function C_SE_TB_1_sq_rec(io: C_SE_TB_1_sq_io):
-    tuple<uint64, uint16, tuple<ql: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.sva, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
-}
-
-public function C_SE_TC_1_sq_rec(io: C_SE_TC_1_sq_io):
-    tuple<uint64, real, tuple<ql: uint8, se: bool>,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.r32, QOS_rec(io.qos), CP56Time2a_rec(io.tt));
-}
-
-public function C_BO_TA_1_sq_rec(io: C_BO_TA_1_sq_io):
-    tuple<uint64, uint32,
-          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
-{
-    return (io.obj_addr, io.bsi, CP56Time2a_rec(io.tt));
-}
-
-public function M_EI_NA_1_sq_rec(io: M_EI_NA_1_sq_io):
-    tuple<uint64, coi: uint8, lpc: bool>
-{
-    return (io.obj_addr, io.coi, io.lpc == 1);
-}
-
-public function C_RD_NA_1_sq_rec_a(io: C_RD_NA_1_sq_io_a):
-    tuple<uint64, optional<uint8>>
-{
-    return (io.obj_addr, io.raw_data);
-}
-
-public function C_RD_NA_1_sq_rec_b(io: C_RD_NA_1_sq_io_b):
-    tuple<uint64, optional<uint8>>
-{
-    return (io.obj_addr, Null);
-}
-
-public function C_RP_NA_1_sq_rec(io: C_RP_NA_1_sq_io):
-    tuple<uint64, qrp: uint8>
-{
-    return (io.obj_addr, io.qrp);
+    return (io.oa, io.qrp);
 }

@@ -4,6 +4,7 @@
   (require "sb-concurrency"))
 
 (defvar *verbose* nil)
+(defvar *quiet* nil)
 (defvar *pretty* nil)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
@@ -103,7 +104,8 @@
     (cond ((and path (pathname-name path))
            (process-file path out check-cb))
           (t
-           (warn "File does not exist: ~S" in)))))
+           (warn "File does not exist: ~S" in)
+           (funcall check-cb nil)))))
 
 (defmethod process-file ((in pathname) (out stream) (check-cb function))
   (with-open-file (stream in)
@@ -152,11 +154,11 @@
              (locate (needle)
                (loop for line = (next-line input)
                      do (cond ((null line)
-                               (format *error-output*
-                                       (paint "~&[" (:red "*") "] ~A~%"
-                                              "[" (:red "-") "] "
-                                              "Not found: ~S~%")
-                                       file needle)
+                               (unless *quiet*
+                                 (format t
+                                         (paint "~&[" (:red "-") "] "
+                                                "Not found: ~S~%")
+                                         needle))
                                (fresh-line)
                                (return-from check-results nil))
                               ((ends-with needle line)
@@ -188,11 +190,26 @@
                              :arguments (list input
                                               (sb-ext:process-input proc)
                                               #'register-check))
-      (prog1 (check-results input
-                            (sb-ext:process-error proc)
-                            (lambda ()
-                              (sb-concurrency:receive-message mb)))
-        (close (sb-ext:process-error proc))))))
+      (check-results input
+                     (sb-ext:process-error proc)
+                     (lambda ()
+                       (sb-concurrency:receive-message mb)))
+      (case (sb-ext:process-status proc)
+        (:exited
+         (unless (zerop (sb-ext:process-exit-code proc))
+           (warn "~A exited with code ~D"
+                 binary (sb-ext:process-exit-code proc))))
+        (:signaled
+         (warn "~A exited with signal ~D"
+               binary (sb-ext:process-exit-code proc)))
+        (:running
+         (loop repeat 10
+               do (case (sb-ext:process-status proc)
+                    (:running
+                     (sleep 0.1))
+                    (:exited
+                     (return t)))
+               finally (warn "Not waiting for ~A to stop." binary)))))))
 
 (define-condition usage-error (serious-condition)
   ())
@@ -209,6 +226,7 @@
 usage: ~A [<options>] [--] <iec104-parser> <test-file>+
 
     -C, --color           color output
+    -q, --quiet           don't output anything
     -v, --verbose         show analyzer output
 "
           (first sb-ext:*posix-argv*)))
@@ -238,6 +256,9 @@ usage: ~A [<options>] [--] <iec104-parser> <test-file>+
                      (string= "--help" arg))
                  (usage)
                  (sb-ext:quit :unix-status 0))
+                ((or (string= "-q" arg)
+                     (string= "--quiet" arg))
+                 (option :quiet t))
                 ((or (string= "-v" arg)
                      (string= "--verbose" arg))
                  (option :verbose t))
@@ -253,16 +274,20 @@ usage: ~A [<options>] [--] <iec104-parser> <test-file>+
           (parse-cmdline args)
         (let ((*verbose* (getf options :verbose nil))
               (*pretty* (getf options :pretty nil))
-              (binary (pop positional)))
+              (*quiet* (getf options :quiet nil))
+              (binary (pop positional))
+              (fail nil))
           (cond ((and binary positional)
                  (loop for (file . more) on positional
-                       do (when *verbose*
+                       do (when (or *verbose* (not *quiet*))
                             (format t (paint "~&[" (:yellow "*") "] ~A~%")
                                     file))
                           (unless (run-test file :binary binary)
-                            (sb-ext:quit :unix-status 1))
+                            (setq fail t))
                           (when (and more *verbose*)
-                            (terpri))))
+                            (terpri)))
+                 (when fail
+                   (sb-ext:quit :unix-status 1)))
                 (t
                  (usage)
                  (sb-ext:quit :unix-status 64)))))
