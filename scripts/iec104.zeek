@@ -364,6 +364,13 @@ type DIQ: record {
     iv: bool;
 } &log;
 
+type QD: record {
+    sq: count;
+    cy: bool;
+    ca: bool;
+    iv: bool;
+} &log;
+
 type QDS: record {
     ov: bool;
     bl: bool;
@@ -487,6 +494,12 @@ type M_ME_TC_1_io: record {
     r32: double;
     qds: QDS;
     tt: CP24Time2a;
+} &log;
+
+type M_IT_NA_1_io: record {
+    obj_addr: count;
+    bcr: count;
+    qd: QD;
 } &log;
 
 type M_SP_TB_1_io: record {

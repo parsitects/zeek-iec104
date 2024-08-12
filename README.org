@@ -105,7 +105,7 @@ the following ASDU information object types:
 | ~M_ME_TB_1~ |     12 | yes         |
 | ~M_ME_NC_1~ |     13 | yes         |
 | ~M_ME_TC_1~ |     14 | yes         |
-| ~M_IT_NA_1~ |     15 |             |
+| ~M_IT_NA_1~ |     15 | yes         |
 | ~M_IT_TA_1~ |     16 |             |
 | ~M_EP_TA_1~ |     17 |             |
 | ~M_EP_TB_1~ |     18 |             |
