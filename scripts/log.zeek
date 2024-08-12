@@ -20,6 +20,7 @@ redef enum Log::ID += {
     LOG_M_ME_TC_1,
     LOG_M_IT_NA_1,
     LOG_M_IT_TA_1,
+    LOG_M_PS_NA_1,
     LOG_M_SP_TB_1,
     LOG_M_DP_TB_1,
     LOG_M_ST_TB_1,
@@ -228,6 +229,17 @@ type M_IT_TA_1_log: record {
     type_id: ::IEC104TypeID;
     type_id_code: int;
     io: M_IT_TA_1_io;
+} &log;
+
+type M_PS_NA_1_log: record {
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    apdu: count;
+    type_id: ::IEC104TypeID;
+    type_id_code: int;
+    io: M_PS_NA_1_io;
 } &log;
 
 type M_SP_TB_1_log: record {
@@ -601,6 +613,7 @@ event zeek_init() &priority=5
     add_log(LOG_M_ME_TC_1, [$columns=M_ME_TC_1_log, $path="iec104-M_ME_TC_1"], log_as_json);
     add_log(LOG_M_IT_NA_1, [$columns=M_IT_NA_1_log, $path="iec104-M_IT_NA_1"], log_as_json);
     add_log(LOG_M_IT_TA_1, [$columns=M_IT_TA_1_log, $path="iec104-M_IT_TA_1"], log_as_json);
+    add_log(LOG_M_PS_NA_1, [$columns=M_PS_NA_1_log, $path="iec104-M_PS_NA_1"], log_as_json);
     add_log(LOG_M_SP_TB_1, [$columns=M_SP_TB_1_log, $path="iec104-M_SP_TB_1"], log_as_json);
     add_log(LOG_M_DP_TB_1, [$columns=M_DP_TB_1_log, $path="iec104-M_DP_TB_1"], log_as_json);
     add_log(LOG_M_ST_TB_1, [$columns=M_ST_TB_1_log, $path="iec104-M_ST_TB_1"], log_as_json);
@@ -946,6 +959,22 @@ event iec104::m_it_ta_1
         $type_id_code=enum_to_int(M_IT_TA_1),
         $io=io);
     Log::write(iec104::LOG_M_IT_TA_1, rec);
+}
+
+event iec104::m_ps_na_1
+    (c: connection, is_orig: bool, io: M_PS_NA_1_io)
+    &priority=-5
+{
+    local rec = M_PS_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $id=c$id,
+        $is_orig=is_orig,
+        $apdu=c$apdu_counter,
+        $type_id=M_PS_NA_1,
+        $type_id_code=enum_to_int(M_PS_NA_1),
+        $io=io);
+    Log::write(iec104::LOG_M_PS_NA_1, rec);
 }
 
 event iec104::m_sp_tb_1

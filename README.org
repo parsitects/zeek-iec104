@@ -110,7 +110,7 @@ the following ASDU information object types:
 | ~M_EP_TA_1~ |     17 |             |
 | ~M_EP_TB_1~ |     18 |             |
 | ~M_EP_TC_1~ |     19 |             |
-| ~M_PS_NA_1~ |     20 |             |
+| ~M_PS_NA_1~ |     20 | yes         |
 | ~M_ME_ND_1~ |     21 |             |
 | ~M_SP_TB_1~ |     30 | yes         |
 | ~M_DP_TB_1~ |     31 | yes         |
