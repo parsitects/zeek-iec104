@@ -332,12 +332,28 @@ type IEC104CoT: enum {
 
 module iec104;
 
-type SIQ: record {
-    spi: bool;
-    bl: bool;
-    sb: bool;
-    nt: bool;
+type CP24Time2a: record {
+    ms: count;
+    minute: count;
     iv: bool;
+} &log;
+
+type CP56Time2a: record {
+    ms: count;
+    minute: count;
+    iv: bool;
+    hour: count;
+    su: bool;
+    day: count;
+    dow: count;
+    month: count;
+    year: count;
+} &log;
+
+type DCO: record {
+    dcs: count;
+    qu: count;
+    se: bool;
 } &log;
 
 type DIQ: record {
@@ -348,15 +364,47 @@ type DIQ: record {
     iv: bool;
 } &log;
 
+type QDS: record {
+    ov: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
+
+type RCO: record {
+    rcs: count;
+    qu: count;
+    se: bool;
+} &log;
+
+type QOS: record {
+    ql: count;
+    se: bool;
+} &log;
+
+type SCO: record {
+    scs: bool;
+    qu: count;
+    se: bool;
+} &log;
+
+type SIQ: record {
+    spi: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
+
+type VTI: record {
+    val: int;
+    ts: bool;
+} &log;
+
 type M_SP_NA_1_io: record {
     obj_addr: count;
     siq: SIQ;
-} &log;
-
-type CP24Time2a: record {
-    ms: count;
-    minute: count;
-    iv: bool;
 } &log;
 
 type M_SP_TA_1_io: record {
@@ -374,19 +422,6 @@ type M_DP_TA_1_io: record {
     obj_addr: count;
     diq: DIQ;
     tt: CP24Time2a;
-} &log;
-
-type VTI: record {
-    val: int;
-    ts: bool;
-} &log;
-
-type QDS: record {
-    ov: bool;
-    bl: bool;
-    sb: bool;
-    nt: bool;
-    iv: bool;
 } &log;
 
 type M_ST_NA_1_io: record {
@@ -454,18 +489,6 @@ type M_ME_TC_1_io: record {
     tt: CP24Time2a;
 } &log;
 
-type CP56Time2a: record {
-    ms: count;
-    minute: count;
-    iv: bool;
-    hour: count;
-    su: bool;
-    day: count;
-    dow: count;
-    month: count;
-    year: count;
-} &log;
-
 type M_SP_TB_1_io: record {
     obj_addr: count;
     siq: SIQ;
@@ -513,21 +536,9 @@ type M_ME_TF_1_io: record {
     tt: CP56Time2a;
 } &log;
 
-type SCO: record {
-    scs: bool;
-    qu: count;
-    se: bool;
-} &log;
-
 type C_SC_NA_1_io: record {
     obj_addr: count;
     sco: SCO;
-} &log;
-
-type DCO: record {
-    dcs: count;
-    qu: count;
-    se: bool;
 } &log;
 
 type C_DC_NA_1_io: record {
@@ -535,20 +546,9 @@ type C_DC_NA_1_io: record {
     dco: DCO;
 } &log;
 
-type RCO: record {
-    rcs: count;
-    qu: count;
-    se: bool;
-} &log;
-
 type C_RC_NA_1_io: record {
     obj_addr: count;
     rco: RCO;
-} &log;
-
-type QOS: record {
-    ql: count;
-    se: bool;
 } &log;
 
 type C_SE_NA_1_io: record {
