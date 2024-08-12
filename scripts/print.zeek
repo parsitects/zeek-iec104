@@ -265,6 +265,15 @@ event iec104::m_ps_na_1
               " QDS=", io$qds);
 }
 
+event iec104::m_me_nd_1
+    (c: connection, is_orig: bool, io: M_ME_ND_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_ME_ND_1 obj_addr=", io$obj_addr,
+              " NVA=", io$nva);
+}
+
 event iec104::m_sp_tb_1
     (c: connection, is_orig: bool, io: M_SP_TB_1_io)
     &priority=-10

@@ -75,6 +75,9 @@ on iec104::M_IT_TA_1_io ->
 on iec104::M_PS_NA_1_io ->
     event iec104::m_ps_na_1($conn, $is_orig, iec104::M_PS_NA_1_rec(self));
 
+on iec104::M_ME_ND_1_io ->
+    event iec104::m_me_nd_1($conn, $is_orig, iec104::M_ME_ND_1_rec(self));
+
 on iec104::M_SP_TB_1_io ->
     event iec104::m_sp_tb_1($conn, $is_orig, iec104::M_SP_TB_1_rec(self));
 

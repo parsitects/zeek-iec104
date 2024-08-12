@@ -649,6 +649,16 @@ type M_PS_NA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type M_ME_ND_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    nva: uint16;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 type M_SP_TB_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     siq: SIQ;
@@ -1090,6 +1100,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_IT_NA_1 -> m_it_na_1: M_IT_NA_1_io(id)[id.nobj];
         TypeID::M_IT_TA_1 -> m_it_ta_1: M_IT_TA_1_io(id)[id.nobj];
         TypeID::M_PS_NA_1 -> m_ps_na_1: M_PS_NA_1_io(id)[id.nobj];
+        TypeID::M_ME_ND_1 -> m_me_nd_1: M_ME_ND_1_io(id)[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io(id)[id.nobj];
         TypeID::M_DP_TB_1 -> m_dp_tb_1: M_DP_TB_1_io(id)[id.nobj];
         TypeID::M_ST_TB_1 -> m_st_tb_1: M_ST_TB_1_io(id)[id.nobj];
@@ -1342,6 +1353,12 @@ public function M_PS_NA_1_rec(io: M_PS_NA_1_io):
           tuple<ov: bool, bl: bool, sb: bool, nt: bool, iv: bool>>
 {
     return (io.oa, io.scd, QDS_rec(io.qds));
+}
+
+public function M_ME_ND_1_rec(io: M_ME_ND_1_io):
+    tuple<uint64, nva: uint16>
+{
+    return (io.oa, io.nva);
 }
 
 public function M_SP_TB_1_rec(io: M_SP_TB_1_io):

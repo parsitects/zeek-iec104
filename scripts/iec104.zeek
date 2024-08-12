@@ -515,6 +515,11 @@ type M_PS_NA_1_io: record {
     qds: QDS;
 } &log;
 
+type M_ME_ND_1_io: record {
+    obj_addr: count;
+    nva: count;
+} &log;
+
 type M_SP_TB_1_io: record {
     obj_addr: count;
     siq: SIQ;
