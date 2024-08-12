@@ -405,6 +405,13 @@ type SEPstart: record {
     srd: bool;
 } &log;
 
+type OCI: record {
+    gc: bool;
+    cl1: bool;
+    cl2: bool;
+    cl3: bool;
+} &log;
+
 type RCO: record {
     rcs: count;
     qu: count;
@@ -610,6 +617,14 @@ type M_EP_TD_1_io: record {
 type M_EP_TE_1_io: record {
     obj_addr: count;
     sep: SEPstart;
+    qdp: QDP;
+    ms: count;
+    tt: CP56Time2a;
+} &log;
+
+type M_EP_TF_1_io: record {
+    obj_addr: count;
+    oci: OCI;
     qdp: QDP;
     ms: count;
     tt: CP56Time2a;

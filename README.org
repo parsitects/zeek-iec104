@@ -122,7 +122,7 @@ the following ASDU information object types:
 | ~M_IT_TB_1~ |     37 | yes         |
 | ~M_EP_TD_1~ |     38 | yes         |
 | ~M_EP_TE_1~ |     39 | yes         |
-| ~M_EP_TF_1~ |     40 |             |
+| ~M_EP_TF_1~ |     40 | yes         |
 | ~C_SC_NA_1~ |     45 | yes         |
 | ~C_DC_NA_1~ |     46 | yes         |
 | ~C_RC_NA_1~ |     47 | yes         |
