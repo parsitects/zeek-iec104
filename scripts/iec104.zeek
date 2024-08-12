@@ -364,10 +364,30 @@ type DIQ: record {
     iv: bool;
 } &log;
 
+type OCI: record {
+    gc: bool;
+    cl1: bool;
+    cl2: bool;
+    cl3: bool;
+} &log;
+
+type QCC: record {
+    rqt: count;
+    frz: bool;
+} &log;
+
 type QD: record {
     sq: count;
     cy: bool;
     ca: bool;
+    iv: bool;
+} &log;
+
+type QDP: record {
+    ei: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
     iv: bool;
 } &log;
 
@@ -379,16 +399,25 @@ type QDS: record {
     iv: bool;
 } &log;
 
-type SEP: record {
-    es: count;
-    ei: bool;
-    bl: bool;
-    sb: bool;
-    nt: bool;
-    iv: bool;
+type QOS: record {
+    ql: count;
+    se: bool;
 } &log;
 
-type QDP: record {
+type RCO: record {
+    rcs: count;
+    qu: count;
+    se: bool;
+} &log;
+
+type SCO: record {
+    scs: bool;
+    qu: count;
+    se: bool;
+} &log;
+
+type SEP: record {
+    es: count;
     ei: bool;
     bl: bool;
     sb: bool;
@@ -403,35 +432,6 @@ type SEPstart: record {
     sl3: bool;
     sie: bool;
     srd: bool;
-} &log;
-
-type OCI: record {
-    gc: bool;
-    cl1: bool;
-    cl2: bool;
-    cl3: bool;
-} &log;
-
-type QOS: record {
-    ql: count;
-    se: bool;
-} &log;
-
-type QCC: record {
-    rqt: count;
-    frz: bool;
-} &log;
-
-type RCO: record {
-    rcs: count;
-    qu: count;
-    se: bool;
-} &log;
-
-type SCO: record {
-    scs: bool;
-    qu: count;
-    se: bool;
 } &log;
 
 type SIQ: record {
