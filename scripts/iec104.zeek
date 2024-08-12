@@ -502,6 +502,13 @@ type M_IT_NA_1_io: record {
     qd: QD;
 } &log;
 
+type M_IT_TA_1_io: record {
+    obj_addr: count;
+    bcr: count;
+    qd: QD;
+    tt: CP24Time2a;
+} &log;
+
 type M_SP_TB_1_io: record {
     obj_addr: count;
     siq: SIQ;
