@@ -551,6 +551,15 @@ event iec104::c_ic_na_1
               " QOI=", io$qoi);
 }
 
+event iec104::c_ci_na_1
+    (c: connection, is_orig: bool, io: C_CI_NA_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("C_CI_NA_1 obj_addr=", io$obj_addr,
+              " QCC=", io$qcc);
+}
+
 event iec104::c_rd_na_1
     (c: connection, is_orig: bool, io: C_RD_NA_1_io)
     &priority=-10

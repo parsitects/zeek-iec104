@@ -139,7 +139,7 @@ the following ASDU information object types:
 | ~C_BO_TA_1~ |     64 | yes         |
 | ~M_EI_NA_1~ |     70 | yes         |
 | ~C_IC_NA_1~ |    100 | yes         |
-| ~C_CI_NA_1~ |    101 |             |
+| ~C_CI_NA_1~ |    101 | yes         |
 | ~C_RD_NA_1~ |    102 | yes         |
 | ~C_CS_NA_1~ |    103 |             |
 | ~C_TS_NA_1~ |    104 |             |

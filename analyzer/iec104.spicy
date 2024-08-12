@@ -466,6 +466,13 @@ type VTI = unit {
     };
 };
 
+type QCC = unit {
+    : bitfield(8) {
+        rqt: 0..5;
+        frz: 6..7;
+    };
+};
+
 type CP24Time2a = unit {
     ms: uint16;
     : bitfield(8) {
@@ -1014,6 +1021,16 @@ type C_IC_NA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type C_CI_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    qcc: QCC;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 # Theoretically C_RD_NA_1_io could be defined as follows (ignoring the
 # SEQ stuff):
 #
@@ -1225,6 +1242,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::C_BO_TA_1 -> c_bo_ta_1: C_BO_TA_1_io(id)[id.nobj];
         TypeID::M_EI_NA_1 -> m_ei_na_1: M_EI_NA_1_io(id)[id.nobj];
         TypeID::C_IC_NA_1 -> c_ic_na_1: C_IC_NA_1_io(id)[id.nobj];
+        TypeID::C_CI_NA_1 -> c_ci_na_1: C_CI_NA_1_io(id)[id.nobj];
         TypeID::C_RD_NA_1 -> c_rd_na_1: C_RD_NA_1_xx(id)[id.nobj];
         # XXX: id.nobj must be 1 for C_CS_NA_1?
         TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj] if (!id.sq);
@@ -1350,6 +1368,11 @@ function VTI_rec(vti: VTI): tuple<val: int8, ts: bool>
         x = int8(-64) + int8(vti.val & 0x3f);
     }
     return (x, vti.ts == 1);
+}
+
+function QCC_rec(qcc: QCC): tuple<rqt: uint8, frz: uint8>
+{
+    return (qcc.rqt, qcc.frz);
 }
 
 function CP56Time2a_rec(tt: CP56Time2a):
@@ -1692,6 +1715,12 @@ public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
     tuple<uint64, uint8>
 {
     return (io.oa, io.qoi);
+}
+
+public function C_CI_NA_1_rec(io: C_CI_NA_1_io):
+    tuple<uint64, qcc: tuple<rqt: uint8, frz: uint8>>
+{
+    return (io.oa, QCC_rec(io.qcc));
 }
 
 public function C_RD_NA_1_rec_a(io: C_RD_NA_1_io_a):

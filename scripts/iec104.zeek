@@ -412,14 +412,19 @@ type OCI: record {
     cl3: bool;
 } &log;
 
-type RCO: record {
-    rcs: count;
-    qu: count;
+type QOS: record {
+    ql: count;
     se: bool;
 } &log;
 
-type QOS: record {
-    ql: count;
+type QCC: record {
+    rqt: count;
+    frz: bool;
+} &log;
+
+type RCO: record {
+    rcs: count;
+    qu: count;
     se: bool;
 } &log;
 
@@ -722,6 +727,11 @@ type M_EI_NA_1_io: record {
 type C_IC_NA_1_io: record {
     obj_addr: count;
     qoi: count;
+} &log;
+
+type C_CI_NA_1_io: record {
+    obj_addr: count;
+    qcc: QCC;
 } &log;
 
 type C_RD_NA_1_io: record {

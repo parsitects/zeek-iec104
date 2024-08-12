@@ -49,6 +49,7 @@ redef enum Log::ID += {
     LOG_C_BO_TA_1,
     LOG_M_EI_NA_1,
     LOG_C_IC_NA_1,
+    LOG_C_CI_NA_1,
     LOG_C_RD_NA_1,
     LOG_C_CS_NA_1,
     LOG_C_RP_NA_1,
@@ -555,6 +556,17 @@ type C_IC_NA_1_log: record {
     io: C_IC_NA_1_io;
 } &log;
 
+type C_CI_NA_1_log: record {
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    apdu: count;
+    type_id: ::IEC104TypeID;
+    type_id_code: int;
+    io: C_CI_NA_1_io;
+} &log;
+
 type C_RD_NA_1_log: record {
     ts: time;
     uid: string;
@@ -702,6 +714,7 @@ event zeek_init() &priority=5
     add_log(LOG_C_BO_TA_1, [$columns=C_BO_TA_1_log, $path="iec104-C_BO_TA_1"], log_as_json);
     add_log(LOG_M_EI_NA_1, [$columns=M_EI_NA_1_log, $path="iec104-M_EI_NA_1"], log_as_json);
     add_log(LOG_C_IC_NA_1, [$columns=C_IC_NA_1_log, $path="iec104-C_IC_NA_1"], log_as_json);
+    add_log(LOG_C_CI_NA_1, [$columns=C_CI_NA_1_log, $path="iec104-C_CI_NA_1"], log_as_json);
     add_log(LOG_C_RD_NA_1, [$columns=C_RD_NA_1_log, $path="iec104-C_RD_NA_1"], log_as_json);
     add_log(LOG_C_CS_NA_1, [$columns=C_CS_NA_1_log, $path="iec104-C_CS_NA_1"], log_as_json);
     add_log(LOG_C_RP_NA_1, [$columns=C_RP_NA_1_log, $path="iec104-C_RP_NA_1"], log_as_json);
@@ -1488,6 +1501,22 @@ event iec104::c_ic_na_1
         $type_id_code=enum_to_int(C_IC_NA_1),
         $io=io);
     Log::write(iec104::LOG_C_IC_NA_1, rec);
+}
+
+event iec104::c_ci_na_1
+    (c: connection, is_orig: bool, io: C_CI_NA_1_io)
+    &priority=-5
+{
+    local rec = C_CI_NA_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $id=c$id,
+        $is_orig=is_orig,
+        $apdu=c$apdu_counter,
+        $type_id=C_CI_NA_1,
+        $type_id_code=enum_to_int(C_CI_NA_1),
+        $io=io);
+    Log::write(iec104::LOG_C_CI_NA_1, rec);
 }
 
 event iec104::c_rd_na_1
