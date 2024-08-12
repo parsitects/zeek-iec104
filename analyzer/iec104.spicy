@@ -1439,12 +1439,6 @@ public function M_IT_TB_1_rec(io: M_IT_TB_1_io):
     return (io.oa, io.bcr, QD_rec(io.qd), CP56Time2a_rec(io.tt));
 }
 
-public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
-    tuple<uint64, uint8>
-{
-    return (io.oa, io.qoi);
-}
-
 public function C_SC_NA_1_rec(io: C_SC_NA_1_io):
     tuple<uint64, tuple<scs: bool, qu: uint8, se: bool>>
 {
@@ -1540,6 +1534,12 @@ public function M_EI_NA_1_rec(io: M_EI_NA_1_io):
     tuple<uint64, coi: uint8, lpc: bool>
 {
     return (io.oa, io.coi, io.lpc == 1);
+}
+
+public function C_IC_NA_1_rec(io: C_IC_NA_1_io):
+    tuple<uint64, uint8>
+{
+    return (io.oa, io.qoi);
 }
 
 public function C_RD_NA_1_rec_a(io: C_RD_NA_1_io_a):
