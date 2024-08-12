@@ -567,6 +567,13 @@ type M_ME_TF_1_io: record {
     tt: CP56Time2a;
 } &log;
 
+type M_IT_TB_1_io: record {
+    obj_addr: count;
+    bcr: count;
+    qd: QD;
+    tt: CP56Time2a;
+} &log;
+
 type C_SC_NA_1_io: record {
     obj_addr: count;
     sco: SCO;

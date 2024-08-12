@@ -349,6 +349,17 @@ event iec104::m_me_tf_1
               " TT=", tt56_str(io$tt));
 }
 
+event iec104::m_it_tb_1
+    (c: connection, is_orig: bool, io: M_IT_TB_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_IT_TB_1 obj_addr=", io$obj_addr,
+              " BCR=", io$bcr,
+              " QD=", io$qd,
+              " TT=", tt56_str(io$tt));
+}
+
 event iec104::c_sc_na_1
     (c: connection, is_orig: bool, io: C_SC_NA_1_io)
     &priority=-10
