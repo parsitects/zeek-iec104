@@ -473,6 +473,14 @@ type QCC = unit {
     };
 };
 
+type QPM = unit {
+    : bitfield(8) {
+        kpa: 0..5;
+        pop: 6;
+        lpc: 7;
+    };
+};
+
 type CP24Time2a = unit {
     ms: uint16;
     : bitfield(8) {
@@ -1098,6 +1106,17 @@ type C_TS_TA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type P_ME_NA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    nva: uint16;
+    qpm: QPM;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 ################################################################################
 
 
@@ -1259,6 +1278,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj] if (!id.sq);
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
         TypeID::C_TS_TA_1 -> c_ts_ta_1: C_TS_TA_1_io(id)[id.nobj];
+        TypeID::P_ME_NA_1 -> p_me_na_1: P_ME_NA_1_io(id)[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
             self.set_input(self.start + (apdu.len - 10));
         }
@@ -1385,6 +1405,11 @@ function VTI_rec(vti: VTI): tuple<val: int8, ts: bool>
 function QCC_rec(qcc: QCC): tuple<rqt: uint8, frz: uint8>
 {
     return (qcc.rqt, qcc.frz);
+}
+
+function QPM_rec(qpm: QPM): tuple<kpa: uint8, pop: bool, lpc: bool>
+{
+    return (qpm.kpa, qpm.pop == 1, qpm.lpc == 1);
 }
 
 function CP56Time2a_rec(tt: CP56Time2a):
@@ -1765,4 +1790,10 @@ public function C_TS_TA_1_rec(io: C_TS_TA_1_io):
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
     return (io.obj_addr, io.tsc, CP56Time2a_rec(io.tt));
+}
+
+public function P_ME_NA_1_rec(io: P_ME_NA_1_io):
+    tuple<uint64, nva: uint16, tuple<kpa: uint8, pop: bool, lpc: bool>>
+{
+    return (io.obj_addr, io.nva, QPM_rec(io.qpm));
 }

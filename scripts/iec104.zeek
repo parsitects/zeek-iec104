@@ -404,6 +404,12 @@ type QOS: record {
     se: bool;
 } &log;
 
+type QPM: record {
+    kpa: count;
+    pop: bool;
+    lpc: bool;
+} &log;
+
 type RCO: record {
     rcs: count;
     qu: count;
@@ -753,6 +759,12 @@ type C_TS_TA_1_io: record {
     obj_addr: count;
     tsc: count;
     tt: CP56Time2a;
+} &log;
+
+type P_ME_NA_1_io: record {
+    obj_addr: count;
+    nva: count;
+    qpm: QPM;
 } &log;
 
 type AsduIdent: record {
