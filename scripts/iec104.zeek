@@ -749,6 +749,12 @@ type C_RP_NA_1_io: record {
     qrp: count;
 } &log;
 
+type C_TS_TA_1_io: record {
+    obj_addr: count;
+    tsc: count;
+    tt: CP56Time2a;
+} &log;
+
 type AsduIdent: record {
     type_id: ::IEC104TypeID;
     nobj: count;

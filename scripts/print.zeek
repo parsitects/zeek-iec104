@@ -590,6 +590,16 @@ event iec104::c_rp_na_1
               " QRP=", io$qrp);
 }
 
+event iec104::c_ts_ta_1
+    (c: connection, is_orig: bool, io: C_TS_TA_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("C_TS_TA_1 obj_addr=", io$obj_addr,
+              " TSC=", io$tsc,
+              " TT=", tt56_str(io$tt));
+}
+
 event iec104::unknown_asdu
     (c: connection, is_orig: bool, type_id: ::IEC104TypeID, hex: string)
     &priority=-10

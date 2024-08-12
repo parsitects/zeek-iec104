@@ -1087,6 +1087,17 @@ type C_RP_NA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type C_TS_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    tsc: uint8;
+    tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 ################################################################################
 
 
@@ -1247,6 +1258,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         # XXX: id.nobj must be 1 for C_CS_NA_1?
         TypeID::C_CS_NA_1 -> c_cs_na_1: C_CS_NA_1_io()[id.nobj] if (!id.sq);
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
+        TypeID::C_TS_TA_1 -> c_ts_ta_1: C_TS_TA_1_io(id)[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
             self.set_input(self.start + (apdu.len - 10));
         }
@@ -1746,4 +1758,11 @@ public function C_RP_NA_1_rec(io: C_RP_NA_1_io):
     tuple<uint64, qrp: uint8>
 {
     return (io.oa, io.qrp);
+}
+
+public function C_TS_TA_1_rec(io: C_TS_TA_1_io):
+    tuple<uint64, tsc: uint8,
+          tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.obj_addr, io.tsc, CP56Time2a_rec(io.tt));
 }
