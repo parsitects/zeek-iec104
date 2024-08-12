@@ -379,6 +379,15 @@ type QDS: record {
     iv: bool;
 } &log;
 
+type SEP: record {
+    es: count;
+    ei: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
+
 type RCO: record {
     rcs: count;
     qu: count;
@@ -571,6 +580,13 @@ type M_IT_TB_1_io: record {
     obj_addr: count;
     bcr: count;
     qd: QD;
+    tt: CP56Time2a;
+} &log;
+
+type M_EP_TD_1_io: record {
+    obj_addr: count;
+    sep: SEP;
+    ms: count;
     tt: CP56Time2a;
 } &log;
 

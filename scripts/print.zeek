@@ -360,6 +360,17 @@ event iec104::m_it_tb_1
               " TT=", tt56_str(io$tt));
 }
 
+event iec104::m_ep_td_1
+    (c: connection, is_orig: bool, io: M_EP_TD_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_EP_TD_1 obj_addr=", io$obj_addr,
+              " SEP=", io$sep,
+              " MS=", io$ms,
+              " TT=", tt56_str(io$tt));
+}
+
 event iec104::c_sc_na_1
     (c: connection, is_orig: bool, io: C_SC_NA_1_io)
     &priority=-10
