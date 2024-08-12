@@ -388,6 +388,23 @@ type SEP: record {
     iv: bool;
 } &log;
 
+type QDP: record {
+    ei: bool;
+    bl: bool;
+    sb: bool;
+    nt: bool;
+    iv: bool;
+} &log;
+
+type SEPstart: record {
+    gs: bool;
+    sl1: bool;
+    sl2: bool;
+    sl3: bool;
+    sie: bool;
+    srd: bool;
+} &log;
+
 type RCO: record {
     rcs: count;
     qu: count;
@@ -586,6 +603,14 @@ type M_IT_TB_1_io: record {
 type M_EP_TD_1_io: record {
     obj_addr: count;
     sep: SEP;
+    ms: count;
+    tt: CP56Time2a;
+} &log;
+
+type M_EP_TE_1_io: record {
+    obj_addr: count;
+    sep: SEPstart;
+    qdp: QDP;
     ms: count;
     tt: CP56Time2a;
 } &log;

@@ -394,6 +394,29 @@ type SEP = unit {
     };
 };
 
+type QDP = unit {
+    : bitfield(8) {
+        # : 0..2 = 0;
+        ei: 3;
+        bl: 4;
+        sb: 5;
+        nt: 6;
+        iv: 7;
+    };
+};
+
+type SEPstart = unit {
+    : bitfield(8) {
+        gs: 0;
+        sl1: 1;
+        sl2: 2;
+        sl3: 3;
+        sie: 4;
+        srd: 5;
+        # : 6..7 = 0;
+    };
+};
+
 type SCO = unit {
     : bitfield(8) {
         scs: 0;
@@ -779,6 +802,19 @@ type M_EP_TD_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type M_EP_TE_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    sep: SEPstart;
+    qdp: QDP;
+    ms: uint16;
+    tt: CP56Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 type C_SC_NA_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sco: SCO;
@@ -1148,6 +1184,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_ME_TF_1 -> m_me_tf_1: M_ME_TF_1_io(id)[id.nobj];
         TypeID::M_IT_TB_1 -> m_it_tb_1: M_IT_TB_1_io(id)[id.nobj];
         TypeID::M_EP_TD_1 -> m_ep_td_1: M_EP_TD_1_io(id)[id.nobj];
+        TypeID::M_EP_TE_1 -> m_ep_te_1: M_EP_TE_1_io(id)[id.nobj];
         TypeID::C_SC_NA_1 -> c_sc_na_1: C_SC_NA_1_io(id)[id.nobj];
         TypeID::C_DC_NA_1 -> c_dc_na_1: C_DC_NA_1_io(id)[id.nobj];
         TypeID::C_RC_NA_1 -> c_rc_na_1: C_RC_NA_1_io(id)[id.nobj];
@@ -1229,6 +1266,25 @@ function SEP_rec(sep: SEP): tuple<es: uint8, ei: bool, bl: bool, sb: bool, nt: b
             sep.sb == 1,
             sep.nt == 1,
             sep.iv == 1);
+}
+
+function QDP_rec(qdp: QDP): tuple<ei: bool, bl: bool, sb: bool, nt: bool, iv: bool>
+{
+    return (qdp.ei == 1,
+            qdp.bl == 1,
+            qdp.sb == 1,
+            qdp.nt == 1,
+            qdp.iv == 1);
+}
+
+function SEPstart_rec(ss: SEPstart): tuple<gs: bool, sl1: bool, sl2: bool, sl3: bool, sie: bool, srd: bool>
+{
+    return (ss.gs == 1,
+            ss.sl1 == 1,
+            ss.sl2 == 1,
+            ss.sl3 == 1,
+            ss.sie == 1,
+            ss.srd == 1);
 }
 
 function SCO_rec(sco: SCO): tuple<scs: bool, qu: uint8, se: bool>
@@ -1481,6 +1537,16 @@ public function M_EP_TD_1_rec(io: M_EP_TD_1_io):
           tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
 {
     return (io.oa, io.sep, io.ms, CP56Time2a_rec(io.tt));
+}
+
+public function M_EP_TE_1_rec(io: M_EP_TE_1_io):
+    tuple<obj_addr: uint64,
+          sep: tuple<gs: bool, sl1: bool, sl2: bool, sl3: bool, sie: bool, srd: bool>,
+          qdp: tuple<ei: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          ms: uint16,
+          tt56: tuple<ms: uint16, minute: uint8, iv: bool, hour: uint8, su: bool, day: uint8, dow: uint8, month: uint8, year: uint8>>
+{
+    return (io.oa, SEPstart_rec(io.sep), QDP_rec(io.qdp), io.ms, CP56Time2a_rec(io.tt));
 }
 
 public function C_SC_NA_1_rec(io: C_SC_NA_1_io):
