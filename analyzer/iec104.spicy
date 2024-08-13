@@ -1117,6 +1117,17 @@ type P_ME_NA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type P_ME_NB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    sva: uint16;
+    qpm: QPM;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 ################################################################################
 
 
@@ -1279,6 +1290,7 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::C_RP_NA_1 -> c_rp_na_1: C_RP_NA_1_io(id)[id.nobj];
         TypeID::C_TS_TA_1 -> c_ts_ta_1: C_TS_TA_1_io(id)[id.nobj];
         TypeID::P_ME_NA_1 -> p_me_na_1: P_ME_NA_1_io(id)[id.nobj];
+        TypeID::P_ME_NB_1 -> p_me_nb_1: P_ME_NB_1_io(id)[id.nobj];
         * -> raw: Raw(id.type_id, apdu.len - 10) &parse-at=self.start {
             self.set_input(self.start + (apdu.len - 10));
         }
@@ -1796,4 +1808,10 @@ public function P_ME_NA_1_rec(io: P_ME_NA_1_io):
     tuple<uint64, nva: uint16, tuple<kpa: uint8, pop: bool, lpc: bool>>
 {
     return (io.obj_addr, io.nva, QPM_rec(io.qpm));
+}
+
+public function P_ME_NB_1_rec(io: P_ME_NB_1_io):
+    tuple<uint64, sva: uint16, tuple<kpa: uint8, pop: bool, lpc: bool>>
+{
+    return (io.obj_addr, io.sva, QPM_rec(io.qpm));
 }

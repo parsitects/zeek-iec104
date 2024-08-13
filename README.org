@@ -147,7 +147,7 @@ the following ASDU information object types:
 | ~C_CD_NA_1~ |    106 |             |
 | ~C_TS_TA_1~ |    107 | yes         |
 | ~P_ME_NA_1~ |    110 | yes         |
-| ~P_ME_NB_1~ |    111 |             |
+| ~P_ME_NB_1~ |    111 | yes         |
 | ~P_ME_NC_1~ |    112 |             |
 | ~P_AC_NA_1~ |    113 |             |
 | ~F_FR_NA_1~ |    120 |             |

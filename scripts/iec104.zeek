@@ -767,6 +767,12 @@ type P_ME_NA_1_io: record {
     qpm: QPM;
 } &log;
 
+type P_ME_NB_1_io: record {
+    obj_addr: count;
+    sva: count;
+    qpm: QPM;
+} &log;
+
 type AsduIdent: record {
     type_id: ::IEC104TypeID;
     nobj: count;
