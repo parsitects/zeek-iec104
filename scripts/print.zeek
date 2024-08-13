@@ -630,6 +630,15 @@ event iec104::p_me_nc_1
               " QPM=", io$qpm);
 }
 
+event iec104::p_ac_na_1
+    (c: connection, is_orig: bool, io: P_AC_NA_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("P_AC_NA_1 obj_addr=", io$obj_addr,
+              " QPA=", io$qpa);
+}
+
 event iec104::unknown_asdu
     (c: connection, is_orig: bool, type_id: ::IEC104TypeID, hex: string)
     &priority=-10
