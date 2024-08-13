@@ -56,6 +56,7 @@ redef enum Log::ID += {
     LOG_C_TS_TA_1,
     LOG_P_ME_NA_1,
     LOG_P_ME_NB_1,
+    LOG_P_ME_NC_1,
     LOG_APCI_U,
     LOG_APCI_S,
     LOG_APCI_I,
@@ -636,6 +637,17 @@ type P_ME_NB_1_log: record {
     io: P_ME_NB_1_io;
 } &log;
 
+type P_ME_NC_1_log: record {
+    ts: time;
+    uid: string;
+    id: conn_id;
+    is_orig: bool;
+    apdu: count;
+    type_id: ::IEC104TypeID;
+    type_id_code: int;
+    io: P_ME_NC_1_io;
+} &log;
+
 type AsduIdent_log: record {
     ts: time;
     uid: string;
@@ -757,6 +769,7 @@ event zeek_init() &priority=5
     add_log(LOG_C_TS_TA_1, [$columns=C_TS_TA_1_log, $path="iec104-C_TS_TA_1"], log_as_json);
     add_log(LOG_P_ME_NA_1, [$columns=P_ME_NA_1_log, $path="iec104-P_ME_NA_1"], log_as_json);
     add_log(LOG_P_ME_NB_1, [$columns=P_ME_NB_1_log, $path="iec104-P_ME_NB_1"], log_as_json);
+    add_log(LOG_P_ME_NC_1, [$columns=P_ME_NC_1_log, $path="iec104-P_ME_NC_1"], log_as_json);
     add_log(LOG_APCI_U, [$columns=APCI_U, $path="iec104-apci_u"], log_as_json);
     add_log(LOG_APCI_S, [$columns=APCI_S, $path="iec104-apci_s"], log_as_json);
     add_log(LOG_APCI_I, [$columns=APCI_I, $path="iec104-apci_i"], log_as_json);
@@ -1652,6 +1665,22 @@ event iec104::p_me_nb_1
         $type_id_code=enum_to_int(P_ME_NB_1),
         $io=io);
     Log::write(iec104::LOG_P_ME_NB_1, rec);
+}
+
+event iec104::p_me_nc_1
+    (c: connection, is_orig: bool, io: P_ME_NC_1_io)
+    &priority=-5
+{
+    local rec = P_ME_NC_1_log(
+        $ts=current_event_time(),
+        $uid=c$uid,
+        $id=c$id,
+        $is_orig=is_orig,
+        $apdu=c$apdu_counter,
+        $type_id=P_ME_NC_1,
+        $type_id_code=enum_to_int(P_ME_NC_1),
+        $io=io);
+    Log::write(iec104::LOG_P_ME_NC_1, rec);
 }
 
 event iec104::unknown_asdu
