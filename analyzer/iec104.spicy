@@ -698,6 +698,44 @@ type M_IT_TA_1_io = unit(inout id: AsduIdent) {
     }
 };
 
+type M_EP_TA_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    sep: SEP;
+    ms: uint16;                 # CP16Time2a?
+    tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
+type M_EP_TB_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    sep: SEPstart;
+    qdp: QDP;
+    ms: uint16;                 # CP16Time2a?
+    tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
+type M_EP_TC_1_io = unit(inout id: AsduIdent) {
+    obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
+    oci: OCI;
+    qdp: QDP;
+    ms: uint16;                 # CP16Time2a?
+    tt: CP24Time2a;
+
+    var oa: uint64;
+    on %done {
+        self.oa = id.sq ? id.next_addr++ : self.obj_addr;
+    }
+};
+
 type M_PS_NA_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     scd: uint32;
@@ -1275,6 +1313,9 @@ type AsduIOs = unit(apdu: Apdu, inout id: AsduIdent) {
         TypeID::M_ME_TC_1 -> m_me_tc_1: M_ME_TC_1_io(id)[id.nobj];
         TypeID::M_IT_NA_1 -> m_it_na_1: M_IT_NA_1_io(id)[id.nobj];
         TypeID::M_IT_TA_1 -> m_it_ta_1: M_IT_TA_1_io(id)[id.nobj];
+        TypeID::M_EP_TA_1 -> m_ep_ta_1: M_EP_TA_1_io(id)[id.nobj];
+        TypeID::M_EP_TB_1 -> m_ep_tb_1: M_EP_TB_1_io(id)[id.nobj];
+        TypeID::M_EP_TC_1 -> m_ep_tc_1: M_EP_TC_1_io(id)[id.nobj];
         TypeID::M_PS_NA_1 -> m_ps_na_1: M_PS_NA_1_io(id)[id.nobj];
         TypeID::M_ME_ND_1 -> m_me_nd_1: M_ME_ND_1_io(id)[id.nobj];
         TypeID::M_SP_TB_1 -> m_sp_tb_1: M_SP_TB_1_io(id)[id.nobj];
@@ -1579,6 +1620,33 @@ public function M_IT_TA_1_rec(io: M_IT_TA_1_io):
           tuple<ms: uint16, minute: uint8, iv: bool>>
 {
     return (io.oa, io.bcr, QD_rec(io.qd), CP24Time2a_rec(io.tt));
+}
+
+public function M_EP_TA_1_rec(io: M_EP_TA_1_io):
+    tuple<uint64, sep: SEP, ms: uint16,
+          tt24: tuple<ms: uint16, minute: uint8, iv: bool>>
+{
+    return (io.oa, io.sep, io.ms, CP24Time2a_rec(io.tt));
+}
+
+public function M_EP_TB_1_rec(io: M_EP_TB_1_io):
+    tuple<obj_addr: uint64,
+          sep: tuple<gs: bool, sl1: bool, sl2: bool, sl3: bool, sie: bool, srd: bool>,
+          qdp: tuple<ei: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          ms: uint16,
+          tt24: tuple<ms: uint16, minute: uint8, iv: bool>>
+{
+    return (io.oa, SEPstart_rec(io.sep), QDP_rec(io.qdp), io.ms, CP24Time2a_rec(io.tt));
+}
+
+public function M_EP_TC_1_rec(io: M_EP_TC_1_io):
+    tuple<obj_addr: uint64,
+          oci: tuple<gc: bool, cl1: bool, cl2: bool, cl3: bool>,
+          qdp: tuple<ei: bool, bl: bool, sb: bool, nt: bool, iv: bool>,
+          ms: uint16,
+          tt24: tuple<ms: uint16, minute: uint8, iv: bool>>
+{
+    return (io.oa, OCI_rec(io.oci), QDP_rec(io.qdp), io.ms, CP24Time2a_rec(io.tt));
 }
 
 public function M_PS_NA_1_rec(io: M_PS_NA_1_io):

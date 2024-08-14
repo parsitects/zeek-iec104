@@ -553,6 +553,29 @@ type M_IT_TA_1_io: record {
     tt: CP24Time2a;
 } &log;
 
+type M_EP_TA_1_io: record {
+    obj_addr: count;
+    sep: SEP;
+    ms: count;
+    tt: CP24Time2a;
+} &log;
+
+type M_EP_TB_1_io: record {
+    obj_addr: count;
+    sep: SEPstart;
+    qdp: QDP;
+    ms: count;
+    tt: CP24Time2a;
+} &log;
+
+type M_EP_TC_1_io: record {
+    obj_addr: count;
+    oci: OCI;
+    qdp: QDP;
+    ms: count;
+    tt: CP24Time2a;
+} &log;
+
 type M_PS_NA_1_io: record {
     obj_addr: count;
     scd: count;

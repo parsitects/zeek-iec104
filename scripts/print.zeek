@@ -255,6 +255,41 @@ event iec104::m_it_ta_1
               " TT=", tt24_str(io$tt));
 }
 
+event iec104::m_ep_ta_1
+    (c: connection, is_orig: bool, io: M_EP_TA_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_EP_TA_1 obj_addr=", io$obj_addr,
+              " SEP=", io$sep,
+              " MS=", io$ms,
+              " TT=", tt24_str(io$tt));
+}
+
+event iec104::m_ep_tb_1
+    (c: connection, is_orig: bool, io: M_EP_TB_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_EP_TB_1 obj_addr=", io$obj_addr,
+              " SEP=", io$sep,
+              " QDP=", io$qdp,
+              " MS=", io$ms,
+              " TT=", tt24_str(io$tt));
+}
+
+event iec104::m_ep_tc_1
+    (c: connection, is_orig: bool, io: M_EP_TC_1_io)
+    &priority=-10
+{
+    print asdu_info(c),
+          cat("M_EP_TC_1 obj_addr=", io$obj_addr,
+              " OCI=", io$oci,
+              " QDP=", io$qdp,
+              " MS=", io$ms,
+              " TT=", tt24_str(io$tt));
+}
+
 event iec104::m_ps_na_1
     (c: connection, is_orig: bool, io: M_PS_NA_1_io)
     &priority=-10
