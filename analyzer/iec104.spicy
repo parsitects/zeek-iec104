@@ -854,9 +854,7 @@ type M_IT_TB_1_io = unit(inout id: AsduIdent) {
 type M_EP_TD_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sep: SEP;
-    # Theoretically this is a CP16Time2a, but not making a separate
-    # unit just for a single value (yet).
-    ms: uint16;
+    ms: uint16;                 # CP16Time2a?
     tt: CP56Time2a;
 
     var oa: uint64;
@@ -869,7 +867,7 @@ type M_EP_TE_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     sep: SEPstart;
     qdp: QDP;
-    ms: uint16;
+    ms: uint16;                 # CP16Time2a?
     tt: CP56Time2a;
 
     var oa: uint64;
@@ -882,7 +880,7 @@ type M_EP_TF_1_io = unit(inout id: AsduIdent) {
     obj_addr: bytes &size=3 &convert=$$.to_uint(spicy::ByteOrder::Little) if (!id.sq);
     oci: OCI;
     qdp: QDP;
-    ms: uint16;
+    ms: uint16;                 # CP16Time2a?
     tt: CP56Time2a;
 
     var oa: uint64;
