@@ -1,6 +1,5 @@
 protocol analyzer spicy::iec104 over TCP:
-    parse with iec104::Apdus,
-    port 2404/tcp;
+    parse with iec104::Apdus;
 
 import iec104;
 
