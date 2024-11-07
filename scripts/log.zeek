@@ -1,6 +1,6 @@
 module iec104;
 
-const log_as_json = T &redef;
+const log_as_json = F &redef;
 
 redef enum Log::ID += {
     LOG_ASDU_IDENT,

@@ -174,11 +174,11 @@ prefix.  All logs have the following fields:
 - ~apdu~ :: APDU counter, increased for each APDU.  Useful for cross-linking
   data from different logs.
 
-By default log files are in JSON format, but that can be changed by setting
-the ~iec104::log_as_json~ (defined in ~scripts/log.zeek~) to ~F~, either by
-changing the source or in another script using the following statement:
+To write logs in JSON format, set the variable ~iec104::log_as_json~ (defined
+in ~scripts/log.zeek~) to ~T~, either by changing the source or in another
+script using the following statement:
 
-: redef iec104::log_as_json = F;
+: redef iec104::log_as_json = T;
 
 ** iec104-apci_i.log
 
