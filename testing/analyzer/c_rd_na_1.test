@@ -1,0 +1,22 @@
+680e                ; iec104::Apdu len=14
+00000000            ; tag=0 ssn=0 rsn=0
+
+                    ; iec104::AsduIdent
+66                  ; type_id=TypeID::C_RD_NA_1
+01                  ; nobj=1 sq=0
+06                  ; cot=CoT::Act pn=0 test=0
+00                  ; originator_address=0
+0100                ; common_address=1
+000000              ; obj_addr=0
+28                  ; raw_data=40
+
+680d                ; iec104::Apdu len=13
+00000200            ; tag=0 ssn=0 rsn=1
+
+                    ; iec104::AsduIdent
+66                  ; type_id=TypeID::C_RD_NA_1
+01                  ; nobj=1 sq=0
+47                  ; cot=CoT::ActCon pn=1 test=0
+00                  ; originator_address=0
+0100                ; common_address=1
+000000              ; obj_addr=0

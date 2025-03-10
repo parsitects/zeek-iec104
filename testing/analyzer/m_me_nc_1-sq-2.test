@@ -1,0 +1,122 @@
+;;; This one triggers infinite loop/memory leak with refactored
+;;; sequence parsing.
+
+;; Ethernet/ip/tcp things.
+;;
+;; 08f1ea927bf270ea1aa411030800450000b9b97b00003b06e086c0a818810a1302010964f45101212e05cfc965cf50182000d82f0000
+
+688f                ; iec104::Apdu len=143
+eecec20e            ; tag=0 ssn=26487 rsn=1889
+
+                    ; iec104::AsduIdent
+0d                  ; type_id=TypeID::M_ME_NC_1
+9a                  ; nobj=26 sq=1
+14                  ; cot=CoT::Inrogen pn=0 test=0
+00                  ; originator_address=0
+9001                ; common_address=400
+
+7d1500              ; base_addr=5501
+
+;; 5501
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5502
+b81e053e            ; r32=0.13
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5503
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5504
+b81e053e            ; r32=0.13
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5505
+cd4c65c3            ; r32=-229.3
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5506
+8fc2f53d            ; r32=0.12
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5507
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5508
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5509
+3d0a573e            ; r32=0.21
+40                  ; iec104::QDS ov=0 bl=0 sb=0 nt=1 iv=0
+
+;; 5510
+3d0a573e            ; r32=0.21
+40                  ; iec104::QDS ov=0 bl=0 sb=0 nt=1 iv=0
+
+;; 5511
+3d0a573e            ; r32=0.21
+40                  ; iec104::QDS ov=0 bl=0 sb=0 nt=1 iv=0
+
+;; 5512
+33334341            ; r32=12.2
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5513
+295c0f3e            ; r32=0.14
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5514
+295c0f3e            ; r32=0.14
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5515
+295c0f3e            ; r32=0.14
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5516
+000018c1            ; r32=-9.5
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5517
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5518
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5519, last successfully parsed sequence entry.
+00000000            ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5520, crashes here.
+00000000            ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+
+;; 5521
+00000000            ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+
+;; 5522
+00000000            ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+
+;; 5523
+5905ec42            ; r32=118.01
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5524
+d94feb42            ; r32=117.656
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5525
+993fea42            ; r32=117.124
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+;; 5526
+0000253f            ; r32=0.644531
+00                  ; iec104::QDS
