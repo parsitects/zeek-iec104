@@ -1,0 +1,24 @@
+;;; This is a purely synthetic test file with a sequnce of C_RD_NA_1
+;;; records (basically a bunch of raw_data bytes starting from base
+;;; address).
+681b                ; iec104::Apdu len=27
+deadbeef            ; tag=0 ssn=22255 rsn=30687
+
+                    ; iec104::AsduIdent
+66                  ; type_id=TypeID::C_RD_NA_1
+8a                  ; nobj=10 sq=1
+06                  ; cot=CoT::Act pn=0 test=0
+00                  ; originator_address=0
+0100                ; common_address=1
+
+40 e2 01            ; base_addr=123456
+f0                  ; raw_data=240
+00                  ; raw_data=0
+ba                  ; raw_data=186
+af                  ; raw_data=175
+41                  ; raw_data=65
+41                  ; raw_data=65
+41                  ; raw_data=65
+41                  ; raw_data=65
+41                  ; raw_data=65
+ff                  ; raw_data=255

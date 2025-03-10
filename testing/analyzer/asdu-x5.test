@@ -1,0 +1,317 @@
+;;; certfep1.pcap, 1701783054.555379
+
+68 5f               ; iec104::Apdu len=95
+18 00 02 00         ; iec104::Ctrl_i tag=0 ssn=12 rsn=1
+
+                    ; iec104::AsduIdent
+01                  ; type_id=TypeID::M_SP_NA_1
+d2                  ; nobj=82 sq=1
+14                  ; cot=CoT::Inrogen pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+e7 04 00            ; base_addr=1255
+
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::SIQ spi=1 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+00                  ; iec104::SIQ spi=0 bl=0 sb=0 nt=0 iv=0
+
+68 22               ; iec104::Apdu len=34
+1a 00 02 00         ; iec104::Ctrl_i tag=0 ssn=13 rsn=1
+
+                    ; iec104::AsduIdent
+03                  ; type_id=TypeID::M_DP_NA_1
+95                  ; nobj=21 sq=1
+14                  ; cot=CoT::Inrogen pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+a1 0f 00            ; base_addr=4001
+
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+03                  ; iec104::DIQ dpi=3 bl=0 sb=0 nt=0 iv=0
+03                  ; iec104::DIQ dpi=3 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+02                  ; iec104::DIQ dpi=2 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+01                  ; iec104::DIQ dpi=1 bl=0 sb=0 nt=0 iv=0
+
+68 fa               ; iec104::Apdu len=250
+1c 00 02 00         ; iec104::Ctrl_i tag=0 ssn=14 rsn=1
+
+                    ; iec104::AsduIdent
+0d                  ; type_id=TypeID::M_ME_NC_1
+1e                  ; nobj=30 sq=0
+14                  ; cot=CoT::Inrogen pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::M_ME_NC_1_io
+7d 15 00            ; obj_addr=5501
+00 fc c1 42         ; r32=96.9922
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+7e 15 00            ; obj_addr=5502
+ee 6e b1 c0         ; r32=-5.54479
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+7f 15 00            ; obj_addr=5503
+00 78 8c 41         ; r32=17.5586
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+80 15 00            ; obj_addr=5504
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+81 15 00            ; obj_addr=5505
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+82 15 00            ; obj_addr=5506
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+83 15 00            ; obj_addr=5507
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+84 15 00            ; obj_addr=5508
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+85 15 00            ; obj_addr=5509
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+86 15 00            ; obj_addr=5510
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+87 15 00            ; obj_addr=5511
+00 00 00 00         ; r32=0
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+88 15 00            ; obj_addr=5512
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+89 15 00            ; obj_addr=5513
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+8a 15 00            ; obj_addr=5514
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+8b 15 00            ; obj_addr=5515
+2a 38 f2 3f         ; r32=1.89234
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+8c 15 00            ; obj_addr=5516
+bf 97 f1 3d         ; r32=0.117965
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+8d 15 00            ; obj_addr=5517
+1c 8c 19 3f         ; r32=0.599794
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+8e 15 00            ; obj_addr=5518
+fb 43 1a 40         ; r32=2.4104
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+8f 15 00            ; obj_addr=5519
+48 92 03 bf         ; r32=-0.513951
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+90 15 00            ; obj_addr=5520
+67 38 f3 3d         ; r32=0.11876
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+91 15 00            ; obj_addr=5521
+4c 7a 19 3f         ; r32=0.599522
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+92 15 00            ; obj_addr=5522
+b2 8e e7 3f         ; r32=1.80904
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+93 15 00            ; obj_addr=5523
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+94 15 00            ; obj_addr=5524
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+95 15 00            ; obj_addr=5525
+00 00 00 00         ; r32=0
+80                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=1
+                    ; iec104::M_ME_NC_1_io
+96 15 00            ; obj_addr=5526
+f3 b0 eb 42         ; r32=117.846
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+97 15 00            ; obj_addr=5527
+7d 03 ec 42         ; r32=118.007
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+98 15 00            ; obj_addr=5528
+de 0b eb 42         ; r32=117.523
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+99 15 00            ; obj_addr=5529
+59 ac 62 41         ; r32=14.1671
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+                    ; iec104::M_ME_NC_1_io
+9a 15 00            ; obj_addr=5530
+53 7d 6a 41         ; r32=14.6556
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+68 f2               ; iec104::Apdu len=242
+1e 00 02 00         ; iec104::Ctrl_i tag=0 ssn=15 rsn=1
+
+                    ; iec104::AsduIdent
+0d                  ; type_id=TypeID::M_ME_NC_1
+1d                  ; nobj=29 sq=0
+14                  ; cot=CoT::Inrogen pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+9b 15 00 d6 94 66 41 00 ; iec104::M_ME_NC_1_io
+9c 15 00 24 7e 2a 40 00 ; iec104::M_ME_NC_1_io
+9d 15 00 c7 9f 78 3f 00 ; iec104::M_ME_NC_1_io
+9e 15 00 d5 20 3f 40 00 ; iec104::M_ME_NC_1_io
+9f 15 00 43 29 48 42 00 ; iec104::M_ME_NC_1_io
+a0 15 00 7d 03 ec 42 00 ; iec104::M_ME_NC_1_io
+a1 15 00 7d 03 ec 42 00 ; iec104::M_ME_NC_1_io
+a2 15 00 de 0b eb 42 00 ; iec104::M_ME_NC_1_io
+a3 15 00 39 9b 0e 38 00 ; iec104::M_ME_NC_1_io
+a4 15 00 39 9b 0e 38 00 ; iec104::M_ME_NC_1_io
+a5 15 00 39 9b 0e 38 00 ; iec104::M_ME_NC_1_io
+a6 15 00 bd 37 86 37 00 ; iec104::M_ME_NC_1_io
+a7 15 00 bd 37 86 37 00 ; iec104::M_ME_NC_1_io
+a8 15 00 bd 37 86 37 00 ; iec104::M_ME_NC_1_io
+a9 15 00 c2 21 48 42 00 ; iec104::M_ME_NC_1_io
+aa 15 00 f3 b0 eb 42 00 ; iec104::M_ME_NC_1_io
+ab 15 00 7d 03 ec 42 00 ; iec104::M_ME_NC_1_io
+ac 15 00 de 0b eb 42 00 ; iec104::M_ME_NC_1_io
+ad 15 00 73 7d 6a 41 00 ; iec104::M_ME_NC_1_io
+ae 15 00 73 7d 6a 41 00 ; iec104::M_ME_NC_1_io
+af 15 00 73 7d 6a 41 00 ; iec104::M_ME_NC_1_io
+b0 15 00 f6 b6 39 c0 00 ; iec104::M_ME_NC_1_io
+b1 15 00 e5 9d 77 bf 00 ; iec104::M_ME_NC_1_io
+b2 15 00 7c b7 39 40 00 ; iec104::M_ME_NC_1_io
+b3 15 00 c2 21 48 42 00 ; iec104::M_ME_NC_1_io
+b4 15 00 b8 c8 ec 42 00 ; iec104::M_ME_NC_1_io
+b5 15 00 43 29 48 42 00 ; iec104::M_ME_NC_1_io
+b6 15 00 b8 c8 ec 42 00 ; iec104::M_ME_NC_1_io
+b7 15 00 43 29 48 42 00 ; iec104::M_ME_NC_1_io
+
+68 0e               ; iec104::Apdu len=14
+20 00 02 00         ; iec104::Ctrl_i tag=0 ssn=16 rsn=1
+
+                    ; iec104::AsduIdent
+64                  ; type_id=TypeID::C_IC_NA_1
+01                  ; nobj=1 sq=0
+0a                  ; cot=CoT::ActTerm pn=0 test=0
+0a                  ; originator_address=10
+90 01               ; common_address=400
+
+                    ; iec104::C_IC_NA_1_io
+00 00 00            ; obj_addr=0
+14                  ; qoi=20

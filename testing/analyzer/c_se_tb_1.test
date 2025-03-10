@@ -1,0 +1,22 @@
+68 17               ; iec104::Apdu len=23
+D2 0A 1A 00         ; iec104::Ctrl_i tag=0 ssn=1385 rsn=13
+
+                    ; iec104::AsduIdent
+3E                  ; type_id=TypeID::C_SE_TB_1
+01                  ; nobj=1 sq=0
+47                  ; cot=CoT::Actcon pn=1 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+                    ; iec104::C_SE_TB_1_io
+42 1F 00            ; obj_addr=8002
+01 00               ; sva=1
+00                  ; iec104::QOS ql=0 se=0
+                    ; iec104::CP56Time2a
+DD D9               ; ms=55773
+03                  ; minute=3 iv=0
+09                  ; hour=9 su=0
+10                  ; day=16 dow=0
+07                  ; month=7
+18                  ; year=24

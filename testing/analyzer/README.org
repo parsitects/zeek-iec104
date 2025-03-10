@@ -1,0 +1,92 @@
+* Requirements
+
+To run these tests the following commands should be available:
+
+- ~spicy-build~ :: Used to compile the analyzer.  Available by installing
+  ~zeek-spicy-dev~ package.
+- ~sbcl~ :: Test driver code.  Available by installing ~sbcl~ package.
+
+* Test files
+
+All the test (~.test~) files in this directory are test input files containing
+both test inputs and expected outputs.  The file may contain one of three
+things:
+
+- A double-digit hex number representing a single byte.  This will be fed to
+  the analyzer.
+
+- A single semicolon comment followed by assertions, delimited by spaces.  If
+  an assertion does not contain an equal sign (~=~), then it will be tested
+  "as is".  If there is an equal sign (with no spaces), then the test string
+  will be created by inserting a space on both sides of the equal sign.  These
+  strings will be looked for in the output of the analyzer at the end of each
+  line (since the leading part of each line contains the text ~[spicy]~ and
+  indentation spaces).  Assertions will be tested in the order they appear in
+  the text file.
+
+- A comment starting with two or more semicolons is just a comment, and all
+  text until the end of line is ignored.
+
+Example test (from ~s-format.test~ file):
+
+#+begin_example
+  68 04               ; iec104::Apdu len=4
+  01 00 7E 14         ; iec104::Ctrl_s tag=1 rsn=2623
+#+end_example
+
+The same can be written like this:
+
+#+begin_example
+  ;;; Initial byte.
+  68                  ; iec104::Apdu
+
+  ;;; APDU Length.
+  04                  ; len=4
+
+  ;;; 4 S-Format bytes.
+
+                      ; iec104::Ctrl_s
+  01 00               ; tag=1
+  7E 14               ; rsn=2623
+#+end_example
+
+Or even on one line:
+
+#+begin_example
+  68 04 01 00 7E 14 ; iec104::Apdu len=4 iec104::Ctrl_s tag=1 rsn=2623
+#+end_example
+
+* Running the tests
+
+Pass one or more test files to the ~test.sh~ script.  For example, to run all
+tests just issue the following command:
+
+: ./test.sh *.txt
+
+~test.sh~ script will compile the Spicy analyzer (~analyzer/iec104.spicy~ in
+project root) in debug mode, creating ~/tmp/iec104~ binary.
+
+To see the output of the analyzer and what has been matched, use the ~-v~
+option.  For example:
+
+: ./test.sh -v -C s-format.test
+
+The output should look like this:
+
+#+begin_example
+  [*] s-format.test
+      [libhilti] Warning: printing of exception backtraces enabled, but not supported in release builds
+      [spicy] iec104::Apdus
+  [+] [spicy]   iec104::Apdu
+      [spicy]     anon_6 = 104
+  [+] [spicy]     len = 4
+      [spicy]     iec104::Ctrl
+      [spicy]       xx = 343801857
+  [+] [spicy]       iec104::Ctrl_s
+      [spicy]         anon_2 = 343801857
+  [+] [spicy]           tag = 1
+      [spicy]           unused = 0
+  [+] [spicy]           rsn = 2623
+#+end_example
+
+The lines prefixed with ~[+]~ are the ones that have been successfully tested.

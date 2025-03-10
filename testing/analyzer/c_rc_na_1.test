@@ -1,0 +1,16 @@
+;;; testing/Traces/first/iec104.pcap, ts:1372919015.167537
+
+68 0e               ; iec104::Apdu len=14
+0c 00 5a 00         ; iec104::Ctrl_i tag=0 ssn=6 rsn=45
+
+                    ; iec104::AsduIdent
+2f                  ; type_id=TypeID::C_RC_NA_1
+01                  ; nobj=1 sq=0
+06                  ; cot=CoT::Act pn=0 test=0
+00                  ; originator_address=0
+0a 00               ; common_address=10
+
+                    ; iec104::AsduIOs
+                    ; iec104::C_RC_NA_1_io
+01 00 00            ; obj_addr=1
+02                  ; iec104::RCO rcs=2 qu=0 se=0

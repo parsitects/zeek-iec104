@@ -1,0 +1,21 @@
+68 17               ; iec104::Apdu len=23
+
+52 d0 e6 54         ; iec104::Ctrl_i tag=0 ssn=26665 rsn=10867
+
+                    ; iec104::AsduIdent
+0d                  ; type_id=TypeID::M_ME_NC_1
+82                  ; nobj=2 sq=1
+03                  ; cot=CoT::Spont pn=0 test=0
+00                  ; originator_address=0
+90 01               ; common_address=400
+
+                    ; iec104::AsduIOs
+c7 15 00            ; base_addr=5575
+
+                    ; iec104::M_ME_NC_1_io
+20 b0 c6 40         ; r32=6.209
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0
+
+                    ; iec104::M_ME_NC_1_io
+ac 1c da be         ; r32=-0.426
+00                  ; iec104::QDS ov=0 bl=0 sb=0 nt=0 iv=0

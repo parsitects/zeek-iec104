@@ -1,0 +1,258 @@
+#+title: Zeek IEC 104
+#+options: toc:t
+
+* Overview
+
+~zeek-iec104~ is a Zeek plugin written using
+[[https://docs.zeek.org/projects/spicy/en/latest/][Spicy]] for parsing and
+logging fields used by the IEC 104 protocol.
+
+** Differences from upstream
+
+- More ASDU type parsing implemented
+- APDU contents logged to log files (only if ~log.zeek~ script is loaded)
+  + For unknown (unimplemented) ASDU types hex dump of content is logged
+- Zeek events generated only for high-level units (i.e., no separate events
+  for internal units like ~CP56Time2a~ or bit-fields):
+  + Control part of an APCI (S, U and I format headers)
+  + Identification part of an ASDU
+  + Object specific information of an ASDU
+- Easy to correlate APDU sub-part event generation, with the parts mentioned
+  above in sequence:
+  + APCI control field
+  + ASDU common part (Cause of Transmission, address fields)
+  + Object-specific ASDU part (object information)
+- All events carry communication direction information
+- ~print.zeek~ script to dump APCIs to console (good for analyzing captured
+  traffic with no need to correlate different log files)
+- Proper parsing (and logging) of R32 (float) and VTI (7-bit signed
+  integer) values
+- Logging in TSV (Zeek default) or JSON formats
+
+* Installation
+
+To build and install the parser into Zeek the following can be used:
+
+#+begin_src sh
+  cmake . && make install
+#+end_src
+
+After successful installation the following command:
+
+#+begin_src sh
+zeek -NN | grep IEC104
+#+end_src
+
+should have output similar to this:
+
+#+begin_example
+    [Analyzer] spicy_iec104 (ANALYZER_SPICY_IEC104, enabled)
+#+end_example
+
+* Implementation
+
+The plugin is implemented using following files:
+
+ - ~analyzer/zeek_iec104.spicy~ :: Spicy protocol analyzer.
+ - ~analyzer/iec104.evt~ :: Event descriptions for Zeek integration.
+ - ~scripts/iec104.zeek~ :: Zeek side definitions of structures exported from
+   Spicy.
+ - ~scripts/log.zeek~  ::  IEC 104 communication logging, see [[*Logging capabilities][Logging
+   capabilities]] below.
+ - ~scripts/print.zeek~ :: Support script that prints communication in
+   sequential manner in a way that can be easily cross-checked with other
+   tools (e.g., Wireshark).  This is how the initial output of analyzing
+   ~testing/Traces/first/iec104.pcap~ using this script looks like:
+   #+begin_example
+     1372918997.053303 10.20.102.1:46413 -> 10.20.100.108:2404, U TESTFR act
+     1372918997.053845 10.20.102.1:46413 <- 10.20.100.108:2404, U TESTFR con
+     1372918997.306461 10.20.102.1:46413 -> 10.20.100.108:2404, U STARTDT act
+     1372918997.307014 10.20.102.1:46413 <- 10.20.100.108:2404, U STARTDT con
+     1372918997.321659 10.20.102.1:46413 -> 10.20.100.108:2404, I ssn:0, rsn:0
+       ASDU Act OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.323589 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:0, rsn:0
+       ASDU Init OA=0 CA=10, M_EI_NA_1 obj_addr=0 COI=0 LPC=F
+     1372918997.331734 10.20.102.1:46413 -> 10.20.100.108:2404, I ssn:1, rsn:1
+       ASDU Act OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.333710 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:1, rsn:1
+       ASDU Actcon OA=0 CA=10, C_IC_NA_1 obj_addr=0 QOI=20
+     1372918997.333710 10.20.102.1:46413 <- 10.20.100.108:2404, I ssn:2, rsn:1
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=1 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=2 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=3 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+       ASDU Inrogen OA=0 CA=10, M_SP_NA_1 obj_addr=4 SIQ=[spi=F, bl=F, sb=F, nt=F, iv=F]
+   #+end_example
+ - ~scripts/seq.zeek~ :: APCI Send and Receive sequence number tracking.
+
+** Supported information object types
+
+The Spicy protocol analyzer and the corresponding Zeek code has support for
+the following ASDU information object types:
+
+| Reference   | TypeID | Implemented |
+|-------------+--------+-------------|
+| ~M_SP_NA_1~ |      1 | yes         |
+| ~M_SP_TA_1~ |      2 | yes         |
+| ~M_DP_NA_1~ |      3 | yes         |
+| ~M_DP_TA_1~ |      4 | yes         |
+| ~M_ST_NA_1~ |      5 | yes         |
+| ~M_ST_TA_1~ |      6 | yes         |
+| ~M_BO_NA_1~ |      7 | yes         |
+| ~M_BO_TA_1~ |      8 | yes         |
+| ~M_ME_NA_1~ |      9 | yes         |
+| ~M_ME_TA_1~ |     10 | yes         |
+| ~M_ME_NB_1~ |     11 | yes         |
+| ~M_ME_TB_1~ |     12 | yes         |
+| ~M_ME_NC_1~ |     13 | yes         |
+| ~M_ME_TC_1~ |     14 | yes         |
+| ~M_IT_NA_1~ |     15 | yes         |
+| ~M_IT_TA_1~ |     16 | yes         |
+| ~M_EP_TA_1~ |     17 | yes         |
+| ~M_EP_TB_1~ |     18 | yes         |
+| ~M_EP_TC_1~ |     19 | yes         |
+| ~M_PS_NA_1~ |     20 | yes         |
+| ~M_ME_ND_1~ |     21 | yes         |
+| ~M_SP_TB_1~ |     30 | yes         |
+| ~M_DP_TB_1~ |     31 | yes         |
+| ~M_ST_TB_1~ |     32 | yes         |
+| ~M_BO_TB_1~ |     33 | yes         |
+| ~M_ME_TD_1~ |     34 | yes         |
+| ~M_ME_TE_1~ |     35 | yes         |
+| ~M_ME_TF_1~ |     36 | yes         |
+| ~M_IT_TB_1~ |     37 | yes         |
+| ~M_EP_TD_1~ |     38 | yes         |
+| ~M_EP_TE_1~ |     39 | yes         |
+| ~M_EP_TF_1~ |     40 | yes         |
+| ~C_SC_NA_1~ |     45 | yes         |
+| ~C_DC_NA_1~ |     46 | yes         |
+| ~C_RC_NA_1~ |     47 | yes         |
+| ~C_SE_NA_1~ |     48 | yes         |
+| ~C_SE_NB_1~ |     49 | yes         |
+| ~C_SE_NC_1~ |     50 | yes         |
+| ~C_BO_NA_1~ |     51 | yes         |
+| ~C_SC_TA_1~ |     58 | yes         |
+| ~C_DC_TA_1~ |     59 | yes         |
+| ~C_RC_TA_1~ |     60 | yes         |
+| ~C_SE_TA_1~ |     61 | yes         |
+| ~C_SE_TB_1~ |     62 | yes         |
+| ~C_SE_TC_1~ |     63 | yes         |
+| ~C_BO_TA_1~ |     64 | yes         |
+| ~M_EI_NA_1~ |     70 | yes         |
+| ~C_IC_NA_1~ |    100 | yes         |
+| ~C_CI_NA_1~ |    101 | yes         |
+| ~C_RD_NA_1~ |    102 | yes         |
+| ~C_CS_NA_1~ |    103 | yes         |
+| ~C_TS_NA_1~ |    104 |             |
+| ~C_RP_NA_1~ |    105 | yes         |
+| ~C_CD_NA_1~ |    106 |             |
+| ~C_TS_TA_1~ |    107 | yes         |
+| ~P_ME_NA_1~ |    110 | yes         |
+| ~P_ME_NB_1~ |    111 | yes         |
+| ~P_ME_NC_1~ |    112 | yes         |
+| ~P_AC_NA_1~ |    113 | yes         |
+| ~F_FR_NA_1~ |    120 |             |
+| ~F_SR_NA_1~ |    121 |             |
+| ~F_SC_NA_1~ |    122 |             |
+| ~F_LS_NA_1~ |    123 |             |
+| ~F_AF_NA_1~ |    124 |             |
+| ~F_SG_NA_1~ |    125 |             |
+| ~F_DR_TA_1~ |    126 |             |
+| ~F_SC_NB_1~ |    127 |             |
+
+* Logging capabilities
+
+This plugin creates many log files, all of which start with a ~iec104-~
+prefix.  All logs have the following fields:
+
+- ~ts~ :: Message timestamp.
+- ~uid~ :: Zeek connection identifier.
+- ~id.orig_h~ :: Connection originator host.
+- ~id.orig_p~ :: Connection originator port.
+- ~id.oesp_h~ :: Connection responding host.
+- ~id.oesp_p~ :: Connection responding port.
+- ~is_orig~ :: True if the message is from the connection originator.
+- ~apdu~ :: APDU counter, increased for each APDU.  Useful for cross-linking
+  data from different logs.
+
+To write logs in JSON format, set the variable ~iec104::log_as_json~ (defined
+in ~scripts/log.zeek~) to ~T~, either by changing the source or in another
+script using the following statement:
+
+: redef iec104::log_as_json = T;
+
+** iec104-apci_i.log
+
+APCI I-Format message fields.  In addition to common fields has the following:
+
+- ~ssn~ :: Send sequence number
+- ~rsn~ :: Receive sequence number
+
+ASDU fields are in [[*iec104-asdu_ident.log][iec104-asdu_ident.log]].
+
+** iec104-apci_s.log
+
+APCI S-Format message fields.  In addition to common fields has the following:
+
+- ~rsn~ :: Receive sequence number
+
+** iec104-apci_u.log
+
+APCI U-Format message fields.  In addition to common fields has the following:
+
+- ~startdt~ ::
+- ~stopdt~ ::
+- ~testfr~ ::
+
+** iec104-asdu_ident.log
+
+- ~ident.type_id~ :: Information object type ID (symbolic)
+- ~ident.nobj~ :: Number of objects in ASDU
+- ~ident.sq~ :: SQ flag
+- ~ident.cot~ :: Cause of transmission (symbolic)
+- ~ident.pn~ :: P/N (positive/negative) flag
+- ~ident.test~ :: Test flag
+- ~ident.originator_address~ :: Originator address
+- ~ident.common_address~ :: Common address
+
+** Information object type specific logs
+
+Each ASDU information object type is logged in a separate log file with the
+symbolic name of ASDU type ID in the file name, e.g., ~iec104-C_DC_NA_1.log~.
+Each file has information object type specific fields (in addition to common
+fields), not documented here at the moment.
+
+** iec104-unk.log
+
+Messages with unknown (vendor-specific) ASDU types.  In addition to common
+fields has the following fields:
+
+- ~type_id~ :: Symbolic name of the ASDU information object type ID
+- ~type_id_code~ :: Numeric value of the ASDU information object type ID
+- ~data~ :: Binary message data as a hex string
+
+* Resources
+
+- Wireshark IEC 104 Dissector:
+  [[https://github.com/wireshark/wireshark/blob/master/epan/dissectors/packet-iec104.c]]
+
+- Matoušek, Petr. "Description and analysis of IEC 104 Protocol." Faculty of
+  Information Technology, Brno University o Technology, Tech. Rep (2017).
+  [[https://www.fit.vut.cz/research/publication/11570/.en]]
+
+- [[https://infosys.beckhoff.com/content/1033/tf6500_tc3_iec60870_5_10x/984444939.html?id=6858453402777673110]]
+
+** PCAPs
+
+- The trace under [[file://testing/Traces/first/][testing/Traces/first]] has
+  been acquired form
+  [[https://github.com/automayt/ICS-pcap/blob/master/IEC%2060870/iec104/iec104.pcap]]
+
+- The traces under the
+  [[file://./testing/Traces/second/][testing/Traces/second]],
+  [[file://./testing/Traces/third/][testing/Traces/third]] and
+  [[file://./testing/Traces/fourth/][testing/Traces/fourth]] directories come
+  from the "20200608_UOWM_IEC104_Dataset_mitm_drop" in: Panagiotis,
+  Konstantinos, Thomas, Vasileios, & Panagiotis. (2022). IEC 60870-5-104
+  Intrusion Detection Dataset [Data
+  set]. [[https://doi.org/10.21227/fj7s-f281]] and
+  [[https://zenodo.org/record/7108614#.ZFR6oJHML0o]]
